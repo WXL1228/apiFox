@@ -3,7 +3,7 @@ export interface LoginRequestData {
   username: "admin" | "editor" | ""
   /** 密码 */
   password: string
-  /** 验证码 */
+  /** 确认密码 */
   confirmedPassword?: string
 }
 

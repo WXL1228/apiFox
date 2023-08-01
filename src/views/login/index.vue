@@ -5,6 +5,7 @@ import { useUserStore } from "@/store/modules/user"
 import { type FormInstance, FormRules } from "element-plus"
 import { User, Lock } from "@element-plus/icons-vue"
 import { type LoginRequestData } from "@/api/login/types/login"
+import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 
 const router = useRouter()
 
@@ -71,7 +72,7 @@ const setflag = () => {
   if (flag.value) {
     loginFormData.username = ""
     loginFormData.password = ""
-    // loginFormData.confirmedPassword = ""
+    loginFormData.confirmedPassword = ""
     flag.value = false
   } else {
     flag.value = true
@@ -83,6 +84,7 @@ const setflag = () => {
 
 <template>
   <div class="login-container">
+    <ThemeSwitch class="theme-switch" />
     <div class="login-card">
       <div class="title">
         <h1>api接口平台</h1>
