@@ -71,7 +71,7 @@ const setflag = () => {
   if (flag.value) {
     loginFormData.username = ""
     loginFormData.password = ""
-    loginFormData.confirmedPassword = ""
+    // loginFormData.confirmedPassword = ""
     flag.value = false
   } else {
     flag.value = true

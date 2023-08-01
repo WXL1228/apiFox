@@ -4,7 +4,7 @@ export interface LoginRequestData {
   /** 密码 */
   password: string
   /** 验证码 */
-  confirmedPassword: string
+  confirmedPassword?: string
 }
 
 export type LoginCodeResponseData = ApiResponseData<string>

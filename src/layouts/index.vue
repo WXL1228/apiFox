@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { computed, watchEffect } from "vue"
 import { storeToRefs } from "pinia"
-import { useAppStore } from "@/store/modules/app"
+// import { useAppStore } from "@/store/modules/app"
 import { useSettingsStore } from "@/store/modules/settings"
 import useResize from "./hooks/useResize"
-import LeftMode from "./LeftMode.vue"
+// import LeftMode from "./LeftMode.vue"
 import TopMode from "./TopMode.vue"
 // import LeftTopMode from "./LeftTopMode.vue"
 // import { Settings, RightPanel } from "./components"

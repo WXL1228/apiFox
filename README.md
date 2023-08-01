@@ -1,16 +1,3 @@
-<div align="center">
-  <img alt="V3 Admin Vite Logo" width="120" height="120" src="./src/assets/layouts/logo.png">
-  <h1>V3 Admin Vite</h1>
-  <span>English | <a href="./README.zh-CN.md">中文</a></span>
-</div>
-
-## ⚡ Introduction
-
-v3-admin-vite is a free and open source middle and background management system basic solution, based on mainstream framework such as Vue3, TypeScript, Element Plus, Pinia and Vite.
-
-- Vue-Cli 5.x: [v3-admin](https://github.com/un-pany/v3-admin)
-- Electron desktop: [v3-electron-vite](https://github.com/un-pany/v3-electron-vite)
-
 ## Feature
 
 - **Vue3**：The latest Vue3 composition API using Vue3 + script setup
@@ -39,23 +26,7 @@ v3-admin-vite is a free and open source middle and background management system 
 - **Dashboard**: Display different Dashboard pages according to different users
 - **Other functions**：SVG, Dynamic Sidebar, Dynamic Breadcrumb Navigation, Tabbed Navigation, Screenfull, Adaptive Shrink Sidebar
 
-## 📚 Document
-
-[Chinese documentation](https://juejin.cn/post/7089377403717287972)
-
-[Chinese getting started tutorial](https://juejin.cn/column/7207659644487139387)
-
-## Gitee repository
-
-[Gitee](https://gitee.com/un-pany/v3-admin-vite)
-
-## Online preview
-
-| Location     | account             | Link                                            |
-| ------------ | ------------------- | ----------------------------------------------- |
-| github-pages | `admin` or `editor` | [Link](https://un-pany.github.io/v3-admin-vite) |
-
-## 🚀 Development
+## Development
 
 ```bash
 # configure
@@ -76,7 +47,7 @@ pnpm i
 pnpm dev
 ```
 
-## ✔️ Preview
+## Preview
 
 ```bash
 # stage environment
@@ -86,7 +57,7 @@ pnpm preview:stage
 pnpm preview:prod
 ```
 
-## 📦️ Multi-environment packaging
+## Multi-environment packaging
 
 ```bash
 # build the stage environment
@@ -96,7 +67,7 @@ pnpm build:stage
 pnpm build:prod
 ```
 
-## 🔧 Code inspection
+## Code inspection
 
 ```bash
 # code formatting
@@ -121,38 +92,3 @@ pnpm test
 - `ci` CICD
 - `types` Type definition
 - `wip` In development
-
-## Project preview
-
-![preview1.png](./src/assets/docs/preview1.png)
-![preview2.png](./src/assets/docs/preview2.png)
-![preview3.png](./src/assets/docs/preview3.png)
-
-## 💕 Contributors
-
-Thanks to all the contributors!
-
-<a href="https://github.com/un-pany/v3-admin-vite/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=un-pany/v3-admin-vite" />
-</a>
-
-## 💕 Thanks star
-
-Small projects are not easy to get a star, if you like this project, welcome to support a star! This is the only motivation for the author to maintain it on an ongoing basis (whisper: it's free after all)
-
-## ☕ Donate
-
-[See how to donate](https://github.com/un-pany/v3-admin-vite/issues/69)
-
-## Group
-
-QQ group：1014374415 (left) && add me on WeChat，Invite you to join WeChat group (right)
-
-![qq.png](./src/assets/docs/qq.png)
-![wechat.png](./src/assets/docs/wechat.png)
-
-## 📄 License
-
-[MIT](./LICENSE)
-
-Copyright (c) 2022-present [pany](https://github.com/pany-ang)
