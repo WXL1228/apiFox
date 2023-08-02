@@ -50,12 +50,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "Dashboard",
         meta: {
           title: "首页",
-          svgIcon: "dashboard",
+          svgIcon: "首页",
           affix: true
         }
       }
     ]
-  }
+  },
   // {
   //   path: "/unocss",
   //   component: Layouts,
@@ -87,36 +87,81 @@ export const constantRoutes: RouteRecordRaw[] = [
   //     }
   //   ]
   // },
-  // {
-  //   path: "/table",
-  //   component: Layouts,
-  //   redirect: "/table/element-plus",
-  //   name: "Table",
-  //   meta: {
-  //     title: "表格",
-  //     elIcon: "Grid"
-  //   },
-  //   children: [
-  //     {
-  //       path: "element-plus",
-  //       component: () => import("@/views/table/element-plus/index.vue"),
-  //       name: "ElementPlus",
-  //       meta: {
-  //         title: "Element Plus",
-  //         keepAlive: true
-  //       }
-  //     },
-  //     {
-  //       path: "vxe-table",
-  //       component: () => import("@/views/table/vxe-table/index.vue"),
-  //       name: "VxeTable",
-  //       meta: {
-  //         title: "Vxe Table",
-  //         keepAlive: true
-  //       }
-  //     }
-  //   ]
-  // },
+
+  {
+    path: "/team",
+    component: Layouts,
+    redirect: "/team/personal-space",
+    name: "Menu",
+    meta: {
+      title: "个人空间",
+      svgIcon: "menu"
+    },
+    children: [
+      {
+        path: "personal-space",
+        component: () => import("@/views/team/personal-space/index.vue"),
+        name: "Personal-Space",
+        meta: {
+          title: "我的团队"
+        }
+      },
+      {
+        path: "private-program",
+        component: () => import("@/views/team/private-program/index.vue"),
+        name: "Private-Program",
+        meta: {
+          title: "我的项目"
+        }
+      }
+    ]
+  },
+  {
+    path: "/public-program",
+    component: Layouts,
+    redirect: "/public-program",
+    name: "Table",
+    meta: {
+      title: "API Hub",
+      elIcon: "Compass"
+    },
+    children: [
+      {
+        path: "development-tool",
+        component: () => import("@/views/public-program/development-tool/index.vue"),
+        name: "Development-Tool",
+        meta: {
+          title: "生活服务",
+          keepAlive: true
+        }
+      },
+      {
+        path: "life-server",
+        component: () => import("@/views/public-program/life-server/index.vue"),
+        name: "Life-Server",
+        meta: {
+          title: "开发工具",
+          keepAlive: true
+        }
+      }
+    ]
+  },
+  {
+    path: "/log-management",
+    component: Layouts,
+    redirect: "/log-management/index",
+    children: [
+      {
+        path: "log-management",
+        component: () => import("@/views/log-management/index.vue"),
+        name: "Log-Management",
+        meta: {
+          title: "日志管理",
+          svgIcon: "日志"
+        }
+      }
+    ]
+  }
   // {
   //   path: "/menu",
   //   component: Layouts,

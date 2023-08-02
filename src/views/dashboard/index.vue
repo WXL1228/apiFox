@@ -1,11 +1,3 @@
-<!-- <template>
-  <div class="windi-wh-full windi-flex-x-center windi-mb-md">
-    <el-button class="windi-mb-md">按钮1</el-button><el-button class="windi-mb-md">按钮1</el-button
-    ><el-button class="windi-mb-md">按钮1</el-button><el-button class="windi-mb-md">按钮1</el-button
-    ><el-button class="windi-mb-md">按钮1</el-button><el-button class="windi-mb-md">按钮1</el-button>
-  </div>
-</template>
-<script lang="ts" setup></script> -->
 <template>
   <div class="app-container">
     <div class="app-content">
