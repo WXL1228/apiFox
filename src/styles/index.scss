@@ -4,34 +4,31 @@
 @import "./transition.scss";
 // Element Plus
 @import "./element-plus.scss";
-// Vxe Table
-@import "./vxe-table.scss";
 // 注册多主题
 @import "./theme/register.scss";
-// mixin
-@import "./mixins.scss";
 
 // 业务页面几乎都应该在根元素上挂载 class="app-container"，以保持页面美观
 .app-container {
-  padding: 20px;
+  @apply p-[10px] md:p-5;
+  .app-content {
+    @apply bg-white rounded p-[10px] md:p-5 shadow;
+  }
 }
 
-html {
-  height: 100%;
-}
-
+html,
 body {
   height: 100%;
+  width: 100%;
   background-color: var(--v3-body-bg-color);
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,
     sans-serif;
-  @include scrollbar();
 }
 
 #app {
   height: 100%;
+  width: 100%;
 }
 
 *,
@@ -50,4 +47,37 @@ a:hover {
 
 div:focus {
   outline: none;
+}
+
+/*改变浏览器滚动条样式仅支持webkit内核浏览器*/
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: #f8f8f8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(209, 209, 209);
+  min-height: 150px;
+  min-width: 150px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:vertical:hover {
+  background: rgb(180, 180, 180);
+}
+
+::-webkit-scrollbar-thumb:horizontal:hover {
+  background: rgb(180, 180, 180);
+}
+
+#nprogress .bar {
+  background: #0aa679 !important;
 }
