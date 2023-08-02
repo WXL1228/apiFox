@@ -4,6 +4,8 @@
 .el-table {
   // 表头
   th.el-table__cell {
+    font-weight: bold !important;
+    color: #333333 !important;
     background-color: var(--el-fill-color-light) !important;
   }
 }
@@ -20,4 +22,53 @@
       display: none !important;
     }
   }
+}
+
+// el-form
+.el-form--inline .el-form-item {
+  margin-right: 20px !important;
+  margin-bottom: 20px !important;
+  @media screen and (max-width: 768px) {
+    margin-right: 0 !important;
+    margin-bottom: 10px !important;
+  }
+  // 固定输入框大小 确保删除按钮出现时不会发生页面抖动
+  .el-form-item__content {
+    .el-input .el-input__wrapper {
+      width: 220px !important;
+    }
+  }
+}
+.el-form-item {
+  display: flex;
+  @media screen and (max-width: 768px) {
+    display: block !important;
+    margin-bottom: 10px !important;
+    .el-form-item__label {
+      justify-content: flex-start !important;
+    }
+  }
+}
+
+// dialog
+.el-dialog {
+  --el-dialog-width: 50%;
+  @media screen and (max-width: 768px) {
+    --el-dialog-width: 100% !important;
+  }
+}
+
+// tree
+.el-tree {
+  --el-tree-node-hover-bg-color: #ebf8f4;
+}
+.el-tree-node__content {
+  @apply h-8;
+}
+
+// popover
+.el-popover.el-popper {
+  padding: 8px !important;
+  width: auto !important;
+  min-width: max-content !important;
 }
