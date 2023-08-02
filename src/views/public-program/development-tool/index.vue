@@ -1,5 +1,5 @@
 <template>
   <div class="app-container">
-    <el-card> 首页 </el-card>
+    <el-card> 生活服务 </el-card>
   </div>
 </template>

@@ -7,6 +7,7 @@ import { useSettingsStore } from "@/store/modules/settings"
 import { useUserStore } from "@/store/modules/user"
 import { UserFilled } from "@element-plus/icons-vue"
 import Hamburger from "../Hamburger/index.vue"
+import Breadcrumb from "../Breadcrumb/index.vue"
 import Sidebar from "../Sidebar/index.vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import Screenfull from "@/components/Screenfull/index.vue"
@@ -38,8 +39,7 @@ const logout = () => {
 <template>
   <div class="navigation-bar">
     <Hamburger v-if="!isTop || isMobile" :is-active="sidebar.opened" class="hamburger" @toggle-click="toggleSidebar" />
-
-    <div />
+    <Breadcrumb v-if="!isTop || isMobile" class="breadcrumb" />
     <Sidebar v-if="isTop && !isMobile" class="sidebar" />
     <div class="right-menu">
       <Screenfull v-if="showScreenfull" class="right-menu-item" />

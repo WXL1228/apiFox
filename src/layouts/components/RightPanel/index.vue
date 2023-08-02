@@ -3,14 +3,14 @@ import { ref } from "vue"
 import { Setting } from "@element-plus/icons-vue"
 
 interface Props {
-  buttonTop?: number
+  buttonbottom?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  buttonTop: 350
+  buttonbottom: 0
 })
 
-const buttonTopCss = props.buttonTop + "px"
+const buttonTopCss = props.buttonbottom + "px"
 const show = ref(false)
 </script>
 
@@ -27,11 +27,11 @@ const show = ref(false)
 
 <style lang="scss" scoped>
 .handle-button {
-  width: 48px;
-  height: 48px;
-  background-color: var(--v3-rightpanel-button-bg-color);
+  width: 38px;
+  height: 38px;
+  background-color: gainsboro;
   position: fixed;
-  top: v-bind(buttonTopCss);
+  bottom: v-bind(buttonTopCss);
   right: 0px;
   border-radius: 6px 0 0 6px;
   z-index: 10;
