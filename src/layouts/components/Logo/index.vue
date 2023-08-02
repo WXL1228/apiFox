@@ -39,10 +39,12 @@ const { layoutMode } = storeToRefs(settingsStore)
   background-color: transparent;
   text-align: center;
   overflow: hidden;
+  text-align: center;
   .layout-logo {
     display: none;
   }
   .layout-logo-text {
+    margin: 0 auto;
     height: 100%;
     vertical-align: middle;
   }

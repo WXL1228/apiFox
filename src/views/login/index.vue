@@ -6,6 +6,7 @@ import { type FormInstance, FormRules } from "element-plus"
 import { User, Lock } from "@element-plus/icons-vue"
 import { type LoginRequestData } from "@/api/login/types/login"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
+import { register } from "@/api/login/index"
 
 const router = useRouter()
 
@@ -54,10 +55,13 @@ const handleRegister = () => {
   loginFormRef.value?.validate((valid: boolean, fields) => {
     if (valid) {
       loading.value = true
-      useUserStore()
-        .login(loginFormData)
-        .then(() => {
-          router.push({ path: "/" })
+      const params = {
+        username: loginFormData.username,
+        password: loginFormData.password
+      }
+      register(params)
+        .then((res: any) => {
+          console.log(res)
         })
         .finally(() => {
           loading.value = false
