@@ -53,7 +53,8 @@ const tipLineWidth = computed(() => {
 
 <template>
   <div :class="{ 'has-logo': isLogo }">
-    <Logo v-if="isLogo" :collapse="isCollapse" />
+    <div class="w-full"><Logo v-if="isLogo" :collapse="isCollapse" /></div>
+
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
@@ -133,7 +134,7 @@ const tipLineWidth = computed(() => {
   &:hover {
     background-color: v-bind(sidebarMenuHoverBgColor);
   }
-  display: block;
+  // display: block;
   * {
     vertical-align: middle;
   }

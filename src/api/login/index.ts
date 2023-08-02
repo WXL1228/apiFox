@@ -1,14 +1,6 @@
 import { request } from "@/utils/service"
 import type * as Login from "./types/login"
 
-/** 获取登录验证码 */
-export function getLoginCodeApi() {
-  return request<Login.LoginCodeResponseData>({
-    url: "login/code",
-    method: "get"
-  })
-}
-
 /** 登录并返回 Token */
 export function loginApi(data: Login.LoginRequestData) {
   return request<Login.LoginResponseData>({
@@ -23,5 +15,14 @@ export function getUserInfoApi() {
   return request<Login.UserInfoResponseData>({
     url: "users/info",
     method: "get"
+  })
+}
+
+// 用户注册
+export function register(data: Login.LoginRequestData1) {
+  return request({
+    url: "user/register",
+    method: "post",
+    data: data
   })
 }
