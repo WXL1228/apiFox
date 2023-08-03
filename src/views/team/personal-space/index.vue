@@ -1,5 +1,5 @@
 <template>
   <div class="app-container">
-    <el-card> 我的团队 </el-card>
+    <el-card> 项目管理 </el-card>
   </div>
 </template>

@@ -155,7 +155,6 @@ const registerRules = reactive<FormRules<typeof ruleForm>>({
 // 填写密码后才可以填写确认密码
 const isShow = ref(true)
 const isInputValue = (row: any) => {
-  console.log(111, row)
   if (row !== "") {
     isShow.value = false
   } else {
@@ -195,6 +194,9 @@ const handleRegister = () => {
         })
         .finally(() => {
           loading.value = false
+          loginFormData.username = params.username
+          loginFormData.password = params.password
+          flag.value = true
         })
     } else {
       console.error("表单校验不通过", fields)

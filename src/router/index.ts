@@ -103,7 +103,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/team/personal-space/index.vue"),
         name: "Personal-Space",
         meta: {
-          title: "我的团队"
+          title: "项目管理"
         }
       },
       {

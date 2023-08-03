@@ -35,6 +35,5 @@ export const useSettingsStore = defineStore("settings", () => {
     return settings
   }
 
-  console.log(state)
   return state
 })
