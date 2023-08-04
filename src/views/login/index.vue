@@ -77,8 +77,8 @@
           </div>
         </el-form>
       </div>
-      <el-button class="set-register" @click.prevent="setflag" v-if="flag">注册</el-button>
-      <el-button class="set-register" @click.prevent="setflag" v-if="!flag">登录</el-button>
+      <el-button class="set-register" @click.prevent="setFlag" v-if="flag">注册</el-button>
+      <el-button class="set-register" @click.prevent="setFlag" v-if="!flag">登录</el-button>
     </div>
   </div>
 </template>
@@ -204,7 +204,7 @@ const handleRegister = () => {
   })
 }
 
-const setflag = () => {
+const setFlag = () => {
   if (flag.value) {
     loginFormData.username = ""
     loginFormData.password = ""
