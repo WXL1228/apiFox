@@ -104,8 +104,7 @@ const loading = ref(false)
 /** 登录表单数据 */
 const loginFormData: LoginRequestData = reactive({
   username: "",
-  password: "",
-  confirmedPassword: ""
+  password: ""
 })
 /** 登录表单校验规则 */
 const loginFormRules: FormRules = {
@@ -185,8 +184,8 @@ const handleRegister = () => {
     if (valid) {
       loading.value = true
       const params = {
-        username: loginFormData.username,
-        password: loginFormData.password
+        username: ruleForm.username,
+        password: ruleForm.password
       }
       register(params)
         .then((res: any) => {
