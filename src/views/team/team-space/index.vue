@@ -10,8 +10,7 @@
           /></el-form-item>
           <el-form-item><el-button type="primary" @click="search">搜索</el-button></el-form-item>
         </el-form>
-        <el-button class="windi-mb-md" type="primary">新建项目</el-button>
-        <el-button class="windi-mb-md" type="danger">批量删除</el-button>
+        <el-button class="windi-mb-md" type="primary">添加成员</el-button>
       </div>
       <!-- 表格区域 -->
       <div>
@@ -30,29 +29,21 @@
               <span>{{ scope.$index + (pagination.page - 1) * pagination.size + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="项目名称" align="center" prop="userName" width="180" />
-          <el-table-column label="创建人" align="center" prop="fileName" min-width="220" show-overflow-tooltip>
+          <el-table-column label="成员昵称" align="center" prop="userName" width="180" />
+          <el-table-column label="成员权限" align="center" prop="fileName" min-width="220" show-overflow-tooltip>
             <template #default="{ row }">
               <el-link :underline="false" type="primary" @click="goDetail(row)">
                 {{ row.fileName }}
               </el-link>
             </template>
           </el-table-column>
-          <el-table-column label="描述" align="center" prop="text" min-width="3000" show-overflow-tooltip />
-          <el-table-column label="日期" align="center" prop="createTime" width="180" />
-          <el-table-column label="状态" align="center" width="120">
-            <template #default="{ row }">
-              <span v-if="value1">公开</span>
-              <span v-else>私有</span>
-              <el-switch v-model="value1" />
-              <span v-if="false">{{ row }}</span>
-            </template>
-          </el-table-column>
+          <el-table-column label="描述" align="center" prop="text" min-width="300" show-overflow-tooltip />
+          <el-table-column label="最近修改" align="center" prop="createTime" width="180" />
           <el-table-column label="操作" align="center" width="150">
             <template #default="{ row }">
               <span v-if="false">{{ row }}</span>
-              <el-button link type="danger">删除</el-button>
-              <el-button link type="primary">详情</el-button>
+              <el-button link type="primary">修改</el-button>
+              <el-button link type="danger">移除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -108,7 +99,6 @@ const tableData = ref<ITable[]>([
 const loading = ref<Boolean>(false)
 const selectVal = ref<ITable[]>([])
 const router = useRouter()
-const value1 = ref(true)
 
 // 初始化数据
 const initData = () => {}

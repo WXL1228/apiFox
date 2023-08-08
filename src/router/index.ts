@@ -99,19 +99,27 @@ export const constantRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: "personal-space",
-        component: () => import("@/views/team/personal-space/index.vue"),
-        name: "Personal-Space",
-        meta: {
-          title: "项目管理"
-        }
-      },
-      {
         path: "private-program",
         component: () => import("@/views/team/private-program/index.vue"),
         name: "Private-Program",
         meta: {
           title: "我的项目"
+        }
+      },
+      {
+        path: "team-space",
+        component: () => import("@/views/team/team-space/index.vue"),
+        name: "team-space",
+        meta: {
+          title: "成员管理"
+        }
+      },
+      {
+        path: "personal-space",
+        component: () => import("@/views/team/personal-space/index.vue"),
+        name: "Personal-Space",
+        meta: {
+          title: "项目管理"
         }
       }
     ]
