@@ -9,7 +9,7 @@
 
 <script long="ts" setup></script>
 
-<style scoped>
+<style scoped lang="scss">
 :deep(.el-button) {
   width: 100% !important;
   height: 100% !important;
