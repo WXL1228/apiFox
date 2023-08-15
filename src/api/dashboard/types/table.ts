@@ -1,36 +1,38 @@
 export interface CreateTableRequestData {
-  username: string
-  password: string
+  name: string
+  description: string
+  isPrivate: boolean
 }
 
 export interface UpdateTableRequestData {
-  id: string
-  username: string
-  password?: string
+  projectId: string | undefined
+  name: string
+  description: string
+  isPrivate: boolean
 }
 
-export interface GetTableRequestData {
-  /** 当前页码 */
-  currentPage: number
-  /** 查询条数 */
-  size: number
-  /** 查询参数：用户名 */
-  username?: string
-  /** 查询参数：手机号 */
-  phone?: string
-}
+// export interface GetTableRequestData {
+//   /** 当前页码 */
+//   currentPage: number
+//   /** 查询条数 */
+//   size: number
+//   /** 查询参数：用户名 */
+//   username?: string
+//   /** 查询参数：手机号 */
+//   phone?: string
+// }
 
-export interface GetTableData {
-  createTime: string
-  email: string
-  id: string
-  phone: string
-  roles: string
-  status: boolean
-  username: string
-}
+// export interface GetTableData {
+//   createTime: string
+//   email: string
+//   id: string
+//   phone: string
+//   roles: string
+//   status: boolean
+//   username: string
+// }
 
-export type GetTableResponseData = ApiResponseData<{
-  list: GetTableData[]
-  total: number
-}>
+// export type GetTableResponseData = ApiResponseData<{
+//   list: GetTableData[]
+//   total: number
+// }>
