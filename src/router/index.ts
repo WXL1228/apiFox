@@ -91,7 +91,7 @@ export const constantRoutes: RouteRecordRaw[] = [
   {
     path: "/team",
     component: Layouts,
-    redirect: "/team/personal-space",
+    redirect: "/team/private-program",
     name: "Menu",
     meta: {
       title: "个人空间",

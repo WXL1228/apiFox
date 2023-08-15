@@ -33,7 +33,7 @@
           <el-table-column label="项目名称" align="center" prop="name" width="180" />
           <el-table-column label="描述" align="center" prop="description" min-width="200" show-overflow-tooltip />
           <el-table-column label="创建日期" align="center" prop="created_time" width="220" />
-          <el-table-column label="创建人" align="center" prop="fileName" width="150" />
+          <el-table-column label="创建人" align="center" width="150">{{ userStore.username }}</el-table-column>
           <el-table-column label="私有项目" align="center" width="150">
             <template #default="{ row }">
               <el-switch v-model="row.isPrivate" />
@@ -57,6 +57,7 @@
 import { ElMessage, ElMessageBox } from "element-plus"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
+import { useUserStore } from "@/store/modules/user"
 
 import { getTableDataApi, deleteTableDataApi } from "@/api/team/private-program/index"
 import { getToken } from "@/utils/cache/cookies"
@@ -96,6 +97,7 @@ const tableData = ref<ITable[]>([
 const loading = ref<Boolean>(false)
 const selectVal = ref<ITable[]>([])
 const router = useRouter()
+const userStore = useUserStore()
 
 // 初始化数据
 const initData = () => {
@@ -105,6 +107,18 @@ const initData = () => {
   getTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
       tableData.value = res.data.projects
+      for (const [key, value] of Object.entries(tableData)) {
+        if (key === "_rawValue") {
+          for (let i = 0; i < value.length; i++) {
+            const timeData = value[i]["created_time"]
+            const time10 = new Date(+new Date(timeData) + 8 * 3600 * 1000)
+              .toISOString()
+              .replace(/T/g, " ")
+              .replace(/\.[\d]{3}Z/, "")
+            value[i]["created_time"] = time10
+          }
+        }
+      }
     }
   })
 }
@@ -120,7 +134,7 @@ const search = () => {
 // 跳转到详情页面
 const goDetail = (item: any) => {
   router.push({
-    name: "",
+    name: "Personal-Space",
     params: { id: item.fileId }
   })
 }
@@ -137,7 +151,7 @@ const editProject = (row: any) => {
   editDialogRef.value?.show(obj)
 }
 
-// 删除项目
+// 删除项目(单个)
 const deleteTableDataApiFun = (row: any) => {
   ElMessageBox.confirm("确定删除该项目吗？", "提示", {
     confirmButtonText: "确认",
@@ -156,12 +170,35 @@ const deleteTableDataApiFun = (row: any) => {
   })
 }
 
+//删除项目(批量)
+const deleteTableDataApiFunc = (data: any) => {
+  ElMessageBox.confirm("确定删除选中项目吗？", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(() => {
+    data.forEach((element: any) => {
+      const params = {
+        projectId: element._id
+      }
+      deleteTableDataApi(params).then((res: any) => {
+        if (res.code === 200) {
+          ElMessage.success(res.message)
+          initData()
+        }
+      })
+    })
+  })
+}
+
 // 批量删除
 const batchDelete = () => {
-  if (selectVal.value && selectVal.value.length > 0) {
+  if (selectVal.value && selectVal.value.length === 0) {
     selectVal.value.forEach((element) => {
       deleteTableDataApiFun(element)
     })
+  } else if (selectVal.value && selectVal.value.length > 0) {
+    deleteTableDataApiFunc(selectVal.value)
   } else {
     ElMessage.info("请选择要删除的项目")
     return

@@ -6,7 +6,7 @@
         type="primary"
         style="width: 100% !important; height: 100% !important ; font-size: xx-large !important"
         @click="createProject"
-        >创建项目</el-button
+        >我的项目</el-button
       >
     </div>
     <EditDialog ref="editDialogRef" @initData="getList" />
@@ -16,13 +16,14 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import EditDialog from "./components/edit-dialog.vue"
+import { useRouter } from "vue-router"
 
 const editDialogRef = ref<InstanceType<typeof EditDialog>>()
+const router = useRouter()
 
 // 创建项目
 const createProject = () => {
-  const obj = { id: 1, title: "创建项目", isAdd: true }
-  editDialogRef.value?.show(obj)
+  router.push({ path: "/team" })
 }
 const getList = () => {}
 </script>

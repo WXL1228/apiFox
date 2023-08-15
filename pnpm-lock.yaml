@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
@@ -35,8 +39,8 @@ dependencies:
     specifier: 2.1.4
     version: 2.1.4(typescript@5.1.6)(vue@3.3.4)
   pnpm:
-    specifier: ^8.6.10
-    version: registry.npmmirror.com/pnpm@8.6.10
+    specifier: ^8.6.11
+    version: registry.npmmirror.com/pnpm@8.6.11
   screenfull:
     specifier: 6.0.2
     version: 6.0.2
@@ -104,7 +108,7 @@ devDependencies:
     version: 8.45.0
   eslint-plugin-prettier:
     specifier: 5.0.0
-    version: 5.0.0(eslint@8.45.0)(prettier@3.0.0)
+    version: 5.0.0(eslint-config-prettier@8.8.0)(eslint@8.45.0)(prettier@3.0.0)
   eslint-plugin-vue:
     specifier: 9.15.1
     version: 9.15.1(eslint@8.45.0)
@@ -131,7 +135,7 @@ devDependencies:
     version: 5.1.6
   unocss:
     specifier: 0.53.5
-    version: 0.53.5(vite@4.4.6)
+    version: 0.53.5(postcss@8.4.26)(vite@4.4.6)
   vite:
     specifier: 4.4.6
     version: 4.4.6(@types/node@20.4.2)(sass@1.64.0)(terser@5.19.1)
@@ -998,9 +1002,11 @@ packages:
       sirv: 2.0.3
     dev: true
 
-  /@unocss/postcss@0.53.5:
+  /@unocss/postcss@0.53.5(postcss@8.4.26):
     resolution: {integrity: sha512-IfZl4GxrpegP/861bp3e0X3VcQJ9/M3VxC9UQ7zzxkOz/E8R09iMpbnznVLrTiLp2r96p5k/ggXLoadFm1FxGA==}
     engines: {node: '>=14'}
+    peerDependencies:
+      postcss: ^8.4.21
     dependencies:
       '@unocss/config': 0.53.5
       '@unocss/core': 0.53.5
@@ -2283,26 +2289,6 @@ packages:
     dependencies:
       eslint: 8.45.0
       eslint-config-prettier: 8.8.0(eslint@8.45.0)
-      prettier: 3.0.0
-      prettier-linter-helpers: 1.0.0
-      synckit: 0.8.5
-    dev: true
-
-  /eslint-plugin-prettier@5.0.0(eslint@8.45.0)(prettier@3.0.0):
-    resolution: {integrity: sha512-AgaZCVuYDXHUGxj/ZGu1u8H8CYgDY3iG6w5kUFw4AzMVXzB7VvbKgYR4nATIN+OvUrghMbiDLeimVjVY5ilq3w==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    peerDependencies:
-      '@types/eslint': '>=8.0.0'
-      eslint: '>=8.0.0'
-      eslint-config-prettier: '*'
-      prettier: '>=3.0.0'
-    peerDependenciesMeta:
-      '@types/eslint':
-        optional: true
-      eslint-config-prettier:
-        optional: true
-    dependencies:
-      eslint: 8.45.0
       prettier: 3.0.0
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.5
@@ -4531,7 +4517,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: true
 
-  /unocss@0.53.5(vite@4.4.6):
+  /unocss@0.53.5(postcss@8.4.26)(vite@4.4.6):
     resolution: {integrity: sha512-LXAdtzAaH8iEDWxW4t9i6TvJNw0OSrgdN+jw8rAZAWb73Nx51ZLoKPUB1rFvQMr2Li7LcsUj5hYpOrQbhhafYg==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -4544,7 +4530,7 @@ packages:
       '@unocss/cli': 0.53.5
       '@unocss/core': 0.53.5
       '@unocss/extractor-arbitrary-variants': 0.53.5
-      '@unocss/postcss': 0.53.5
+      '@unocss/postcss': 0.53.5(postcss@8.4.26)
       '@unocss/preset-attributify': 0.53.5
       '@unocss/preset-icons': 0.53.5
       '@unocss/preset-mini': 0.53.5
@@ -4561,6 +4547,7 @@ packages:
       '@unocss/transformer-variant-group': 0.53.5
       '@unocss/vite': 0.53.5(vite@4.4.6)
     transitivePeerDependencies:
+      - postcss
       - rollup
       - supports-color
       - vite
@@ -5624,10 +5611,10 @@ packages:
     version: 2.3.1
     engines: {node: '>=8.6'}
 
-  registry.npmmirror.com/pnpm@8.6.10:
-    resolution: {integrity: sha512-EBlPdgrAqmIDK6lflNm8M4lueWGM4PKJIDngt6vJ1+fmzh3e0482tg52nUjiuGvkzZ2sngA181GLqknXhAHgIg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pnpm/-/pnpm-8.6.10.tgz}
+  registry.npmmirror.com/pnpm@8.6.11:
+    resolution: {integrity: sha512-jqknppuj45tDzJsLcLqkAxytBHZXIx9JTYkGNq0/7pSRggpio9wRxTDj4NA2ilOHPlJ5BVjB5Ij5dx65woMi5A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pnpm/-/pnpm-8.6.11.tgz}
     name: pnpm
-    version: 8.6.10
+    version: 8.6.11
     engines: {node: '>=16.14'}
     hasBin: true
     dev: false
@@ -5737,7 +5724,3 @@ packages:
     engines: {node: '>= 12'}
     hasBin: true
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

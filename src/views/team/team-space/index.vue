@@ -32,7 +32,7 @@
           <el-table-column label="成员昵称" align="center" prop="userName" width="180" />
           <el-table-column label="成员权限" align="center" prop="fileName" min-width="220" show-overflow-tooltip>
             <template #default="{ row }">
-              <el-link :underline="false" type="primary" @click="goDetail(row)">
+              <el-link :underline="false" type="primary" @click="goDetail()">
                 {{ row.fileName }}
               </el-link>
             </template>
@@ -113,10 +113,10 @@ const search = () => {
   initData()
 }
 // 跳转到详情页面
-const goDetail = (item: any) => {
+const goDetail = () => {
   router.push({
-    name: "",
-    params: { id: item.fileId }
+    name: "Personal-Space"
+    // params: { id: item.fileId }
   })
 }
 

@@ -116,6 +116,9 @@ const createTableDataApiFun = () => {
   createTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
       ElMessage.success(res.message)
+      formData.value.name = ""
+      formData.value.description = ""
+      formData.value.isPrivate = false
       detail()
     }
   })
