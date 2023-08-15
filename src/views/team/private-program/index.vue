@@ -10,8 +10,8 @@
           /></el-form-item>
           <el-form-item><el-button type="primary" @click="search">搜索</el-button></el-form-item>
         </el-form>
-        <el-button class="windi-mb-md" type="primary">新建项目</el-button>
-        <el-button class="windi-mb-md" type="danger">批量删除</el-button>
+        <el-button class="windi-mb-md" type="primary" @click="createProject">新建项目</el-button>
+        <el-button class="windi-mb-md" type="danger" @click="batchDelete">批量删除</el-button>
       </div>
       <!-- 表格区域 -->
       <div>
@@ -27,91 +27,87 @@
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" width="100" align="center">
             <template #default="scope">
-              <span>{{ scope.$index + (pagination.page - 1) * pagination.size + 1 }}</span>
+              <span>{{ scope.$index + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="项目名称" align="center" prop="userName" width="180" />
-          <el-table-column label="创建人" align="center" prop="fileName" min-width="220" show-overflow-tooltip>
+          <el-table-column label="项目名称" align="center" prop="name" width="180" />
+          <el-table-column label="描述" align="center" prop="description" min-width="200" show-overflow-tooltip />
+          <el-table-column label="创建日期" align="center" prop="created_time" width="220" />
+          <el-table-column label="创建人" align="center" prop="fileName" width="150" />
+          <el-table-column label="私有项目" align="center" width="150">
             <template #default="{ row }">
-              <el-link :underline="false" type="primary" @click="goDetail(row)">
-                {{ row.fileName }}
-              </el-link>
+              <el-switch v-model="row.isPrivate" />
             </template>
           </el-table-column>
-          <el-table-column label="描述" align="center" prop="text" min-width="3000" show-overflow-tooltip />
-          <el-table-column label="日期" align="center" prop="createTime" width="180" />
-          <el-table-column label="状态" align="center" width="120">
+          <el-table-column label="操作" align="center" width="200">
             <template #default="{ row }">
-              <span v-if="value1">公开</span>
-              <span v-else>私有</span>
-              <el-switch v-model="value1" />
-              <span v-if="false">{{ row }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" width="150">
-            <template #default="{ row }">
-              <span v-if="false">{{ row }}</span>
-              <el-button link type="danger">删除</el-button>
-              <el-button link type="primary">详情</el-button>
+              <el-button link type="primary" @click="editProject(row)">编辑</el-button>
+              <el-button link type="primary" @click="goDetail(row)">详情</el-button>
+              <el-button link type="danger" @click="deleteTableDataApiFun(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <Pagination
-          :total="pagination.total"
-          v-model:size="pagination.size"
-          v-model:page="pagination.page"
-          @change="initData"
-        />
       </div>
     </div>
+    <EditDialog ref="editDialogRef" @initData="initData" />
   </div>
 </template>
 
 <script setup lang="ts">
-// import { ElMessage, ElMessageBox } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
+
+import { getTableDataApi, deleteTableDataApi } from "@/api/team/private-program/index"
+import { getToken } from "@/utils/cache/cookies"
+const token = getToken()
+import EditDialog from "../../dashboard/components/edit-dialog.vue"
+
+const editDialogRef = ref<InstanceType<typeof EditDialog>>()
 
 defineOptions({
   name: "CommentManage"
 })
 
 interface ITable {
-  id: number
-  creationIp: string
-  text: string
-  userId: number
-  userName: string
-  createTime: string
-  fileId: number
-  fileName: string
+  name: string
+  description: string
+  created_time: string
+  isPrivate: boolean
+  created_by: string
+  members: []
+  __v: number | null
+  _id: string
 }
 
-const pagination = ref({
-  page: 1,
-  size: 10,
-  total: 0
-})
 const commentText = ref("")
 const tableData = ref<ITable[]>([
   {
-    id: 1,
-    creationIp: "2222",
-    text: "string",
-    userId: 1,
-    userName: "string",
-    createTime: "string",
-    fileId: 1,
-    fileName: "string"
+    name: "",
+    description: "",
+    created_time: "",
+    isPrivate: false,
+    created_by: "",
+    members: [],
+    __v: null,
+    _id: ""
   }
 ])
 const loading = ref<Boolean>(false)
 const selectVal = ref<ITable[]>([])
 const router = useRouter()
-const value1 = ref(true)
 
 // 初始化数据
-const initData = () => {}
+const initData = () => {
+  const params = {
+    token: token
+  }
+  getTableDataApi(params).then((res: any) => {
+    if (res.code === 200) {
+      tableData.value = res.data.projects
+    }
+  })
+}
 // 获取批量选择数据
 const handleSelectionChange = (val: ITable[]) => {
   selectVal.value = val
@@ -119,7 +115,6 @@ const handleSelectionChange = (val: ITable[]) => {
 
 // 检索
 const search = () => {
-  pagination.value.page = 1
   initData()
 }
 // 跳转到详情页面
@@ -128,6 +123,49 @@ const goDetail = (item: any) => {
     name: "",
     params: { id: item.fileId }
   })
+}
+
+// 创建项目
+const createProject = () => {
+  const obj = { id: 1, title: "创建项目", isAdd: true }
+  editDialogRef.value?.show(obj)
+}
+
+// 编辑项目
+const editProject = (row: any) => {
+  const obj = { id: 1, title: "编辑项目", isAdd: false, detailMsg: row }
+  editDialogRef.value?.show(obj)
+}
+
+// 删除项目
+const deleteTableDataApiFun = (row: any) => {
+  ElMessageBox.confirm("确定删除该项目吗？", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(() => {
+    const params = {
+      projectId: row._id
+    }
+    deleteTableDataApi(params).then((res: any) => {
+      if (res.code === 200) {
+        ElMessage.success(res.message)
+        initData()
+      }
+    })
+  })
+}
+
+// 批量删除
+const batchDelete = () => {
+  if (selectVal.value && selectVal.value.length > 0) {
+    selectVal.value.forEach((element) => {
+      deleteTableDataApiFun(element)
+    })
+  } else {
+    ElMessage.info("请选择要删除的项目")
+    return
+  }
 }
 
 initData()
