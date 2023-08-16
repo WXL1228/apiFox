@@ -27,11 +27,11 @@ export function updateTableDataApi(data: Table.UpdateTableRequestData) {
   })
 }
 
-// /** 查 */
-// export function getTableDataApi(params: Table.GetTableRequestData) {
-//   return request({
-//     url: "table",
-//     method: "get",
-//     params
-//   })
-// }
+/** 查 */
+export function getTableDetailApi(data: Table.GetTableRequestData) {
+  return request({
+    url: "/project/projectDetail",
+    method: "post",
+    data: data
+  })
+}

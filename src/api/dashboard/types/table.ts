@@ -11,16 +11,9 @@ export interface UpdateTableRequestData {
   isPrivate: boolean
 }
 
-// export interface GetTableRequestData {
-//   /** 当前页码 */
-//   currentPage: number
-//   /** 查询条数 */
-//   size: number
-//   /** 查询参数：用户名 */
-//   username?: string
-//   /** 查询参数：手机号 */
-//   phone?: string
-// }
+export interface GetTableRequestData {
+  projectId: string
+}
 
 // export interface GetTableData {
 //   createTime: string

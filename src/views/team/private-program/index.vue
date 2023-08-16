@@ -33,16 +33,17 @@
           <el-table-column label="项目名称" align="center" prop="name" width="180" />
           <el-table-column label="描述" align="center" prop="description" min-width="200" show-overflow-tooltip />
           <el-table-column label="创建日期" align="center" prop="created_time" width="220" />
-          <el-table-column label="创建人" align="center" width="150">{{ userStore.username }}</el-table-column>
+          <el-table-column label="项目ID" align="center" prop="_id" width="220" />
           <el-table-column label="私有项目" align="center" width="150">
             <template #default="{ row }">
               <el-switch v-model="row.isPrivate" />
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" width="200">
+          <el-table-column label="操作" align="center" width="220">
             <template #default="{ row }">
+              <el-button link type="warning" @click="goDetail(row)">管理</el-button>
               <el-button link type="primary" @click="editProject(row)">编辑</el-button>
-              <el-button link type="primary" @click="goDetail(row)">详情</el-button>
+              <el-button link type="primary" @click="getDetail(row._id)">详情</el-button>
               <el-button link type="danger" @click="deleteTableDataApiFun(row)">删除</el-button>
             </template>
           </el-table-column>
@@ -50,6 +51,7 @@
       </div>
     </div>
     <EditDialog ref="editDialogRef" @initData="initData" />
+    <TableDetail ref="tableDetailRef" />
   </div>
 </template>
 
@@ -57,14 +59,16 @@
 import { ElMessage, ElMessageBox } from "element-plus"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
-import { useUserStore } from "@/store/modules/user"
+import { useProjectStore } from "@/store/modules/personal-space"
 
 import { getTableDataApi, deleteTableDataApi } from "@/api/team/private-program/index"
 import { getToken } from "@/utils/cache/cookies"
 const token = getToken()
 import EditDialog from "../../dashboard/components/edit-dialog.vue"
+import TableDetail from "../../dashboard/components/program-detail.vue"
 
 const editDialogRef = ref<InstanceType<typeof EditDialog>>()
+const tableDetailRef = ref<InstanceType<typeof TableDetail>>()
 
 defineOptions({
   name: "CommentManage"
@@ -97,7 +101,7 @@ const tableData = ref<ITable[]>([
 const loading = ref<Boolean>(false)
 const selectVal = ref<ITable[]>([])
 const router = useRouter()
-const userStore = useUserStore()
+const projectStore = useProjectStore()
 
 // 初始化数据
 const initData = () => {
@@ -131,11 +135,19 @@ const handleSelectionChange = (val: ITable[]) => {
 const search = () => {
   initData()
 }
+
+// 跳转到详情页面
+const getDetail = (item: string) => {
+  const obj = { id: 1, title: "接口详情", isAdd: false, item: item }
+  tableDetailRef.value?.show(obj)
+}
 // 跳转到详情页面
 const goDetail = (item: any) => {
+  console.log(item._id)
+  projectStore.projectId = item._id
+  projectStore.projectName = item.name
   router.push({
-    name: "Personal-Space",
-    params: { id: item.fileId }
+    name: "Personal-Space"
   })
 }
 

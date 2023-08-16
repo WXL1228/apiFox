@@ -1,23 +1,25 @@
-export interface CreateTableRequestData {
-  username: string
-  password: string
+export interface CreateInterfaceRequestData {
+  projectId: string
+  name: string
+  url: string
+  method: "GET" | "POST" | "PUT" | "DELETE"
+  query: object
+  body: object
+  responseData: object
 }
 
-export interface UpdateTableRequestData {
-  id: string
-  username: string
-  password?: string
+export interface UpdateInterfaceRequestData {
+  interfaceId: string
+  name: string
+  url: string
+  method: "GET" | "POST" | "PUT" | "DELETE"
+  query: object
+  body: object
+  responseData: object
 }
 
 export interface GetTableRequestData {
-  /** 当前页码 */
-  currentPage: number
-  /** 查询条数 */
-  size: number
-  /** 查询参数：用户名 */
-  username?: string
-  /** 查询参数：手机号 */
-  phone?: string
+  projectId: string
 }
 
 export interface GetTableData {
@@ -30,7 +32,10 @@ export interface GetTableData {
   username: string
 }
 
-export type GetTableResponseData = ApiResponseData<{
-  list: GetTableData[]
-  total: number
-}>
+export interface deleteInterfaceRequestData {
+  interfaceId: string
+}
+
+export interface GetInterfaceDetail {
+  interfaceId: string
+}

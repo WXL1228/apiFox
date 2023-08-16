@@ -5,12 +5,15 @@
       <!-- 检索区域 -->
       <div>
         <el-form :inline="true">
-          <el-form-item label="项目名称："
-            ><el-input placeholder="请输入项目名称" clearable v-model="commentText" @clear="search"
+          <el-form-item label="项目名称/ID"
+            ><el-input placeholder="请输入项目名称/ID" clearable v-model="projectID" @clear="search"
           /></el-form-item>
           <el-form-item><el-button type="primary" @click="search">搜索</el-button></el-form-item>
+          <el-form-item label="项目名称:">{{ projectStore.projectName }}</el-form-item>
+          <el-form-item label="项目ID:">{{ projectStore.projectId }}</el-form-item>
         </el-form>
-        <el-button class="windi-mb-md" type="primary">添加成员</el-button>
+        <el-button class="windi-mb-md" type="warning" @click="createInterface">添加成员</el-button>
+        <el-button class="windi-mb-md" type="danger" @click="batchDelete">删除成员</el-button>
       </div>
       <!-- 表格区域 -->
       <div>
@@ -61,7 +64,10 @@
 <script setup lang="ts">
 // import { ElMessage, ElMessageBox } from "element-plus"
 import { ref } from "vue"
+import { useProjectStore } from "@/store/modules/personal-space"
+import { getTableDataApi } from "@/api/table/index"
 import { useRouter } from "vue-router"
+const projectStore = useProjectStore()
 
 defineOptions({
   name: "CommentManage"
@@ -83,7 +89,7 @@ const pagination = ref({
   size: 10,
   total: 0
 })
-const commentText = ref("")
+const projectID = ref<string>("")
 const tableData = ref<ITable[]>([
   {
     id: 1,
@@ -100,6 +106,20 @@ const loading = ref<Boolean>(false)
 const selectVal = ref<ITable[]>([])
 const router = useRouter()
 
+const searchProjectDetail = () => {
+  const params = {
+    projectId: projectID.value
+  }
+  getTableDataApi(params).then((res: any) => {
+    if (res.code === 200) {
+      projectStore.projectId = projectID.value
+      projectStore.projectName = res.data.project.name
+      projectID.value = ""
+      initData()
+    }
+  })
+}
+
 // 初始化数据
 const initData = () => {}
 // 获取批量选择数据
@@ -109,8 +129,7 @@ const handleSelectionChange = (val: ITable[]) => {
 
 // 检索
 const search = () => {
-  pagination.value.page = 1
-  initData()
+  searchProjectDetail()
 }
 // 跳转到详情页面
 const goDetail = () => {

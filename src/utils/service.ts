@@ -93,7 +93,7 @@ function createService() {
         default:
           break
       }
-      ElMessage.error(error.message)
+      ElMessage.error("错误")
       return Promise.reject(error)
     }
   )
