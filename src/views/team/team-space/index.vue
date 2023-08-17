@@ -15,6 +15,7 @@
         <el-button class="windi-mb-md" type="warning" @click="createInterface">添加成员</el-button>
         <el-button class="windi-mb-md" type="danger" @click="batchDelete">删除成员</el-button>
       </div>
+      <el-divider />
       <!-- 表格区域 -->
       <div>
         <el-table

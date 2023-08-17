@@ -13,9 +13,10 @@
           <el-form-item label="项目ID:">{{ projectStore.projectId }}</el-form-item>
         </el-form>
         <el-button class="windi-mb-md" type="warning" @click="createInterface">新建接口</el-button>
-        <el-button class="windi-mb-md" color="#626aef" @click="111">导入接口</el-button>
+        <el-button class="windi-mb-md" color="#626aef" @click="importInterface">导入接口</el-button>
         <el-button class="windi-mb-md" type="danger" @click="batchDelete">批量删除</el-button>
       </div>
+      <el-divider />
       <!-- 表格区域 -->
       <div>
         <el-table
@@ -33,17 +34,20 @@
               <span>{{ scope.$index + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="接口名称" align="center" prop="name" width="100" />
-          <el-table-column label="接口地址" align="center" prop="url" width="250" show-overflow-tooltip />
-          <el-table-column label="方法" align="center" prop="http_method" width="100" />
-          <el-table-column label="参数格式" align="center" prop="query" width="200" />
-          <el-table-column label="body" align="center" prop="body" min-width="300" />
-          <el-table-column label="响应格式" align="center" prop="response_data" min-width="220" />
-          <el-table-column label="操作" align="center" width="220">
+          <el-table-column label="接口名称" align="center" prop="name" width="300" />
+          <el-table-column label="接口地址" align="center" prop="url" width="300" show-overflow-tooltip />
+          <el-table-column label="方法" align="center" prop="http_method" width="300" />
+          <el-table-column label="状态" align="center" prop="query" width="300"
+            ><div class="flex flex-wrap gap-2 my-2">
+              <el-tag v-for="item in items" :key="item.label" :type="item.type" class="mx-1" effect="dark" round>
+                {{ item.label }}
+              </el-tag>
+            </div></el-table-column
+          >
+          <el-table-column label="操作" align="center" min-width="220">
             <template #default="{ row }">
-              <el-button link type="warning" @click="222">测试</el-button>
-              <el-button link type="primary" @click="editProject(row)">编辑</el-button>
-              <el-button link type="primary" @click="goDetail(row._id)">详情</el-button>
+              <el-button link type="primary" @click="editProject(row)">开发</el-button>
+              <el-button link type="info" @click="goDetail(row._id)">详情</el-button>
               <el-button link type="danger" @click="deleteTableDataApiFun(row)">删除</el-button>
             </template>
           </el-table-column>
@@ -52,6 +56,8 @@
     </div>
     <EditDialog ref="editDialogRef" @initData="initData" />
     <InterfaceDetail ref="interfaceDetailRef" />
+    <ImportInterface ref="importInterfaceRef" />
+    <InterfaceDevelopment ref="InterfaceDevelopmentRef" />
   </div>
 </template>
 
@@ -63,10 +69,18 @@ import { getTableDataApi, getInterfaceDataApi, deleteInterfaceDataApi } from "@/
 // const token = getToken()
 import EditDialog from "./components/edit-dialog.vue"
 import InterfaceDetail from "./components/interface-detail.vue"
+import ImportInterface from "./components/import-interface.vue"
+import InterfaceDevelopment from "./components/interface-development.vue"
 import { ElMessageBox, ElMessage } from "element-plus"
+import type { TagProps } from "element-plus"
+type Item = { type: TagProps["type"]; label: string }
+
+const items = ref<Array<Item>>([{ type: "info", label: "开发中" }])
 
 const editDialogRef = ref<InstanceType<typeof EditDialog>>()
 const interfaceDetailRef = ref<InstanceType<typeof InterfaceDetail>>()
+const importInterfaceRef = ref<InstanceType<typeof ImportInterface>>()
+const InterfaceDevelopmentRef = ref<InstanceType<typeof InterfaceDevelopment>>()
 const projectStore = useProjectStore()
 defineOptions({
   name: "CommentManage"
@@ -176,22 +190,29 @@ const goDetail = (item: string) => {
   interfaceDetailRef.value?.show(obj)
 }
 
-// 创建项目
+// 创建接口
 const createInterface = () => {
   const obj = { id: 1, title: "创建接口", isAdd: true }
   editDialogRef.value?.show(obj)
   initData()
 }
 
-// 编辑项目
-const editProject = (row: any) => {
-  console.log(row.responseData)
-  const obj = { id: 1, title: "编辑项目", isAdd: false, detailMsg: row }
-  editDialogRef.value?.show(obj)
+// 导入接口
+const importInterface = () => {
+  const obj = { id: 1, title: "导入接口", projectId: projectStore.projectId }
+  importInterfaceRef.value?.show(obj)
   initData()
 }
 
-// 删除项目(单个)
+// 开发接口
+const editProject = (row: any) => {
+  console.log(row.responseData)
+  const obj = { id: 1, title: "开发接口", detailMsg: row }
+  InterfaceDevelopmentRef.value?.show(obj)
+  initData()
+}
+
+// 删除接口(单个)
 const deleteTableDataApiFun = (row: any) => {
   console.log(row._id)
   ElMessageBox.confirm("确定删除该接口吗？", "提示", {
@@ -211,7 +232,7 @@ const deleteTableDataApiFun = (row: any) => {
   })
 }
 
-//删除项目(批量)
+//删除接口(批量)
 const deleteTableDataApiFunc = (data: any) => {
   ElMessageBox.confirm("确定删除选中接口吗？", "提示", {
     confirmButtonText: "确认",

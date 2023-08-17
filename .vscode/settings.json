@@ -27,5 +27,5 @@
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["unocss", "windi", "windicss"]
+  "cSpell.words": ["importinterface", "unocss", "windi", "windicss"]
 }

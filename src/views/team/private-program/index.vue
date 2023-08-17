@@ -43,7 +43,7 @@
             <template #default="{ row }">
               <el-button link type="warning" @click="goDetail(row)">管理</el-button>
               <el-button link type="primary" @click="editProject(row)">编辑</el-button>
-              <el-button link type="primary" @click="getDetail(row._id)">详情</el-button>
+              <el-button link type="info" @click="getDetail(row._id)">详情</el-button>
               <el-button link type="danger" @click="deleteTableDataApiFun(row)">删除</el-button>
             </template>
           </el-table-column>
