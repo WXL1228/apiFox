@@ -43,7 +43,7 @@ interface DetailMsg {
   http_method: "GET" | "POST" | "PUT" | "DELETE"
   query: object
   body: object
-  responseData: object
+  response_data: object
   __v: number | null
   _id: string
 }
@@ -77,14 +77,16 @@ const show = async (obj: { id?: number; title: string; isAdd: boolean; detailMsg
   isAdd.value = obj.isAdd
   if (obj.detailMsg) {
     interfaceId.value = obj.detailMsg._id
-    console.log(interfaceId.value)
+    // console.log(interfaceId.value)
     formData.value.projectId = obj.detailMsg.projectId
     formData.value.name = obj.detailMsg.name
     formData.value.url = obj.detailMsg.url
     formData.value.method = obj.detailMsg.http_method
     formData.value.query = obj.detailMsg.query
     formData.value.body = obj.detailMsg.body
-    formData.value.responseData = obj.detailMsg.responseData
+    // console.log(formData.value.responseData)
+    // console.log(obj.detailMsg.response_data)
+    formData.value.responseData = obj.detailMsg.response_data
   } else {
     formData.value.name = ""
     formData.value.url = ""
@@ -108,10 +110,10 @@ const detail = () => {
 
 // 保存信息
 const save = () => {
-  console.log(isAdd.value)
-  console.log(projectStore.projectId)
-  console.log(formData.value)
-  console.log(formData.value.name)
+  // console.log(isAdd.value)
+  // console.log(projectStore.projectId)
+  // console.log(formData.value)
+  // console.log(formData.value.name)
   formRef.value?.validate((valid) => {
     if (valid) {
       if (isAdd.value) {
@@ -175,12 +177,14 @@ const updateTableDataApiFun = () => {
     url: formData.value.url,
     method: formData.value.method,
     query: formData.value.query,
-    body: formData.value.body,
-    responseData: formData.value.responseData
+    responseData: formData.value.responseData,
+    body: formData.value.body
   }
   updateInterfaceDataApi(params).then((res: any) => {
     if (res.code === 200) {
-      console.log(res)
+      ElMessage.success(res.message)
+      emit("initData")
+      detail()
     }
   })
 }

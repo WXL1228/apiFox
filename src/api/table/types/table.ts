@@ -14,8 +14,8 @@ export interface UpdateInterfaceRequestData {
   url: string
   method: "GET" | "POST" | "PUT" | "DELETE"
   query: object
-  body: object
   responseData: object
+  body: object
 }
 
 export interface GetTableRequestData {

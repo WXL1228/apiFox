@@ -38,7 +38,7 @@
           <el-table-column label="方法" align="center" prop="http_method" width="100" />
           <el-table-column label="参数格式" align="center" prop="query" width="200" />
           <el-table-column label="body" align="center" prop="body" min-width="300" />
-          <el-table-column label="响应格式" align="center" prop="responseData" min-width="220" />
+          <el-table-column label="响应格式" align="center" prop="response_data" min-width="220" />
           <el-table-column label="操作" align="center" width="220">
             <template #default="{ row }">
               <el-button link type="warning" @click="222">测试</el-button>
@@ -79,7 +79,7 @@ interface ITable {
   http_method: string
   query: object
   body: object
-  responseData: object
+  response_data: object
   __v: number | null
   _id: string
 }
@@ -93,7 +93,7 @@ const tableData = ref<ITable[]>([
     http_method: "",
     query: {},
     body: {},
-    responseData: {},
+    response_data: {},
     __v: null,
     _id: ""
   }
@@ -185,6 +185,7 @@ const createInterface = () => {
 
 // 编辑项目
 const editProject = (row: any) => {
+  console.log(row.responseData)
   const obj = { id: 1, title: "编辑项目", isAdd: false, detailMsg: row }
   editDialogRef.value?.show(obj)
   initData()
