@@ -187,6 +187,7 @@ const createInterface = () => {
 const editProject = (row: any) => {
   const obj = { id: 1, title: "编辑项目", isAdd: false, detailMsg: row }
   editDialogRef.value?.show(obj)
+  initData()
 }
 
 // 删除项目(单个)

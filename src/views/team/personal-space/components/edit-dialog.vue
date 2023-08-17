@@ -100,6 +100,7 @@ const show = async (obj: { id?: number; title: string; isAdd: boolean; detailMsg
 import { useRouter } from "vue-router"
 const router = useRouter()
 const detail = () => {
+  emit("initData")
   router.push({
     name: "Personal-Space"
   })
@@ -122,6 +123,7 @@ const save = () => {
       dialogVisible.value = false
     }
   })
+  emit("initData")
 }
 // 关闭事件
 const close = () => {
@@ -155,6 +157,7 @@ const createTableDataApiFun = () => {
       formData.value.query = {}
       formData.value.body = {}
       formData.value.responseData = {}
+      emit("initData")
       detail()
     }
   })
