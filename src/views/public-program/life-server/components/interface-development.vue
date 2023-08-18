@@ -8,30 +8,39 @@
     @close="close"
     :destroy-on-close="true"
   >
-    <el-form-item label="项目名称/ID:">{{ projectStore.projectName }}--------{{ projectStore.projectId }}</el-form-item>
-    <el-form-item label="接口名称/ID:">{{ interfaceName }}--------{{ interfaceId }}</el-form-item>
+    <el-form-item label="项目名称/ID:">{{ projectStore.publicProjectName }}</el-form-item>
+    <el-form-item label="接口名称/ID:">{{ interfaceName }}</el-form-item>
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-      <el-tab-pane label="编辑" name="first">
+      <el-tab-pane label="预览" name="first"
+        ><el-descriptions size="large" :border="true" title="基本信息">
+          <el-descriptions-item label="接口名称:">{{ formData.name }}</el-descriptions-item
+          ><el-descriptions-item label="接口路径:">{{ formData.url }}</el-descriptions-item
+          ><el-descriptions-item label="请求方法:">{{ formData.method }}</el-descriptions-item
+          ><el-descriptions-item label="状态:">
+            <el-tag size="small" type="success">公开中</el-tag>
+          </el-descriptions-item>
+        </el-descriptions>
+        <el-divider />
+        <el-descriptions size="large" :border="true" title="Mock服务">
+          <el-descriptions-item label="Mock地址:">{{ mockUrl }}</el-descriptions-item>
+        </el-descriptions>
+        <el-divider />
+        <el-descriptions size="large" :border="true" title="返回数据">
+          <el-descriptions-item>
+            <textarea disabled rows="27" style="width: 100%; resize: vertical">[0]</textarea>
+          </el-descriptions-item>
+        </el-descriptions> </el-tab-pane
+      ><el-tab-pane label="参数设置" name="second">
         <el-descriptions size="large" title="基本设置">
           <el-descriptions-item
             ><el-form ref="formRef" label-width="100px" :model="formData" :rules="rules">
               <el-form-item label="接口名称：" prop="name">
-                <el-input v-model="formData.name" placeholder="请输入接口名称" />
+                <el-input disabled v-model="formData.name" placeholder="请输入接口名称" />
               </el-form-item>
               <el-form-item label="接口地址：" prop="url">
-                <el-input v-model="formData.url" placeholder="请输入接口地址"
+                <el-input disabled v-model="formData.url" placeholder="请输入接口地址"
                   ><template #prepend>http://</template></el-input
                 >
-              </el-form-item>
-              <el-form-item label="请求方法：" prop="method">
-                <div>
-                  <el-radio-group v-model="formData.method">
-                    <el-radio-button label="GET" />
-                    <el-radio-button label="POST" />
-                    <el-radio-button label="PUT" />
-                    <el-radio-button label="DELETE" />
-                  </el-radio-group>
-                </div>
               </el-form-item>
             </el-form>
           </el-descriptions-item>
@@ -202,7 +211,7 @@
           <el-button type="primary" @click="save">保 存</el-button>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="运行" name="second">
+      <el-tab-pane label="运行" name="third">
         <el-divider />
         <div class="mt-4">
           <el-input v-model="urlRunConfig" disabled prefix placeholder="/" class="input-with-select">
@@ -347,7 +356,7 @@
         <el-button @click="clear">重置</el-button>
         <el-button type="warning" @click="sendData">发送</el-button>
       </el-tab-pane>
-      <el-tab-pane label="Mock(高级)" name="third"
+      <el-tab-pane label="Mock(高级)" name="fourth"
         ><el-descriptions title="接口参数信息" :column="2">
           <el-descriptions-item label="Headers">
             <textarea rows="15" disabled style="width: 100%; resize: vertical">[0]</textarea>
@@ -365,27 +374,6 @@
         <el-divider />
         <el-descriptions title="Mock服务" :column="1">
           <el-descriptions-item label="Mock地址:">{{ mockUrl }}</el-descriptions-item>
-        </el-descriptions> </el-tab-pane
-      ><el-tab-pane label="预览" name="fourth"
-        ><el-descriptions size="large" :border="true" title="基本信息">
-          <el-descriptions-item label="接口名称:">{{ formData.name }}</el-descriptions-item
-          ><el-descriptions-item label="接口路径:">{{ formData.url }}</el-descriptions-item
-          ><el-descriptions-item label="请求方法:">{{ formData.method }}</el-descriptions-item
-          ><el-descriptions-item label="状态:">
-            <el-tag size="small">开发中</el-tag>
-          </el-descriptions-item>
-          <el-descriptions-item label="最近更新成员ID:">{{ update_by }}</el-descriptions-item>
-          <el-descriptions-item label="最近更新时间:">{{ update_time }}</el-descriptions-item>
-        </el-descriptions>
-        <el-divider />
-        <el-descriptions size="large" :border="true" title="Mock服务">
-          <el-descriptions-item label="Mock地址:">{{ mockUrl }}</el-descriptions-item>
-        </el-descriptions>
-        <el-divider />
-        <el-descriptions size="large" :border="true" title="返回数据">
-          <el-descriptions-item>
-            <textarea disabled rows="27" style="width: 100%; resize: vertical">[0]</textarea>
-          </el-descriptions-item>
         </el-descriptions>
       </el-tab-pane>
     </el-tabs>
@@ -397,7 +385,7 @@ import { FormRules, ElInput, FormInstance, ElMessage, TabsPaneContext } from "el
 import { reactive, ref, toRefs } from "vue"
 import { updateInterfaceDataApi, MockInterfaceDetailApi } from "@/api/table/index"
 import { CreateInterfaceRequestData } from "@/api/table/types/table"
-import { useProjectStore } from "@/store/modules/personal-space"
+import { usePublicProjectStore } from "@/store/modules/public-space"
 import { getInterfaceDetailApi } from "@/api/table/index"
 import { Delete, Plus } from "@element-plus/icons-vue"
 // 参数声明
@@ -587,7 +575,7 @@ const { ruleForm_4 } = {
   ...toRefs(state_4)
 }
 
-const projectStore = useProjectStore()
+const projectStore = usePublicProjectStore()
 
 const options = [
   {
@@ -694,7 +682,7 @@ const urlRunConfig = ref("")
 const RunData = ref("/111111")
 const mockUrl = ref<string>("")
 const formData = ref<CreateInterfaceRequestData>({
-  projectId: projectStore.projectId,
+  projectId: projectStore.publicProjectId,
   name: "",
   url: "",
   method: "GET",
@@ -747,33 +735,6 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
   mockConfig()
 }
 
-const clear = () => {
-  state_4.ruleForm_4.CookiesConfig = [
-    {
-      name: "",
-      value: "",
-      format: "",
-      remark: ""
-    }
-  ]
-  state_3.ruleForm_3.HeadersConfig = [
-    {
-      name: "",
-      value: "",
-      format: "",
-      remark: ""
-    }
-  ]
-}
-
-const clear_1 = () => {
-  state_2.ruleForm_2.returnConfig = [{ name: "", is_have: "", format: "", http_dome: "", remark: "" }]
-  state_1.ruleForm_1.BodyConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
-  state.ruleForm.QueryConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
-}
-
-const sendData = () => {}
-
 const getInterfaceDetailApiFun = (data: string) => {
   if (interfaceId.value === "") return
   const params = {
@@ -820,6 +781,33 @@ const save = () => {
   })
   emit("initData")
 }
+
+const clear = () => {
+  state_4.ruleForm_4.CookiesConfig = [
+    {
+      name: "",
+      value: "",
+      format: "",
+      remark: ""
+    }
+  ]
+  state_3.ruleForm_3.HeadersConfig = [
+    {
+      name: "",
+      value: "",
+      format: "",
+      remark: ""
+    }
+  ]
+}
+
+const clear_1 = () => {
+  state_2.ruleForm_2.returnConfig = [{ name: "", is_have: "", format: "", http_dome: "", remark: "" }]
+  state_1.ruleForm_1.BodyConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
+  state.ruleForm.QueryConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
+}
+
+const sendData = () => {}
 // 关闭事件
 const close = () => {
   formRef.value?.resetFields()
@@ -829,7 +817,7 @@ const close = () => {
 
 // mock
 const mockConfig = () => {
-  if (projectStore.projectId === "") {
+  if (projectStore.publicProjectId === "") {
     ElMessage.error("请选择项目")
     return
   }
@@ -847,7 +835,7 @@ const mockConfig = () => {
 
 //修改接口
 const updateTableDataApiFun = () => {
-  if (projectStore.projectId === "") {
+  if (projectStore.publicProjectId === "") {
     ElMessage.error("请选择项目")
     return
   }

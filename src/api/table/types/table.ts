@@ -39,3 +39,7 @@ export interface deleteInterfaceRequestData {
 export interface GetInterfaceDetail {
   interfaceId: string
 }
+
+export interface MockInterfaceDetail {
+  interfaceId: string
+}

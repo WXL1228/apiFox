@@ -52,3 +52,11 @@ export function getInterfaceDetailApi(data: Table.GetInterfaceDetail) {
     data: data
   })
 }
+
+export function MockInterfaceDetailApi(data: Table.MockInterfaceDetail) {
+  return request({
+    url: "/interface/mockInterface",
+    method: "post",
+    data: data
+  })
+}

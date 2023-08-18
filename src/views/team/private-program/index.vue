@@ -14,7 +14,7 @@
         <el-button class="windi-mb-md" type="danger" @click="batchDelete">批量删除</el-button>
       </div>
       <!-- 表格区域 -->
-      <div>
+      <div style="margin-top: 5px">
         <el-table
           class="windi-mb-md"
           size="large"

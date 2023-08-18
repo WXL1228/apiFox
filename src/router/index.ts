@@ -119,7 +119,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/team/personal-space/index.vue"),
         name: "Personal-Space",
         meta: {
-          title: "项目管理"
+          title: "接口管理"
         }
       }
     ]
@@ -139,7 +139,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/public-program/development-tool/index.vue"),
         name: "Development-Tool",
         meta: {
-          title: "生活服务",
+          title: "公开项目",
           keepAlive: true
         }
       },
@@ -148,7 +148,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/public-program/life-server/index.vue"),
         name: "Life-Server",
         meta: {
-          title: "开发工具",
+          title: "公开接口",
           keepAlive: true
         }
       }
