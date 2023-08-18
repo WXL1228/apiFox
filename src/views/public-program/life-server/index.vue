@@ -124,7 +124,7 @@ const searchProjectDetail = () => {
 // 初始化数据
 const initData = () => {
   if (projectStore.publicProjectId === "") {
-    ElMessage.error("请选择项目")
+    ElMessage.error("请选择公开项目")
     return
   }
   const params = {
@@ -175,7 +175,7 @@ const search = () => {
 // 跳转到详情页面
 const goDetail = (item: string) => {
   if (projectStore.publicProjectId === "") {
-    ElMessage.error("请选择项目")
+    ElMessage.error("请选择公开项目")
     return
   }
   const obj = { id: 1, title: "接口详情", isAdd: false, item: item }
