@@ -8,8 +8,8 @@
     @close="close"
     :destroy-on-close="true"
   >
-    <el-form-item label="项目名称/ID:">{{ projectStore.publicProjectName }}</el-form-item>
-    <el-form-item label="接口名称/ID:">{{ interfaceName }}</el-form-item>
+    <el-form-item label="项目名称:">{{ projectStore.publicProjectName }}</el-form-item>
+    <el-form-item label="接口名称:">{{ interfaceName }}</el-form-item>
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="预览" name="first"
         ><el-descriptions size="large" :border="true" title="基本信息">
@@ -35,12 +35,13 @@
           <el-descriptions-item
             ><el-form ref="formRef" label-width="100px" :model="formData" :rules="rules">
               <el-form-item label="接口名称：" prop="name">
-                <el-input disabled v-model="formData.name" placeholder="请输入接口名称" />
+                <el-input disabled v-model="formData.name" />
               </el-form-item>
               <el-form-item label="接口地址：" prop="url">
-                <el-input disabled v-model="formData.url" placeholder="请输入接口地址"
-                  ><template #prepend>http://</template></el-input
-                >
+                <el-input disabled v-model="formData.url"> ><template #prepend>http://</template></el-input>
+              </el-form-item>
+              <el-form-item label="请求方法：" prop="name">
+                <el-input disabled v-model="formData.method" />
               </el-form-item>
             </el-form>
           </el-descriptions-item>
@@ -805,6 +806,7 @@ const clear_1 = () => {
   state_2.ruleForm_2.returnConfig = [{ name: "", is_have: "", format: "", http_dome: "", remark: "" }]
   state_1.ruleForm_1.BodyConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
   state.ruleForm.QueryConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
+  radio.value = 0
 }
 
 const sendData = () => {}

@@ -38,7 +38,7 @@
           <el-table-column label="接口地址" align="center" prop="url" width="300" show-overflow-tooltip />
           <el-table-column label="方法" align="center" prop="http_method" width="300" />
           <el-table-column label="状态" align="center" prop="query" width="300"
-            ><div class="flex flex-wrap gap-2 my-2">
+            ><div>
               <el-tag v-for="item in items" :key="item.label" :type="item.type" class="mx-1" effect="dark" round>
                 {{ item.label }}
               </el-tag>
