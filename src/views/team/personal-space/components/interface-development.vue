@@ -56,14 +56,14 @@
                 </el-col>
                 <el-col :span="3">
                   <el-form-item label="Query参数:" prop="'is_have' + index">
-                    <el-select v-model="item.is_have" class="m-2" autocomplete="off" placeholder="必需">
+                    <el-select v-model="item.is_have" autocomplete="off" placeholder="必需">
                       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
                   <el-form-item label="参数格式:" prop="'format' + index">
-                    <el-select v-model="item.format" class="m-2" autocomplete="off" placeholder="string">
+                    <el-select v-model="item.format" autocomplete="off" placeholder="string">
                       <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
@@ -102,14 +102,14 @@
                 </el-col>
                 <el-col :span="3">
                   <el-form-item label="Body参数:" prop="'is_have' + index">
-                    <el-select v-model="item.is_have" class="m-2" autocomplete="off" placeholder="必需">
+                    <el-select v-model="item.is_have" autocomplete="off" placeholder="必需">
                       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
                   <el-form-item label="参数格式:" prop="'format' + index">
-                    <el-select v-model="item.format" class="m-2" autocomplete="off" placeholder="string">
+                    <el-select v-model="item.format" autocomplete="off" placeholder="string">
                       <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
@@ -156,14 +156,14 @@
                 </el-col>
                 <el-col :span="3">
                   <el-form-item prop="'is_have' + index">
-                    <el-select v-model="item.is_have" class="m-2" autocomplete="off" placeholder="必需">
+                    <el-select v-model="item.is_have" autocomplete="off" placeholder="必需">
                       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
                   <el-form-item prop="'format' + index">
-                    <el-select v-model="item.format" class="m-2" autocomplete="off" placeholder="string">
+                    <el-select v-model="item.format" autocomplete="off" placeholder="string">
                       <el-option v-for="item in options_2" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
@@ -254,7 +254,7 @@
             </el-col>
             <el-col :span="3">
               <el-form-item prop="'format' + index">
-                <el-select v-model="item.format" class="m-2" autocomplete="off" placeholder="string">
+                <el-select v-model="item.format" autocomplete="off" placeholder="string">
                   <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
@@ -307,7 +307,7 @@
             </el-col>
             <el-col :span="3">
               <el-form-item prop="'format' + index">
-                <el-select v-model="item.format" class="m-2" autocomplete="off" placeholder="string">
+                <el-select v-model="item.format" autocomplete="off" placeholder="string">
                   <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
