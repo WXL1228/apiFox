@@ -1,14 +1,14 @@
 export interface CreateTableRequestData {
   name: string
   description: string
-  isPrivate: boolean
+  isPrivate?: boolean
 }
 
 export interface UpdateTableRequestData {
   projectId: string | undefined
   name: string
   description: string
-  isPrivate: boolean
+  isPrivate?: boolean
 }
 
 export interface GetTableRequestData {

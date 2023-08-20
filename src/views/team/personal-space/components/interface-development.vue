@@ -55,21 +55,21 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
-                  <el-form-item label="Query参数:" prop="'is_have' + index">
+                  <el-form-item label="是/否必填:" prop="'is_have' + index">
                     <el-select v-model="item.is_have" autocomplete="off" placeholder="必需">
                       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
-                  <el-form-item label="参数格式:" prop="'format' + index">
+                  <el-form-item label="参数类型:" prop="'format' + index">
                     <el-select v-model="item.format" autocomplete="off" placeholder="string">
                       <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
-                  <el-form-item label="参数值:" prop="'dome' + index">
+                  <el-form-item label="参数示例:" prop="'dome' + index">
                     <el-input type="text" v-model="item.dome" autocomplete="off" maxlength="50" />
                   </el-form-item>
                 </el-col>
@@ -101,21 +101,21 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
-                  <el-form-item label="Body参数:" prop="'is_have' + index">
+                  <el-form-item label="是/否必填:" prop="'is_have' + index">
                     <el-select v-model="item.is_have" autocomplete="off" placeholder="必需">
                       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
-                  <el-form-item label="参数格式:" prop="'format' + index">
+                  <el-form-item label="参数类型:" prop="'format' + index">
                     <el-select v-model="item.format" autocomplete="off" placeholder="string">
                       <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
-                  <el-form-item label="参数值:" prop="'dome' + index">
+                  <el-form-item label="参数示例:" prop="'dome' + index">
                     <el-input type="text" v-model="item.dome" autocomplete="off" maxlength="50" />
                   </el-form-item>
                 </el-col>
@@ -198,7 +198,7 @@
 
         <el-divider />
         <div class="windi-flex-center">
-          <el-button @click="clear_1">重置</el-button>
+          <el-button type="warning" @click="clear_1">清空(参数信息))</el-button>
           <el-button type="primary" @click="save">保 存</el-button>
         </div>
       </el-tab-pane>
@@ -219,10 +219,12 @@
           <el-radio-group v-model="radio1" size="large" @change="setFlag1">
             <el-radio-button label="Headers" />
             <el-radio-button label="Cookies" />
+            <el-radio-button label="Params" />
+            <el-radio-button label="Body" />
           </el-radio-group>
         </div>
         <el-form
-          v-if="flag_1"
+          v-if="flag_1 === 1"
           :model="ruleForm_3"
           status-icon
           ref="formRef_4"
@@ -234,7 +236,7 @@
               <el-form-item>参数名 (Headers) </el-form-item>
             </el-col>
             <el-col :span="3">
-              <el-form-item> 格式 (Headers) </el-form-item>
+              <el-form-item> 类型 (Headers) </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item> 参数值 (Headers) </el-form-item>
@@ -275,7 +277,7 @@
           </el-row>
         </el-form>
         <el-form
-          v-if="!flag_1"
+          v-if="flag_1 === 2"
           :model="ruleForm_4"
           status-icon
           ref="formRef_5"
@@ -287,7 +289,7 @@
               <el-form-item>参数名 (Cookies) </el-form-item>
             </el-col>
             <el-col :span="3">
-              <el-form-item> 格式 (Cookies) </el-form-item>
+              <el-form-item> 类型 (Cookies) </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item> 参数值 (Cookies) </el-form-item>
@@ -327,6 +329,114 @@
             </el-col>
           </el-row>
         </el-form>
+        <el-form
+          v-if="flag_1 === 3"
+          :model="ruleForm_5"
+          status-icon
+          ref="formRef_6"
+          label-width="100px"
+          style="margin-top: 20px"
+          @change="checkParams"
+        >
+          <el-row :gutter="20">
+            <el-col :span="4">
+              <el-form-item>参数名 (Params) </el-form-item>
+            </el-col>
+            <el-col :span="3">
+              <el-form-item> 类型 (Params) </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item> 参数值 (Params) </el-form-item>
+            </el-col>
+            <el-col :span="9">
+              <el-form-item> 说明 (Params) </el-form-item>
+            </el-col>
+            <el-col :span="1">
+              <el-button type="success" :icon="Plus" circle @click="addParamsConfig" />
+            </el-col>
+          </el-row>
+          <el-row :gutter="20" v-for="item in ruleForm_5.ParamsConfig">
+            <el-col :span="4">
+              <el-form-item prop="'name' + index">
+                <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="添加参数" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="3">
+              <el-form-item prop="'format' + index">
+                <el-select v-model="item.format" autocomplete="off" placeholder="string">
+                  <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item prop="'value' + index">
+                <el-input type="text" v-model="item.value" autocomplete="off" maxlength="50" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="7">
+              <el-form-item prop="'remark' + index">
+                <el-input type="text" v-model="item.remark" autocomplete="off" maxlength="50" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-button type="danger" :icon="Delete" circle @click.prevent="removeParamsConfig(item)" />
+            </el-col>
+          </el-row>
+        </el-form>
+        <el-form
+          v-if="flag_1 === 4"
+          :model="ruleForm_6"
+          status-icon
+          ref="formRef_7"
+          label-width="100px"
+          style="margin-top: 20px"
+          @change="checkBody"
+        >
+          <el-row :gutter="20">
+            <el-col :span="4">
+              <el-form-item>参数名 (Body) </el-form-item>
+            </el-col>
+            <el-col :span="3">
+              <el-form-item> 类型 (Body) </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item> 参数值 (Body) </el-form-item>
+            </el-col>
+            <el-col :span="9">
+              <el-form-item> 说明 (Body) </el-form-item>
+            </el-col>
+            <el-col :span="1">
+              <el-button type="success" :icon="Plus" circle @click="addBody1Config" />
+            </el-col>
+          </el-row>
+          <el-row :gutter="20" v-for="item in ruleForm_6.BodyConfig">
+            <el-col :span="4">
+              <el-form-item prop="'name' + index">
+                <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="添加参数" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="3">
+              <el-form-item prop="'format' + index">
+                <el-select v-model="item.format" autocomplete="off" placeholder="string">
+                  <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item prop="'value' + index">
+                <el-input type="text" v-model="item.value" autocomplete="off" maxlength="50" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="7">
+              <el-form-item prop="'remark' + index">
+                <el-input type="text" v-model="item.remark" autocomplete="off" maxlength="50" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-button type="danger" :icon="Delete" circle @click.prevent="removeBody1Config(item)" />
+            </el-col>
+          </el-row>
+        </el-form>
         <el-divider />
         <el-card class="box-card" shadow="never">
           <template #header>
@@ -336,7 +446,7 @@
           </template>
           <el-descriptions>
             <el-descriptions-item label="Body">
-              <textarea rows="19" disabled style="width: 100%; resize: vertical">[0]</textarea>
+              <textarea rows="19" disabled style="width: 100%; resize: vertical" :v-model="formData.body" />
             </el-descriptions-item>
             <el-descriptions-item label="Headers">
               <textarea rows="19" disabled style="width: 100%; resize: vertical">[0]</textarea>
@@ -400,6 +510,7 @@ import { CreateInterfaceRequestData } from "@/api/table/types/table"
 import { useProjectStore } from "@/store/modules/personal-space"
 import { getInterfaceDetailApi } from "@/api/table/index"
 import { Delete, Plus } from "@element-plus/icons-vue"
+
 // 参数声明
 const formRef_1 = ref(null)
 const state = reactive({
@@ -587,6 +698,78 @@ const { ruleForm_4 } = {
   ...toRefs(state_4)
 }
 
+const formRef_7 = ref(null)
+const state_6 = reactive({
+  ruleForm_6: {
+    BodyConfig: [
+      {
+        name: "",
+        value: "",
+        format: "",
+        remark: ""
+      }
+    ]
+  }
+})
+console.log(state_6.ruleForm_6.BodyConfig)
+
+const addBody1Config = () => {
+  state_6.ruleForm_6.BodyConfig.push({
+    name: "",
+    value: "",
+    format: "",
+    remark: ""
+  })
+}
+
+const removeBody1Config = (item: any) => {
+  const index = state_6.ruleForm_6.BodyConfig.indexOf(item)
+  if (index !== -1) {
+    state_6.ruleForm_6.BodyConfig.splice(index, 1)
+  }
+}
+
+// 数据解构
+const { ruleForm_6 } = {
+  ...toRefs(state_6)
+}
+
+const formRef_6 = ref(null)
+const state_5 = reactive({
+  ruleForm_5: {
+    ParamsConfig: [
+      {
+        name: "",
+        value: "",
+        format: "",
+        remark: ""
+      }
+    ]
+  }
+})
+console.log(state_5.ruleForm_5.ParamsConfig)
+
+const addParamsConfig = () => {
+  state_5.ruleForm_5.ParamsConfig.push({
+    name: "",
+    value: "",
+    format: "",
+    remark: ""
+  })
+}
+
+const removeParamsConfig = (item: any) => {
+  const index = state_5.ruleForm_5.ParamsConfig.indexOf(item)
+  if (index !== -1) {
+    state_5.ruleForm_5.ParamsConfig.splice(index, 1)
+  }
+}
+
+// 数据解构
+const { ruleForm_5 } = {
+  ...toRefs(state_5)
+}
+
 const projectStore = useProjectStore()
 
 const options = [
@@ -655,10 +838,10 @@ const options_2 = [
 ]
 
 const flag = ref<boolean>(true)
-const flag_1 = ref<boolean>(true)
+const flag_1 = ref<number>(4)
 const activeName = ref("first")
 const radio = ref()
-const radio1 = ref("Headers")
+const radio1 = ref("Body")
 const setFlag = () => {
   console.log(radio.value)
   if (radio.value === 3 || radio.value === 6) flag.value = true
@@ -666,8 +849,10 @@ const setFlag = () => {
 }
 const setFlag1 = () => {
   console.log(flag_1.value)
-  if (radio1.value === "Headers") flag_1.value = true
-  else flag_1.value = false
+  if (radio1.value === "Headers") flag_1.value = 1
+  else if (radio1.value === "Cookies") flag_1.value = 2
+  else if (radio1.value === "Params") flag_1.value = 3
+  else flag_1.value = 4
 }
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
@@ -698,9 +883,9 @@ const formData = ref<CreateInterfaceRequestData>({
   name: "",
   url: "",
   method: "GET",
-  query: {},
-  body: {},
-  responseData: {}
+  query: [],
+  body: [],
+  responseData: []
 })
 const titleName = ref("")
 const interfaceId = ref("") //接口id
@@ -731,8 +916,6 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
     methodRun.value = obj.detailMsg.http_method
     formData.value.query = obj.detailMsg.query
     formData.value.body = obj.detailMsg.body
-    // console.log(formData.value.responseData)
-    // console.log(obj.detailMsg.response_data)
     formData.value.responseData = obj.detailMsg.response_data
   } else {
     formData.value.name = ""
@@ -764,6 +947,23 @@ const clear = () => {
       remark: ""
     }
   ]
+  state_5.ruleForm_5.ParamsConfig = [
+    {
+      name: "",
+      value: "",
+      format: "",
+      remark: ""
+    }
+  ]
+  state_6.ruleForm_6.BodyConfig = [
+    {
+      name: "",
+      value: "",
+      format: "",
+      remark: ""
+    }
+  ]
+  save()
 }
 
 const clear_1 = () => {
@@ -771,6 +971,7 @@ const clear_1 = () => {
   state_1.ruleForm_1.BodyConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
   state.ruleForm.QueryConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
   radio.value = 0
+  save()
 }
 
 const sendData = () => {}
@@ -790,33 +991,110 @@ const getInterfaceDetailApiFun = (data: string) => {
         .toISOString()
         .replace(/T/g, " ")
         .replace(/\.[\d]{3}Z/, "")
+      state.ruleForm.QueryConfig =
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.query
+      state_1.ruleForm_1.BodyConfig =
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.body
+      state_2.ruleForm_2.returnConfig =
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data
     }
   })
   mockConfig()
 }
 
+const paramFlag = ref<string>("")
+//检查Params
+const checkParams = () => {
+  if (state_5.ruleForm_5.ParamsConfig.length != state.ruleForm.QueryConfig.length) {
+    paramFlag.value = "false"
+  }
+  if (state_5.ruleForm_5.ParamsConfig.length === 0 && state.ruleForm.QueryConfig.length === 0) {
+    paramFlag.value = ""
+    return
+  }
+  const max = ref<number>()
+  if (state_5.ruleForm_5.ParamsConfig.length >= state.ruleForm.QueryConfig.length) {
+    max.value = state_5.ruleForm_5.ParamsConfig.length
+  } else {
+    max.value = state.ruleForm.QueryConfig.length
+  }
+  for (let i = 0; i < max.value; i++) {
+    if (
+      state_5.ruleForm_5.ParamsConfig[i].name === "" ||
+      state.ruleForm.QueryConfig[i].name === "" ||
+      state_5.ruleForm_5.ParamsConfig[i].format === "" ||
+      state.ruleForm.QueryConfig[i].format === ""
+    ) {
+      paramFlag.value = "false"
+      return
+    }
+    if (
+      state_5.ruleForm_5.ParamsConfig[i].name != state.ruleForm.QueryConfig[i].name ||
+      state_5.ruleForm_5.ParamsConfig[i].format != state.ruleForm.QueryConfig[i].format
+    ) {
+      paramFlag.value = "false"
+      return
+    }
+  }
+  paramFlag.value = "true"
+  console.log(paramFlag.value)
+}
+
+const bodyFlag = ref<string>("")
+//检查Body
+const checkBody = () => {
+  if (state_6.ruleForm_6.BodyConfig.length != state_1.ruleForm_1.BodyConfig.length) {
+    bodyFlag.value = "false"
+  }
+  if (state_6.ruleForm_6.BodyConfig.length === 0 && state_1.ruleForm_1.BodyConfig.length === 0) {
+    bodyFlag.value = ""
+    return
+  }
+  const max1 = ref<number>()
+  if (state_6.ruleForm_6.BodyConfig.length >= state_1.ruleForm_1.BodyConfig.length) {
+    max1.value = state_6.ruleForm_6.BodyConfig.length
+  } else {
+    max1.value = state_1.ruleForm_1.BodyConfig.length
+  }
+  for (let i = 0; i < max1.value; i++) {
+    if (
+      state_6.ruleForm_6.BodyConfig[i].name === "" ||
+      state_1.ruleForm_1.BodyConfig[i].name === "" ||
+      state_6.ruleForm_6.BodyConfig[i].format === "" ||
+      state_1.ruleForm_1.BodyConfig[i].format === ""
+    ) {
+      bodyFlag.value = "false"
+      return
+    }
+    if (
+      state_6.ruleForm_6.BodyConfig[i].name != state_1.ruleForm_1.BodyConfig[i].name ||
+      state_6.ruleForm_6.BodyConfig[i].format != state_1.ruleForm_1.BodyConfig[i].format
+    ) {
+      bodyFlag.value = "false"
+      return
+    }
+  }
+  bodyFlag.value = "true"
+  console.log(bodyFlag.value)
+}
+
 // 跳转项目页
-import { useRouter } from "vue-router"
-const router = useRouter()
 const detail = () => {
   emit("initData")
-  router.push({
-    name: "Personal-Space"
-  })
+  emit("initData")
 }
 
 // 保存信息
 const save = () => {
-  // console.log(isAdd.value)
-  // console.log(projectStore.projectId)
-  // console.log(formData.value)
-  // console.log(formData.value.name)
   formRef.value?.validate((valid) => {
     if (valid) {
+      console.log(state_2.ruleForm_2.returnConfig)
+      console.log(state_1.ruleForm_1.BodyConfig)
+      console.log(state.ruleForm.QueryConfig)
+      console.log()
       updateTableDataApiFun()
-
       emit("initData")
-      dialogVisible.value = false
+      emit("initData")
     }
   })
   emit("initData")
@@ -857,9 +1135,9 @@ const updateTableDataApiFun = () => {
     name: formData.value.name,
     url: formData.value.url,
     method: formData.value.method,
-    query: formData.value.query,
-    responseData: formData.value.responseData,
-    body: formData.value.body
+    query: state.ruleForm.QueryConfig,
+    responseData: state_2.ruleForm_2.returnConfig,
+    body: state_1.ruleForm_1.BodyConfig
   }
   updateInterfaceDataApi(params).then((res: any) => {
     if (res.code === 200) {

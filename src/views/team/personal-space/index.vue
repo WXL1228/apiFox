@@ -6,7 +6,7 @@
       <div>
         <el-form :inline="true">
           <el-form-item label="项目名称/ID"
-            ><el-input placeholder="请输入项目名称/ID" clearable v-model="projectID" @clear="search"
+            ><el-input placeholder="请输入项目名称/ID" v-model="projectID" @clear="search"
           /></el-form-item>
           <el-form-item><el-button type="primary" @click="search">搜索</el-button></el-form-item>
           <el-form-item label="项目名称:">{{ projectStore.projectName }}</el-form-item>
@@ -55,9 +55,9 @@
       </div>
     </div>
     <EditDialog ref="editDialogRef" @initData="initData" />
-    <InterfaceDetail ref="interfaceDetailRef" />
-    <ImportInterface ref="importInterfaceRef" />
-    <InterfaceDevelopment ref="InterfaceDevelopmentRef" />
+    <InterfaceDetail ref="interfaceDetailRef" @initData="initData" />
+    <ImportInterface ref="importInterfaceRef" @initData="initData" />
+    <InterfaceDevelopment ref="InterfaceDevelopmentRef" @initData="initData" />
   </div>
 </template>
 
@@ -105,9 +105,9 @@ const tableData = ref<ITable[]>([
     name: "",
     url: "",
     http_method: "",
-    query: {},
-    body: {},
-    response_data: {},
+    query: [],
+    body: [],
+    response_data: [],
     __v: null,
     _id: ""
   }
@@ -116,11 +116,26 @@ const loading = ref<Boolean>(false)
 const selectVal = ref<ITable[]>([])
 
 const searchProjectDetail = () => {
-  const params = {
+  // const params = {
+  //   projectName: projectID.value
+  // }
+  // getPublicTableDataApi(params).then((res: any) => {
+  //   if (res.code === 200) {
+  //     ElMessage.success(res.message)
+  //     console.log(res)
+  //     projectStore.projectName = projectID.value
+  //     console.log(res.data.projects.length)
+  //     projectStore.projectId = res.data.projects[res.data.projects.length - 1]._id
+  //     initData()
+  //   }
+  // })
+  // if (projectStore.projectId === "" && projectStore.projectName === "") return
+  const params_1 = {
     projectId: projectID.value
   }
-  getTableDataApi(params).then((res: any) => {
+  getTableDataApi(params_1).then((res: any) => {
     if (res.code === 200) {
+      ElMessage.success(res.message)
       projectStore.projectId = projectID.value
       projectStore.projectName = res.data.project.name
       projectID.value = ""
@@ -209,6 +224,7 @@ const editProject = (row: any) => {
   console.log(row.responseData)
   const obj = { id: 1, title: "开发接口", detailMsg: row }
   InterfaceDevelopmentRef.value?.show(obj)
+  initData()
   initData()
 }
 

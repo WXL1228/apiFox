@@ -36,3 +36,10 @@ export function getTableDataApi(data: Table.GetTableRequestData) {
     data: data
   })
 }
+// 公开项目查询
+export function getPublicTableDataApi() {
+  return request({
+    url: "/project/allPublicProjects",
+    method: "post"
+  })
+}

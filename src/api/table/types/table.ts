@@ -43,3 +43,7 @@ export interface GetInterfaceDetail {
 export interface MockInterfaceDetail {
   interfaceId: string
 }
+
+export interface GetPublicTableRequestData {
+  projectName: string
+}

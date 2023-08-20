@@ -36,7 +36,7 @@
           <el-table-column label="项目ID" align="center" prop="_id" width="220" />
           <el-table-column label="私有项目" align="center" width="150">
             <template #default="{ row }">
-              <el-switch v-model="row.isPrivate" />
+              <el-switch v-model="row.isPrivate" @change="isPublicDetail(row)" />
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="220">
@@ -60,7 +60,7 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { useProjectStore } from "@/store/modules/personal-space"
-
+import { updateTableDataApi } from "@/api/dashboard/index"
 import { getTableDataApi, deleteTableDataApi } from "@/api/team/private-program/index"
 import { getToken } from "@/utils/cache/cookies"
 const token = getToken()
@@ -111,6 +111,7 @@ const initData = () => {
   getTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
       tableData.value = res.data.projects
+      console.log(tableData.value)
       for (const [key, value] of Object.entries(tableData)) {
         if (key === "_rawValue") {
           for (let i = 0; i < value.length; i++) {
@@ -124,6 +125,20 @@ const initData = () => {
         }
       }
     }
+  })
+}
+
+const isPublicDetail = (row: any) => {
+  const isPrivateFlag = ref<boolean>()
+  console.log(isPrivateFlag.value)
+  const params = {
+    projectId: row._id,
+    name: row.name,
+    description: row.description,
+    isPrivate: row.isPrivate
+  }
+  updateTableDataApi(params).then((res: any) => {
+    console.log(res)
   })
 }
 // 获取批量选择数据

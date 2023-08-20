@@ -60,3 +60,12 @@ export function MockInterfaceDetailApi(data: Table.MockInterfaceDetail) {
     data: data
   })
 }
+
+//查公开项目
+export function getPublicTableDataApi(data: Table.GetPublicTableRequestData) {
+  return request({
+    url: "/project/searchProject",
+    method: "post",
+    data: data
+  })
+}

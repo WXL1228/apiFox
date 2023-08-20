@@ -51,9 +51,7 @@ import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { usePublicProjectStore } from "@/store/modules/public-space"
 
-import { getTableDataApi } from "@/api/team/private-program/index"
-import { getToken } from "@/utils/cache/cookies"
-const token = getToken()
+import { getPublicTableDataApi } from "@/api/team/private-program/index"
 import TableDetail from "./components/program-detail.vue"
 
 const tableDetailRef = ref<InstanceType<typeof TableDetail>>()
@@ -93,12 +91,11 @@ const projectStore = usePublicProjectStore()
 
 // 初始化数据
 const initData = () => {
-  const params = {
-    token: token
-  }
-  getTableDataApi(params).then((res: any) => {
+  getPublicTableDataApi().then((res: any) => {
     if (res.code === 200) {
-      tableData.value = res.data.projects
+      console.log(res)
+      tableData.value = res.data.publicProjects
+      console.log(tableData.value)
       for (const [key, value] of Object.entries(tableData)) {
         if (key === "_rawValue") {
           for (let i = 0; i < value.length; i++) {
