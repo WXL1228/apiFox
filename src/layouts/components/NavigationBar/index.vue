@@ -48,6 +48,8 @@ const logout = () => {
         <div class="right-menu-avatar">
           <el-avatar :icon="UserFilled" :size="30" />
           <span>{{ userStore.username }}</span>
+          <span>——</span>
+          <span> {{ userStore.userId }}</span>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
