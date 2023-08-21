@@ -21,6 +21,7 @@
           </el-table-column>
           <el-table-column label="项目名称" align="center" prop="name" width="180" />
           <el-table-column label="描述" align="center" prop="description" min-width="200" show-overflow-tooltip />
+          <el-table-column label="创建人" align="center" prop="created_by" width="220" />
           <el-table-column label="创建日期" align="center" prop="created_time" width="220" />
 
           <el-table-column label="操作" align="center" width="220">

@@ -185,7 +185,7 @@ const upDeleteTeam = (row: any) => {
 
   const params = {
     projectId: ID.value,
-    members: tableData.value.members
+    members: tableData1.value.members
   }
 
   updateTableDataApi(params).then((res: any) => {

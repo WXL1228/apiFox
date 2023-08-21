@@ -84,7 +84,7 @@
               </el-row> </el-form
           ></el-descriptions-item>
         </el-descriptions>
-        <el-descriptions size="large" :border="true">
+        <el-descriptions v-if="flag_10" size="large" :border="true">
           <el-descriptions-item label="Body*">
             <el-form :model="ruleForm_1" status-icon ref="formRef_2" label-width="100px">
               <el-row :gutter="20">
@@ -894,7 +894,7 @@ const options_2 = [
 const flag = ref<boolean>(true)
 const flag_1 = ref<number>(4)
 const activeName = ref("first")
-const radio = ref()
+const radio = ref(3)
 const radio1 = ref("Body")
 const setFlag = () => {
   console.log(radio.value)
@@ -954,6 +954,7 @@ const rules = reactive<FormRules>({
   method: [{ required: true, message: "请求方法不能为空！", trigger: "change" }]
 })
 
+const flag_10 = ref<boolean>(true)
 // 显示弹窗
 const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) => {
   titleName.value = obj.title
@@ -966,6 +967,8 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
     formData.value.url = obj.detailMsg.url
     urlRunConfig.value = "local: http://" + obj.detailMsg.url
     formData.value.method = obj.detailMsg.http_method
+    if (formData.value.method === "GET") flag_10.value = false
+    else flag_10.value = true
     methodRun.value = obj.detailMsg.http_method
     formData.value.query = obj.detailMsg.query
     formData.value.body = obj.detailMsg.body
@@ -1257,12 +1260,16 @@ const updateTableDataApiFun = () => {
   }
   updateInterfaceDataApi(params).then((res: any) => {
     if (res.code === 200) {
+      if (formData.value.method === "GET") flag_10.value = false
+      else flag_10.value = true
       ElMessage.success(res.message)
       formData.value.query = state.ruleForm.QueryConfig
       formData.value.responseData = state_2.ruleForm_2.returnConfig
       formData.value.body = state_1.ruleForm_1.BodyConfig
       ResponseParams.value = toJSONString(state.ruleForm)
       ResponseBody1.value = toJSONString(state_1.ruleForm_1)
+      urlRunConfig.value = "local: http://" + formData.value.url
+      methodRun.value = formData.value.method
       emit("initData")
       detail()
     }

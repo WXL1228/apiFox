@@ -16,7 +16,7 @@ const SELECT_RESPONSE_DATA = {
       disabled: true
     }
   ],
-  message: "获取 1 ~ 1000 随机数据成功！",
+  message: "获取 1 ~ 10000 随机数据成功！",
   info: ""
 }
 
