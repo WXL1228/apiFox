@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <div class="app-content">
-      <PageTitle />
       <!-- 检索区域 -->
       <!-- 表格区域 -->
       <div style="margin-top: 5px">
