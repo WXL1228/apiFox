@@ -7,7 +7,6 @@
       /></el-form-item>
       <el-form-item><el-button type="primary" @click="addTeamConfig">添加成员</el-button></el-form-item>
     </el-form>
-    <PageTitle />
     <div style="margin-top: 5px">
       <el-table
         class="windi-mb-md"

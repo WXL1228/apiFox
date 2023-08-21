@@ -144,7 +144,7 @@
               <el-row :gutter="20">
                 <el-col :span="4">
                   <el-form-item>
-                    <el-button size="small" round>导入JSON/XML</el-button>
+                    <el-button size="small" round @click="editProject">导入JSON/XML</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -540,6 +540,8 @@
         </el-descriptions>
       </el-tab-pane>
     </el-tabs>
+
+    <InterfaceDevelopment1 ref="InterfaceDevelopmentRef1" @initData="initData" />
   </el-dialog>
 </template>
 
@@ -553,6 +555,9 @@ import { getInterfaceDetailApi } from "@/api/table/index"
 import { Delete, Plus } from "@element-plus/icons-vue"
 import { toJSONString } from "xe-utils"
 import { getSelectDataApi } from "@/api/hook-demo/use-fetch-select"
+
+import InterfaceDevelopment1 from "./interface-development1.vue"
+const InterfaceDevelopmentRef1 = ref<InstanceType<typeof InterfaceDevelopment1>>()
 
 type Item = { type: TagProps["type"]; label: string }
 
@@ -1263,6 +1268,15 @@ const updateTableDataApiFun = () => {
     }
   })
 }
+
+// json编辑器
+const editProject = (row: any) => {
+  console.log(row.responseData)
+  const obj = { id: 1, title: "开发接口", detailMsg: row }
+  InterfaceDevelopmentRef1.value?.show(obj)
+  initData()
+}
+const initData = () => {}
 
 defineExpose({
   show
