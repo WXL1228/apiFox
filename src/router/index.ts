@@ -107,14 +107,6 @@ export const constantRoutes: RouteRecordRaw[] = [
         }
       },
       {
-        path: "team-space",
-        component: () => import("@/views/team/team-space/index.vue"),
-        name: "team-space",
-        meta: {
-          title: "成员管理"
-        }
-      },
-      {
         path: "personal-space",
         component: () => import("@/views/team/personal-space/index.vue"),
         name: "Personal-Space",

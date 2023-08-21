@@ -47,3 +47,9 @@ export interface MockInterfaceDetail {
 export interface GetPublicTableRequestData {
   projectName: string
 }
+
+// 增加成员
+export interface AddTeamTableRequestData {
+  username: string
+  projectId: string
+}

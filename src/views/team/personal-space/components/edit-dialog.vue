@@ -145,9 +145,9 @@ const createTableDataApiFun = () => {
     name: formData.value.name,
     url: formData.value.url,
     method: formData.value.method,
-    query: formData.value.query,
-    body: formData.value.body,
-    responseData: formData.value.responseData
+    query: [{ name: "", is_have: "", format: "", dome: "", remark: "" }],
+    body: [{ name: "", is_have: "", format: "", dome: "", remark: "" }],
+    responseData: [{ name: "", is_have: "", format: "", http_dome: "", remark: "" }]
   }
 
   createInterfaceDataApi(params).then((res: any) => {
@@ -156,9 +156,9 @@ const createTableDataApiFun = () => {
       formData.value.name = ""
       formData.value.url = ""
       formData.value.method = "GET"
-      formData.value.query = {}
-      formData.value.body = {}
-      formData.value.responseData = {}
+      formData.value.query = []
+      formData.value.body = []
+      formData.value.responseData = []
       emit("initData")
       detail()
     }

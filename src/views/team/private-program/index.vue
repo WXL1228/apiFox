@@ -4,12 +4,6 @@
       <PageTitle />
       <!-- 检索区域 -->
       <div>
-        <el-form :inline="true">
-          <el-form-item label="项目名称："
-            ><el-input placeholder="请输入项目名称" clearable v-model="commentText" @clear="search"
-          /></el-form-item>
-          <el-form-item><el-button type="primary" @click="search">搜索</el-button></el-form-item>
-        </el-form>
         <el-button class="windi-mb-md" type="primary" @click="createProject">新建项目</el-button>
         <el-button class="windi-mb-md" type="danger" @click="batchDelete">批量删除</el-button>
       </div>
@@ -30,8 +24,9 @@
               <span>{{ scope.$index + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="项目名称" align="center" prop="name" width="180" />
+          <el-table-column label="项目名称" align="center" prop="name" width="150" />
           <el-table-column label="描述" align="center" prop="description" min-width="200" show-overflow-tooltip />
+          <el-table-column label="创建人ID" align="center" prop="created_by" width="220" />
           <el-table-column label="创建日期" align="center" prop="created_time" width="220" />
           <el-table-column label="项目ID" align="center" prop="_id" width="220" />
           <el-table-column label="私有项目" align="center" width="150">
@@ -39,11 +34,12 @@
               <el-switch v-model="row.isPrivate" @change="isPublicDetail(row)" />
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" width="220">
+          <el-table-column label="操作" align="center" width="250">
             <template #default="{ row }">
               <el-button link type="warning" @click="goDetail(row)">管理</el-button>
               <el-button link type="primary" @click="editProject(row)">编辑</el-button>
               <el-button link type="info" @click="getDetail(row._id)">详情</el-button>
+              <el-button link type="success" @click="getTeam(row)">成员</el-button>
               <el-button link type="danger" @click="deleteTableDataApiFun(row)">删除</el-button>
             </template>
           </el-table-column>
@@ -52,6 +48,7 @@
     </div>
     <EditDialog ref="editDialogRef" @initData="initData" />
     <TableDetail ref="tableDetailRef" />
+    <TeamDetail ref="teamDetailRef" />
   </div>
 </template>
 
@@ -66,9 +63,11 @@ import { getToken } from "@/utils/cache/cookies"
 const token = getToken()
 import EditDialog from "../../dashboard/components/edit-dialog.vue"
 import TableDetail from "../../dashboard/components/program-detail.vue"
+import TeamDetail from "./components/team-detail.vue"
 
 const editDialogRef = ref<InstanceType<typeof EditDialog>>()
 const tableDetailRef = ref<InstanceType<typeof TableDetail>>()
+const teamDetailRef = ref<InstanceType<typeof TeamDetail>>()
 
 defineOptions({
   name: "CommentManage"
@@ -85,7 +84,6 @@ interface ITable {
   _id: string
 }
 
-const commentText = ref("")
 const tableData = ref<ITable[]>([
   {
     name: "",
@@ -146,15 +144,16 @@ const handleSelectionChange = (val: ITable[]) => {
   selectVal.value = val
 }
 
-// 检索
-const search = () => {
-  initData()
-}
-
 // 跳转到详情页面
 const getDetail = (item: string) => {
   const obj = { id: 1, title: "接口详情", isAdd: false, item: item }
   tableDetailRef.value?.show(obj)
+}
+// 成员页面
+const getTeam = (item: any) => {
+  const obj = { id: 1, title: "接口详情", item: item }
+  console.log(item)
+  teamDetailRef.value?.show(obj)
 }
 // 跳转到详情页面
 const goDetail = (item: any) => {

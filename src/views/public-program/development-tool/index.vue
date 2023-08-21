@@ -3,14 +3,6 @@
     <div class="app-content">
       <PageTitle />
       <!-- 检索区域 -->
-      <div>
-        <el-form :inline="true">
-          <el-form-item label="项目名称："
-            ><el-input placeholder="请输入项目名称" clearable v-model="commentText" @clear="search"
-          /></el-form-item>
-          <el-form-item><el-button type="primary" @click="search">搜索</el-button></el-form-item>
-        </el-form>
-      </div>
       <!-- 表格区域 -->
       <div style="margin-top: 5px">
         <el-table
@@ -71,7 +63,6 @@ interface ITable {
   _id: string
 }
 
-const commentText = ref("")
 const tableData = ref<ITable[]>([
   {
     name: "",
@@ -114,11 +105,6 @@ const initData = () => {
 // 获取批量选择数据
 const handleSelectionChange = (val: ITable[]) => {
   selectVal.value = val
-}
-
-// 检索
-const search = () => {
-  initData()
 }
 
 // 跳转到详情页面

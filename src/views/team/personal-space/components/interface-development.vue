@@ -221,6 +221,45 @@
             <el-radio-button label="Cookies" />
             <el-radio-button label="Params" />
             <el-radio-button label="Body" />
+            <div v-if="paramFlag + bodyFlag > 2" class="ml-65vw">
+              <el-tag
+                v-for="item in items"
+                size="large"
+                :key="item.label"
+                :type="item.type"
+                class="mx-1"
+                effect="dark"
+                round
+              >
+                {{ item.label }}
+              </el-tag>
+            </div>
+            <div v-else-if="paramFlag + bodyFlag === 2" class="ml-65vw">
+              <el-tag
+                v-for="item in items1"
+                size="large"
+                :key="item.label"
+                :type="item.type"
+                class="mx-1"
+                effect="dark"
+                round
+              >
+                {{ item.label }}
+              </el-tag>
+            </div>
+            <div v-else-if="paramFlag + bodyFlag === 1" class="ml-65vw">
+              <el-tag
+                v-for="item in items"
+                size="large"
+                :key="item.label"
+                :type="item.type"
+                class="mx-1"
+                effect="dark"
+                round
+              >
+                {{ item.label }}
+              </el-tag>
+            </div>
           </el-radio-group>
         </div>
         <el-form
@@ -230,6 +269,7 @@
           ref="formRef_4"
           label-width="100px"
           style="margin-top: 20px"
+          @change="setHeaders"
         >
           <el-row :gutter="20">
             <el-col :span="4">
@@ -283,6 +323,7 @@
           ref="formRef_5"
           label-width="100px"
           style="margin-top: 20px"
+          @change="setCookies"
         >
           <el-row :gutter="20">
             <el-col :span="4">
@@ -446,10 +487,10 @@
           </template>
           <el-descriptions>
             <el-descriptions-item label="Body">
-              <textarea rows="19" disabled style="width: 100%; resize: vertical" :v-model="formData.body" />
+              <textarea rows="19" disabled style="width: 100%; resize: vertical" v-model="ResponseBody" />
             </el-descriptions-item>
             <el-descriptions-item label="Headers">
-              <textarea rows="19" disabled style="width: 100%; resize: vertical">[0]</textarea>
+              <textarea rows="19" disabled style="width: 100%; resize: vertical" v-model="ResponseHeaders" />
             </el-descriptions-item>
           </el-descriptions>
         </el-card>
@@ -460,16 +501,16 @@
       <el-tab-pane label="Mock(高级)" name="third"
         ><el-descriptions title="接口参数信息" :column="2">
           <el-descriptions-item label="Headers">
-            <textarea rows="15" disabled style="width: 100%; resize: vertical">[0]</textarea>
+            <textarea rows="15" disabled style="width: 100%; resize: vertical" v-model="ResponseHeaders" />
           </el-descriptions-item>
           <el-descriptions-item label="Cookies">
-            <textarea rows="15" disabled style="width: 100%; resize: vertical">[0]</textarea>
+            <textarea rows="15" disabled style="width: 100%; resize: vertical" v-model="ResponseCookies" />
           </el-descriptions-item>
           <el-descriptions-item label="body">
-            <textarea rows="15" disabled style="width: 100%; resize: vertical">[0]</textarea>
+            <textarea rows="15" disabled style="width: 100%; resize: vertical" v-model="ResponseBody1" />
           </el-descriptions-item>
           <el-descriptions-item label="query">
-            <textarea rows="15" disabled style="width: 100%; resize: vertical">[0]</textarea>
+            <textarea rows="15" disabled style="width: 100%; resize: vertical" v-model="ResponseParams" />
           </el-descriptions-item>
         </el-descriptions>
         <el-divider />
@@ -494,7 +535,7 @@
         <el-divider />
         <el-descriptions size="large" :border="true" title="返回数据">
           <el-descriptions-item>
-            <textarea disabled rows="27" style="width: 100%; resize: vertical">[0]</textarea>
+            <textarea type="text" disabled rows="27" style="width: 100%; resize: vertical" v-model="ResponseReturn" />
           </el-descriptions-item>
         </el-descriptions>
       </el-tab-pane>
@@ -503,13 +544,21 @@
 </template>
 
 <script setup lang="ts">
-import { FormRules, ElInput, FormInstance, ElMessage, TabsPaneContext } from "element-plus"
+import { FormRules, ElInput, FormInstance, ElMessage, TabsPaneContext, TagProps } from "element-plus"
 import { reactive, ref, toRefs } from "vue"
 import { updateInterfaceDataApi, MockInterfaceDetailApi } from "@/api/table/index"
 import { CreateInterfaceRequestData } from "@/api/table/types/table"
 import { useProjectStore } from "@/store/modules/personal-space"
 import { getInterfaceDetailApi } from "@/api/table/index"
 import { Delete, Plus } from "@element-plus/icons-vue"
+import { toJSONString } from "xe-utils"
+import { getSelectDataApi } from "@/api/hook-demo/use-fetch-select"
+
+type Item = { type: TagProps["type"]; label: string }
+
+const items = ref<Array<Item>>([{ type: "warning", label: "! 参数/类型不一致" }])
+
+const items1 = ref<Array<Item>>([{ type: "success", label: "参数/类型一致" }])
 
 // 参数声明
 const formRef_1 = ref(null)
@@ -848,7 +897,6 @@ const setFlag = () => {
   else flag.value = false
 }
 const setFlag1 = () => {
-  console.log(flag_1.value)
   if (radio1.value === "Headers") flag_1.value = 1
   else if (radio1.value === "Cookies") flag_1.value = 2
   else if (radio1.value === "Params") flag_1.value = 3
@@ -916,6 +964,7 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
     methodRun.value = obj.detailMsg.http_method
     formData.value.query = obj.detailMsg.query
     formData.value.body = obj.detailMsg.body
+    console.log(formData.value.body)
     formData.value.responseData = obj.detailMsg.response_data
   } else {
     formData.value.name = ""
@@ -964,17 +1013,37 @@ const clear = () => {
     }
   ]
   save()
+  ResponseBody.value = "{}"
+  ResponseHeaders.value = "{}"
 }
+const derailment = ref<string>("")
+const ResponseHeaders = ref<string>("{}")
+const ResponseBody = ref<string>("{}")
+const ResponseCookies = ref<string>("{}")
+const ResponseParams = ref<string>("{}")
+const ResponseBody1 = ref<string>("{}")
+const ResponseReturn = ref<string>("{}")
 
 const clear_1 = () => {
   state_2.ruleForm_2.returnConfig = [{ name: "", is_have: "", format: "", http_dome: "", remark: "" }]
   state_1.ruleForm_1.BodyConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
   state.ruleForm.QueryConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
+
   radio.value = 0
   save()
 }
 
-const sendData = () => {}
+const sendData = () => {
+  if (paramFlag.value + bodyFlag.value === 2) {
+    getSelectDataApi().then((res: any) => {
+      console.log(res)
+      ResponseReturn.value = toJSONString(res)
+      ElMessage.success("响应成功，请前往预览！")
+    })
+  } else {
+    ElMessage.error("参数或类型不一致！")
+  }
+}
 
 const getInterfaceDetailApiFun = (data: string) => {
   if (interfaceId.value === "") return
@@ -993,8 +1062,10 @@ const getInterfaceDetailApiFun = (data: string) => {
         .replace(/\.[\d]{3}Z/, "")
       state.ruleForm.QueryConfig =
         res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.query
+      ResponseParams.value = toJSONString(state.ruleForm)
       state_1.ruleForm_1.BodyConfig =
         res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.body
+      ResponseBody1.value = toJSONString(state_1.ruleForm_1)
       state_2.ruleForm_2.returnConfig =
         res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data
     }
@@ -1002,80 +1073,108 @@ const getInterfaceDetailApiFun = (data: string) => {
   mockConfig()
 }
 
-const paramFlag = ref<string>("")
+const paramFlag = ref<number>(0)
+const flag11 = ref<number>(0)
 //检查Params
 const checkParams = () => {
-  if (state_5.ruleForm_5.ParamsConfig.length != state.ruleForm.QueryConfig.length) {
-    paramFlag.value = "false"
-  }
-  if (state_5.ruleForm_5.ParamsConfig.length === 0 && state.ruleForm.QueryConfig.length === 0) {
-    paramFlag.value = ""
-    return
-  }
-  const max = ref<number>()
-  if (state_5.ruleForm_5.ParamsConfig.length >= state.ruleForm.QueryConfig.length) {
-    max.value = state_5.ruleForm_5.ParamsConfig.length
-  } else {
-    max.value = state.ruleForm.QueryConfig.length
-  }
-  for (let i = 0; i < max.value; i++) {
-    if (
-      state_5.ruleForm_5.ParamsConfig[i].name === "" ||
-      state.ruleForm.QueryConfig[i].name === "" ||
-      state_5.ruleForm_5.ParamsConfig[i].format === "" ||
-      state.ruleForm.QueryConfig[i].format === ""
-    ) {
-      paramFlag.value = "false"
-      return
-    }
-    if (
-      state_5.ruleForm_5.ParamsConfig[i].name != state.ruleForm.QueryConfig[i].name ||
-      state_5.ruleForm_5.ParamsConfig[i].format != state.ruleForm.QueryConfig[i].format
-    ) {
-      paramFlag.value = "false"
-      return
+  flag11.value = 0
+  for (let i = 0; i < state_5.ruleForm_5.ParamsConfig.length; i++) {
+    console.log("1")
+    const s5P = state_5.ruleForm_5.ParamsConfig[i]
+    console.log("2")
+    for (let j = 0; j < state.ruleForm.QueryConfig.length; j++) {
+      const sQ = state.ruleForm.QueryConfig[j]
+      if (s5P.name === sQ.name) {
+        if (s5P.format === sQ.format) {
+          flag11.value = flag11.value + 1
+          break
+        }
+      }
     }
   }
-  paramFlag.value = "true"
-  console.log(paramFlag.value)
+  console.log(flag11.value)
+
+  const aux = ref<number>(0)
+  const aux1 = ref<number>(0)
+  for (let i = 0; i < state.ruleForm.QueryConfig.length; i++) {
+    const sQ = state.ruleForm.QueryConfig[i]
+    if (sQ.is_have === "必需") {
+      aux.value = aux.value + 1
+      for (let j = 0; j < state_5.ruleForm_5.ParamsConfig.length; j++) {
+        const s5P = state_5.ruleForm_5.ParamsConfig[j]
+        console.log(s5P.name)
+        console.log(s5P.format)
+        if (s5P.name === sQ.name) {
+          if (sQ.format === s5P.format) {
+            aux1.value = aux1.value + 1
+            break
+          }
+        }
+      }
+    }
+  }
+
+  if (flag11.value != state_5.ruleForm_5.ParamsConfig.length) {
+    if (aux.value != 0 && aux1.value != 0) {
+      if (aux.value == aux1.value) paramFlag.value = 1
+      else paramFlag.value = 3
+    } else paramFlag.value = 3
+  } else paramFlag.value = 1
 }
 
-const bodyFlag = ref<string>("")
+const setHeaders = () => {
+  ResponseHeaders.value = toJSONString(state_3.ruleForm_3)
+}
+
+const setCookies = () => {
+  ResponseCookies.value = toJSONString(state_4.ruleForm_4)
+}
+
+const bodyFlag = ref<number>(0)
 //检查Body
+const flag22 = ref<number>(0)
 const checkBody = () => {
-  if (state_6.ruleForm_6.BodyConfig.length != state_1.ruleForm_1.BodyConfig.length) {
-    bodyFlag.value = "false"
-  }
-  if (state_6.ruleForm_6.BodyConfig.length === 0 && state_1.ruleForm_1.BodyConfig.length === 0) {
-    bodyFlag.value = ""
-    return
-  }
-  const max1 = ref<number>()
-  if (state_6.ruleForm_6.BodyConfig.length >= state_1.ruleForm_1.BodyConfig.length) {
-    max1.value = state_6.ruleForm_6.BodyConfig.length
-  } else {
-    max1.value = state_1.ruleForm_1.BodyConfig.length
-  }
-  for (let i = 0; i < max1.value; i++) {
-    if (
-      state_6.ruleForm_6.BodyConfig[i].name === "" ||
-      state_1.ruleForm_1.BodyConfig[i].name === "" ||
-      state_6.ruleForm_6.BodyConfig[i].format === "" ||
-      state_1.ruleForm_1.BodyConfig[i].format === ""
-    ) {
-      bodyFlag.value = "false"
-      return
-    }
-    if (
-      state_6.ruleForm_6.BodyConfig[i].name != state_1.ruleForm_1.BodyConfig[i].name ||
-      state_6.ruleForm_6.BodyConfig[i].format != state_1.ruleForm_1.BodyConfig[i].format
-    ) {
-      bodyFlag.value = "false"
-      return
+  flag22.value = 0
+  console.log("111")
+  for (let i = 0; i < state_6.ruleForm_6.BodyConfig.length; i++) {
+    const s5P = state_6.ruleForm_6.BodyConfig[i]
+    for (let j = 0; j < state_1.ruleForm_1.BodyConfig.length; j++) {
+      const sQ = state_1.ruleForm_1.BodyConfig[j]
+      if (s5P.name === sQ.name) {
+        if (s5P.format === sQ.format) {
+          flag22.value = flag22.value + 1
+          break
+        }
+      }
     }
   }
-  bodyFlag.value = "true"
-  console.log(bodyFlag.value)
+
+  const aux = ref<number>(0)
+  const aux1 = ref<number>(0)
+  for (let i = 0; i < state_1.ruleForm_1.BodyConfig.length; i++) {
+    const sQ = state_1.ruleForm_1.BodyConfig[i]
+    if (sQ.is_have === "必需") {
+      aux.value = aux.value + 1
+      for (let j = 0; j < state_6.ruleForm_6.BodyConfig.length; j++) {
+        const s5P = state_6.ruleForm_6.BodyConfig[j]
+        if (s5P.name === sQ.name) {
+          if (s5P.format === sQ.format) {
+            aux1.value = aux1.value + 1
+            break
+          }
+        }
+      }
+    }
+  }
+
+  if (flag22.value != state_6.ruleForm_6.BodyConfig.length) {
+    if (aux.value != 0 && aux1.value != 0) {
+      if (aux.value == aux1.value) bodyFlag.value = 1
+      else bodyFlag.value = 3
+    } else bodyFlag.value = 3
+  } else bodyFlag.value = 1
+
+  ResponseBody.value = toJSONString(state_6.ruleForm_6)
 }
 
 // 跳转项目页
@@ -1104,6 +1203,7 @@ const close = () => {
   formRef.value?.resetFields()
   emit("initData")
   dialogVisible.value = false
+  clear()
 }
 
 // mock
@@ -1120,8 +1220,19 @@ const mockConfig = () => {
     if (res.code === 200) {
       ElMessage.success(res.message)
       mockUrl.value = "http://localhost:3333/api/v1" + res.data.mockUrl
+      derailment.value = res.data.mockUrl
+      console.log(mockUrl.value)
+      console.log(derailment.value)
+      // MockDetailApi(derailment.value).then((res: any) => {
+      //   if (res.code === 200) {
+      //     ElMessage.success(res.error)
+      //     console.log(res.value)
+      //   }
+      // })
     }
   })
+
+  console.log(derailment.value)
 }
 
 //修改接口
@@ -1142,6 +1253,11 @@ const updateTableDataApiFun = () => {
   updateInterfaceDataApi(params).then((res: any) => {
     if (res.code === 200) {
       ElMessage.success(res.message)
+      formData.value.query = state.ruleForm.QueryConfig
+      formData.value.responseData = state_2.ruleForm_2.returnConfig
+      formData.value.body = state_1.ruleForm_1.BodyConfig
+      ResponseParams.value = toJSONString(state.ruleForm)
+      ResponseBody1.value = toJSONString(state_1.ruleForm_1)
       emit("initData")
       detail()
     }

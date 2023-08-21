@@ -69,3 +69,18 @@ export function getPublicTableDataApi(data: Table.GetPublicTableRequestData) {
     data: data
   })
 }
+
+export function AddTeamTableDataApi(data: Table.AddTeamTableRequestData) {
+  return request({
+    url: "/project/addMember",
+    method: "post",
+    data: data
+  })
+}
+
+export function MockDetailApi(retail: string) {
+  return request({
+    url: `${retail}`,
+    method: "post"
+  })
+}

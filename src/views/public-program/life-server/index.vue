@@ -6,7 +6,7 @@
       <div>
         <el-form :inline="true">
           <el-form-item label="项目名称"
-            ><el-input placeholder="请输入项目名称" clearable v-model="projectID" @clear="search"
+            ><el-input placeholder="请输入项目名称" clearable v-model="projectName" @clear="search"
           /></el-form-item>
           <el-form-item><el-button type="primary" @click="search">搜索</el-button></el-form-item>
           <el-form-item label="项目名称:">{{ projectStore.publicProjectName }}</el-form-item>
@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { usePublicProjectStore } from "@/store/modules/public-space"
-import { getTableDataApi, getInterfaceDataApi } from "@/api/table/index"
+import { getPublicTableDataApi, getInterfaceDataApi } from "@/api/table/index"
 
 import InterfaceDetail from "./components/interface-detail.vue"
 
@@ -91,6 +91,7 @@ interface ITable {
 }
 
 const projectID = ref<string>("")
+const projectName = ref<string>("")
 const tableData = ref<ITable[]>([
   {
     projectId: projectStore.publicProjectId,
@@ -109,13 +110,14 @@ const selectVal = ref<ITable[]>([])
 
 const searchProjectDetail = () => {
   const params = {
-    projectId: projectID.value
+    projectName: projectName.value
   }
-  getTableDataApi(params).then((res: any) => {
+  getPublicTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
-      projectStore.publicProjectId = projectID.value
-      projectStore.publicProjectName = res.data.project.name
-      projectID.value = ""
+      console.log(res.data)
+      projectStore.publicProjectName = projectName.value
+      projectStore.publicProjectId = res.data.projects[res.data.projects.length - 1]._id
+      projectID.value = projectStore.publicProjectId
       initData()
     }
   })

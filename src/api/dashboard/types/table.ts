@@ -6,9 +6,10 @@ export interface CreateTableRequestData {
 
 export interface UpdateTableRequestData {
   projectId: string | undefined
-  name: string
-  description: string
+  name?: string
+  description?: string
   isPrivate?: boolean
+  members?: object
 }
 
 export interface GetTableRequestData {

@@ -5,8 +5,8 @@
       <!-- 检索区域 -->
       <div>
         <el-form :inline="true">
-          <el-form-item label="项目名称/ID"
-            ><el-input placeholder="请输入项目名称/ID" v-model="projectID" @clear="search"
+          <el-form-item label="项目ID"
+            ><el-input placeholder="请输入项目ID" v-model="projectID" @clear="search"
           /></el-form-item>
           <el-form-item><el-button type="primary" @click="search">搜索</el-button></el-form-item>
           <el-form-item label="项目名称:">{{ projectStore.projectName }}</el-form-item>
