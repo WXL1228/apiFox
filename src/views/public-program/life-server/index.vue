@@ -115,9 +115,10 @@ const searchProjectDetail = () => {
   getPublicTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
       console.log(res.data)
-      projectStore.publicProjectName = projectName.value
+      projectStore.publicProjectName = res.data.projects[res.data.projects.length - 1].name
       projectStore.publicProjectId = res.data.projects[res.data.projects.length - 1]._id
       projectID.value = projectStore.publicProjectId
+      tableData.value = res.data.interface
       initData()
     }
   })
