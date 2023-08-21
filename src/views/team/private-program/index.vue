@@ -1,7 +1,6 @@
 <template>
   <div class="app-container">
     <div class="app-content">
-      <PageTitle />
       <!-- 检索区域 -->
       <div>
         <el-button class="windi-mb-md" type="primary" @click="createProject">新建项目</el-button>
