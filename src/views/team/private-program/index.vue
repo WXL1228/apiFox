@@ -30,16 +30,29 @@
           <el-table-column label="项目ID" align="center" prop="_id" width="220" />
           <el-table-column label="私有项目" align="center" width="150">
             <template #default="{ row }">
-              <el-switch v-model="row.isPrivate" @change="isPublicDetail(row)" />
+              <el-switch
+                v-if="isShow[tableData.indexOf(row)].show === 0"
+                v-model="row.isPrivate"
+                @change="isPublicDetail(row)"
+              />
+              <el-tag v-if="isShow[tableData.indexOf(row)].show != 0" class="ml-2" type="info">无权限</el-tag>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="250">
             <template #default="{ row }">
               <el-button link type="warning" @click="goDetail(row)">管理</el-button>
-              <el-button link type="primary" @click="editProject(row)">编辑</el-button>
+              <el-button v-if="isShow[tableData.indexOf(row)].show === 0" link type="primary" @click="editProject(row)"
+                >编辑</el-button
+              >
               <el-button link type="info" @click="getDetail(row._id)">详情</el-button>
               <el-button link type="success" @click="getTeam(row)">成员</el-button>
-              <el-button link type="danger" @click="deleteTableDataApiFun(row)">删除</el-button>
+              <el-button
+                v-if="isShow[tableData.indexOf(row)].show === 0"
+                link
+                type="danger"
+                @click="deleteTableDataApiFun(row)"
+                >删除</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -63,10 +76,12 @@ const token = getToken()
 import EditDialog from "../../dashboard/components/edit-dialog.vue"
 import TableDetail from "../../dashboard/components/program-detail.vue"
 import TeamDetail from "./components/team-detail.vue"
+import { useUserStore } from "@/store/modules/user"
 
 const editDialogRef = ref<InstanceType<typeof EditDialog>>()
 const tableDetailRef = ref<InstanceType<typeof TableDetail>>()
 const teamDetailRef = ref<InstanceType<typeof TeamDetail>>()
+const userStore = useUserStore()
 
 defineOptions({
   name: "CommentManage"
@@ -78,7 +93,12 @@ interface ITable {
   created_time: string
   isPrivate: boolean
   created_by: string
-  members: []
+  members: [
+    {
+      member: string
+      permission: number
+    }
+  ]
   __v: number | null
   _id: string
 }
@@ -90,11 +110,21 @@ const tableData = ref<ITable[]>([
     created_time: "",
     isPrivate: false,
     created_by: "",
-    members: [],
+    members: [
+      {
+        member: "",
+        permission: 0
+      }
+    ],
     __v: null,
     _id: ""
   }
 ])
+interface isShow1 {
+  show: number
+}
+const isShow = ref<isShow1[]>([{ show: 0 }])
+
 const loading = ref<Boolean>(false)
 const selectVal = ref<ITable[]>([])
 const router = useRouter()
@@ -108,7 +138,6 @@ const initData = () => {
   getTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
       tableData.value = res.data.projects
-      console.log(tableData.value)
       for (const [key, value] of Object.entries(tableData)) {
         if (key === "_rawValue") {
           for (let i = 0; i < value.length; i++) {
@@ -121,10 +150,25 @@ const initData = () => {
           }
         }
       }
+      console.log(res.data)
+      isShow.value = [{ show: 0 }]
+      for (let i = 0; i < res.data.projects.length - 1; i++) {
+        isShow.value.push({ show: 0 })
+      }
+
+      for (let i = 0; i < res.data.projects.length; i++) {
+        for (let j = 0; j < res.data.projects[i].members.length; j++) {
+          if (userStore.userId === res.data.projects[i].members[j].member) {
+            isShow.value[i].show = res.data.projects[i].members[j].permission
+          }
+        }
+        console.log(isShow.value)
+      }
     }
   })
 }
 
+// 设置公开私有
 const isPublicDetail = (row: any) => {
   const isPrivateFlag = ref<boolean>()
   console.log(isPrivateFlag.value)
@@ -172,6 +216,7 @@ const createProject = () => {
 
 // 编辑项目
 const editProject = (row: any) => {
+  console.log(tableData.value.indexOf(row))
   const obj = { id: 1, title: "编辑项目", isAdd: false, detailMsg: row }
   editDialogRef.value?.show(obj)
 }

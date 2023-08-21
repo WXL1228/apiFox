@@ -12,9 +12,9 @@
     <el-form-item label="接口名称/ID:">{{ interfaceName }}--------{{ interfaceId }}</el-form-item>
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="编辑" name="first">
-        <el-descriptions size="large" title="基本设置">
-          <el-descriptions-item
-            ><el-form ref="formRef" label-width="100px" :model="formData" :rules="rules">
+        <el-descriptions size="large" v-if="isShow === 0" title="基本设置">
+          <el-descriptions-item>
+            <el-form ref="formRef" label-width="100px" :model="formData" :rules="rules">
               <el-form-item label="接口名称：" prop="name">
                 <el-input v-model="formData.name" placeholder="请输入接口名称" />
               </el-form-item>
@@ -36,9 +36,33 @@
             </el-form>
           </el-descriptions-item>
         </el-descriptions>
+        <el-descriptions size="large" v-if="isShow != 0" title="基本设置-(无权限)">
+          <el-descriptions-item>
+            <el-form ref="formRef" label-width="100px" :model="formData" :rules="rules">
+              <el-form-item label="接口名称：" prop="name">
+                <el-input disabled v-model="formData.name" placeholder="请输入接口名称" />
+              </el-form-item>
+              <el-form-item label="接口地址：" prop="url">
+                <el-input disabled v-model="formData.url" placeholder="请输入接口地址"
+                  ><template #prepend>http://</template></el-input
+                >
+              </el-form-item>
+              <el-form-item label="请求方法：" prop="method">
+                <div>
+                  <el-radio-group disabled v-model="formData.method">
+                    <el-radio-button label="GET" />
+                    <el-radio-button label="POST" />
+                    <el-radio-button label="PUT" />
+                    <el-radio-button label="DELETE" />
+                  </el-radio-group>
+                </div>
+              </el-form-item>
+            </el-form>
+          </el-descriptions-item>
+        </el-descriptions>
         <el-divider />
 
-        <el-descriptions size="large" :border="true" title="请求参数设置">
+        <el-descriptions size="large" :border="true" v-if="isShow != 2" title="请求参数设置">
           <el-descriptions-item label="Query"
             ><el-form :model="ruleForm" status-icon ref="formRef_1" label-width="100px">
               <el-row :gutter="20">
@@ -84,7 +108,7 @@
               </el-row> </el-form
           ></el-descriptions-item>
         </el-descriptions>
-        <el-descriptions v-if="flag_10" size="large" :border="true">
+        <el-descriptions v-if="flag_10 && isShow != 2" size="large" :border="true">
           <el-descriptions-item label="Body*">
             <el-form :model="ruleForm_1" status-icon ref="formRef_2" label-width="100px">
               <el-row :gutter="20">
@@ -130,15 +154,107 @@
               </el-row> </el-form
           ></el-descriptions-item>
         </el-descriptions>
+        <el-descriptions size="large" :border="true" v-if="isShow === 2" title="请求参数设置-(无权限)">
+          <el-descriptions-item label="Query"
+            ><el-form disabled :model="ruleForm" status-icon ref="formRef_1" label-width="100px">
+              <el-row :gutter="20">
+                <el-col :span="4">
+                  <el-form-item>
+                    <el-button type="primary" @click="addQueryConfig">添加Query参数</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20" v-for="item in ruleForm.QueryConfig">
+                <el-col :span="4">
+                  <el-form-item label="参数名称:" prop="'name' + index">
+                    <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="是/否必填:" prop="'is_have' + index">
+                    <el-select v-model="item.is_have" autocomplete="off" placeholder="必需">
+                      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="参数类型:" prop="'format' + index">
+                    <el-select v-model="item.format" autocomplete="off" placeholder="string">
+                      <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="参数示例:" prop="'dome' + index">
+                    <el-input type="text" v-model="item.dome" autocomplete="off" maxlength="50" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="备注:" prop="'remark' + index">
+                    <el-input type="text" v-model="item.remark" autocomplete="off" maxlength="50" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-button type="danger" :icon="Delete" circle @click.prevent="removeQueryConfig(item)" />
+                </el-col>
+              </el-row> </el-form
+          ></el-descriptions-item>
+        </el-descriptions>
+        <el-descriptions v-if="flag_10 && isShow === 2" size="large" :border="true">
+          <el-descriptions-item label="Body*">
+            <el-form disabled :model="ruleForm_1" status-icon ref="formRef_2" label-width="100px">
+              <el-row :gutter="20">
+                <el-col :span="4">
+                  <el-form-item>
+                    <el-button type="primary" @click="addBodyConfig">添加Body*参数</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20" v-for="item in ruleForm_1.BodyConfig">
+                <el-col :span="4">
+                  <el-form-item label="参数名称:" prop="'name' + index">
+                    <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="是/否必填:" prop="'is_have' + index">
+                    <el-select v-model="item.is_have" autocomplete="off" placeholder="必需">
+                      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="参数类型:" prop="'format' + index">
+                    <el-select v-model="item.format" autocomplete="off" placeholder="string">
+                      <el-option v-for="item in options_1" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="参数示例:" prop="'dome' + index">
+                    <el-input type="text" v-model="item.dome" autocomplete="off" maxlength="50" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="备注:" prop="'remark' + index">
+                    <el-input type="text" v-model="item.remark" autocomplete="off" maxlength="50" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-button type="danger" :icon="Delete" circle @click.prevent="removeBodyConfig(item)" />
+                </el-col>
+              </el-row> </el-form
+          ></el-descriptions-item>
+        </el-descriptions>
         <el-divider />
-        <el-descriptions size="large" title="返回数据设置" />
-        <el-radio-group v-model="radio" @change="setFlag">
+        <el-descriptions size="large" v-if="isShow != 2" title="返回数据设置" />
+        <el-radio-group v-if="isShow != 2" v-model="radio" @change="setFlag">
           <el-radio :label="3">JSON</el-radio>
           <el-radio :label="6">XML</el-radio>
           <el-radio :label="9">HTML</el-radio>
           <el-radio :label="12">RAW</el-radio>
         </el-radio-group>
-        <el-descriptions v-if="flag" size="large" :border="true">
+        <el-descriptions v-if="flag && isShow != 2" size="large" :border="true">
           <el-descriptions-item label="模板">
             <el-form :model="ruleForm_2" status-icon ref="formRef_3" label-width="100px">
               <el-row :gutter="20">
@@ -192,12 +308,77 @@
           ></el-descriptions-item>
         </el-descriptions>
 
-        <el-descriptions v-if="!flag" size="large" :border="true">
+        <el-descriptions v-if="!flag && isShow != 2" size="large" :border="true">
+          <el-descriptions-item label="预览"><el-input v-model="v_input" /></el-descriptions-item>
+        </el-descriptions>
+
+        <el-descriptions size="large" v-if="isShow == 2" title="返回数据设置-(无权限)" />
+        <el-radio-group v-if="isShow == 2" disabled v-model="radio" @change="setFlag">
+          <el-radio :label="3">JSON</el-radio>
+          <el-radio :label="6">XML</el-radio>
+          <el-radio :label="9">HTML</el-radio>
+          <el-radio :label="12">RAW</el-radio>
+        </el-radio-group>
+        <el-descriptions v-if="flag && isShow === 2" size="large" :border="true">
+          <el-descriptions-item label="模板">
+            <el-form disabled :model="ruleForm_2" status-icon ref="formRef_3" label-width="100px">
+              <el-row :gutter="20">
+                <el-col :span="4">
+                  <el-form-item>
+                    <el-button size="small" round @click="editProject">导入JSON/XML</el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20" v-for="item in ruleForm_2.returnConfig">
+                <el-col :span="4">
+                  <el-form-item prop="'name' + index">
+                    <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="根节点" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item prop="'is_have' + index">
+                    <el-select v-model="item.is_have" autocomplete="off" placeholder="必需">
+                      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item prop="'format' + index">
+                    <el-select v-model="item.format" autocomplete="off" placeholder="string">
+                      <el-option v-for="item in options_2" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item prop="'http_dome' + index">
+                    <el-input
+                      type="text"
+                      v-model="item.http_dome"
+                      autocomplete="off"
+                      maxlength="50"
+                      placeholder="中文名"
+                    />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item prop="'remark' + index">
+                    <el-input type="text" v-model="item.remark" autocomplete="off" maxlength="50" placeholder="备注" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-button type="success" :icon="Plus" circle @click="addReturnConfig" />
+                  <el-button type="danger" :icon="Delete" circle @click.prevent="removeReturnConfig(item)" />
+                </el-col>
+              </el-row> </el-form
+          ></el-descriptions-item>
+        </el-descriptions>
+
+        <el-descriptions v-if="!flag && isShow === 2" size="large" :border="true">
           <el-descriptions-item label="预览"><el-input v-model="v_input" /></el-descriptions-item>
         </el-descriptions>
 
         <el-divider />
-        <div class="windi-flex-center">
+        <div v-if="isShow != 2" class="windi-flex-center">
           <el-button type="warning" @click="clear_1">清空(参数信息))</el-button>
           <el-button type="primary" @click="save">保 存</el-button>
         </div>
@@ -548,15 +729,16 @@
 <script setup lang="ts">
 import { FormRules, ElInput, FormInstance, ElMessage, TabsPaneContext, TagProps } from "element-plus"
 import { reactive, ref, toRefs } from "vue"
-import { updateInterfaceDataApi, MockInterfaceDetailApi } from "@/api/table/index"
+import { updateInterfaceDataApi, MockInterfaceDetailApi, getTableDataApi } from "@/api/table/index"
 import { CreateInterfaceRequestData } from "@/api/table/types/table"
 import { useProjectStore } from "@/store/modules/personal-space"
+import { useUserStore } from "@/store/modules/user"
 import { getInterfaceDetailApi } from "@/api/table/index"
 import { Delete, Plus } from "@element-plus/icons-vue"
 import { toJSONString } from "xe-utils"
 import { getSelectDataApi } from "@/api/hook-demo/use-fetch-select"
-
 import InterfaceDevelopment1 from "./interface-development1.vue"
+
 const InterfaceDevelopmentRef1 = ref<InstanceType<typeof InterfaceDevelopment1>>()
 
 type Item = { type: TagProps["type"]; label: string }
@@ -985,6 +1167,24 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
   dialogVisible.value = true
   getInterfaceDetailApiFun(interfaceId.value)
   mockConfig()
+  searchTeam()
+}
+
+const userStore = useUserStore()
+const isShow = ref<number>(0)
+const searchTeam = () => {
+  const params = {
+    projectId: projectStore.projectId
+  }
+  getTableDataApi(params).then((res: any) => {
+    if (res.code === 200) {
+      for (let i = 0; i < res.data.project.members.length; i++) {
+        if (userStore.userId === res.data.project.members[i].member) {
+          isShow.value = res.data.project.members[i].permission
+        }
+      }
+    }
+  })
 }
 
 const clear = () => {

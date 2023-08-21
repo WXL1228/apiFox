@@ -11,9 +11,9 @@
           <el-form-item label="项目名称:">{{ projectStore.projectName }}</el-form-item>
           <el-form-item label="项目ID:">{{ projectStore.projectId }}</el-form-item>
         </el-form>
-        <el-button class="windi-mb-md" type="warning" @click="createInterface">新建接口</el-button>
-        <el-button class="windi-mb-md" color="#626aef" @click="importInterface">导入接口</el-button>
-        <el-button class="windi-mb-md" type="danger" @click="batchDelete">批量删除</el-button>
+        <el-button v-if="isShow" class="windi-mb-md" type="warning" @click="createInterface">新建接口</el-button>
+        <el-button v-if="isShow" class="windi-mb-md" color="#626aef" @click="importInterface">导入接口</el-button>
+        <el-button v-if="isShow" class="windi-mb-md" type="danger" @click="batchDelete">批量删除</el-button>
       </div>
       <el-divider />
       <!-- 表格区域 -->
@@ -47,7 +47,7 @@
             <template #default="{ row }">
               <el-button link type="primary" @click="editProject(row)">开发</el-button>
               <el-button link type="info" @click="goDetail(row._id)">详情</el-button>
-              <el-button link type="danger" @click="deleteTableDataApiFun(row)">删除</el-button>
+              <el-button v-if="isShow" link type="danger" @click="deleteTableDataApiFun(row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -63,6 +63,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useProjectStore } from "@/store/modules/personal-space"
+import { useUserStore } from "@/store/modules/user"
 import { getTableDataApi, getInterfaceDataApi, deleteInterfaceDataApi } from "@/api/table/index"
 // import { getToken } from "@/utils/cache/cookies"
 // const token = getToken()
@@ -81,6 +82,9 @@ const interfaceDetailRef = ref<InstanceType<typeof InterfaceDetail>>()
 const importInterfaceRef = ref<InstanceType<typeof ImportInterface>>()
 const InterfaceDevelopmentRef = ref<InstanceType<typeof InterfaceDevelopment>>()
 const projectStore = useProjectStore()
+const userStore = useUserStore()
+const isShow = ref<boolean>(true)
+
 defineOptions({
   name: "CommentManage"
 })
@@ -145,7 +149,7 @@ const searchProjectDetail = () => {
 
 // 初始化数据
 const initData = () => {
-  if (projectStore.projectId === "") {
+  if (projectStore.projectId === "" || (projectID.value === "" && projectStore.projectId === "")) {
     ElMessage.error("请选择项目")
     return
   }
@@ -179,6 +183,24 @@ const initData = () => {
             }
             sort(value, 0, value.length - 1)
           }
+        }
+      }
+    }
+  })
+
+  searchTeam()
+}
+
+const searchTeam = () => {
+  const params = {
+    projectId: projectStore.projectId
+  }
+  getTableDataApi(params).then((res: any) => {
+    if (res.code === 200) {
+      for (let i = 0; i < res.data.project.members.length; i++) {
+        if (userStore.userId === res.data.project.members[i].member) {
+          if (res.data.project.members[i].permission === 0) isShow.value = true
+          else isShow.value = false
         }
       }
     }

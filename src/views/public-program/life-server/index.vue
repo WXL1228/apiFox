@@ -125,7 +125,7 @@ const searchProjectDetail = () => {
 
 // 初始化数据
 const initData = () => {
-  if (projectStore.publicProjectId === "") {
+  if (projectStore.publicProjectId === "" || (projectStore.publicProjectId === "" && projectName.value === "")) {
     ElMessage.error("请选择公开项目")
     return
   }
