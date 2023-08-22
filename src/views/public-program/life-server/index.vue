@@ -123,7 +123,7 @@ const searchProjectDetail = () => {
 const initData = () => {
   if (projectStore.publicProjectId === "" || (projectStore.publicProjectId === "" && projectName.value === "")) {
     ElMessage.error("请选择公开项目")
-    router.go(-1)
+    router.push({ name: "Development-Tool" })
     return
   }
   const params = {

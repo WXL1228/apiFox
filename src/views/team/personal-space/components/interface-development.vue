@@ -722,7 +722,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <InterfaceDevelopment1 ref="InterfaceDevelopmentRef1" @initData="initData1" />
+    <InterfaceDevelopment1 ref="InterfaceDevelopmentRef1" @initData="initData1()" />
   </el-dialog>
 </template>
 
@@ -762,6 +762,7 @@ const state = reactive({
     ]
   }
 })
+
 console.log(state.ruleForm.QueryConfig)
 
 const addQueryConfig = () => {
@@ -800,6 +801,7 @@ const state_1 = reactive({
     ]
   }
 })
+
 console.log(state_1.ruleForm_1.BodyConfig)
 
 const addBodyConfig = () => {
@@ -1483,7 +1485,13 @@ const updateTableDataApiFun = () => {
 // json编辑器
 const editProject = (row: any) => {
   console.log(row.responseData)
-  const obj = { id: 1, title: "开发接口", detailMsg: row }
+  const obj = {
+    id: 1,
+    title: "开发接口",
+    detailMsg: formData.value,
+    responseData: state_2.ruleForm_2.returnConfig
+  }
+
   InterfaceDevelopmentRef1.value?.show(obj)
   // initData()
 }

@@ -145,9 +145,9 @@ const searchProjectDetail = () => {
 
 // 初始化数据
 const initData = () => {
-  if (projectStore.projectId === "" || (projectID.value === "" && projectStore.projectId === "")) {
+  if (projectStore.projectId === "") {
     ElMessage.error("请选择项目")
-    router.go(-1)
+    router.push({ name: "Private-Program" })
     return
   }
   const params = {
