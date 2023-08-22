@@ -9,7 +9,6 @@
         :expandedOnStart="false"
         language="zh-cn"
         :style="{ height: '300px', overflowX: 'hidden', overflowY: 'auto' }"
-        @change="test"
       />
     </div>
     <template #footer>
@@ -25,6 +24,9 @@
 // import { FormInstance } from "element-plus"
 import { ref } from "vue"
 import JsonEditorVue from "json-editor-vue3" // 导入模块
+import { ElMessage } from "element-plus"
+
+const emit = defineEmits(["initData"])
 
 const dialogVisible = ref(false)
 
@@ -39,14 +41,19 @@ const show = async (obj: { id?: number; title: string }) => {
 }
 
 const save = () => {
-  console.log(isJson.value)
-}
-const test = () => {
-  console.log("row", isJson.value)
+  // console.log(isJson.value)
+  emit("initData", isJson.value)
+  // console.log(11111, isJson.value)
+  if (isJson.value === "") {
+    ElMessage.error("请输入json字符")
+  } else {
+    dialogVisible.value = false
+  }
 }
 
 const changePosition = () => {
   console.log(11111, isJson.value)
+  // emit("initData", isJson.value)
 }
 
 defineExpose({

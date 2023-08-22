@@ -62,6 +62,7 @@ import { useUserStore } from "@/store/modules/user"
 import { getTableDataApi, getInterfaceDataApi, deleteInterfaceDataApi } from "@/api/table/index"
 // import { getToken } from "@/utils/cache/cookies"
 // const token = getToken()
+import router from "@/router"
 import EditDialog from "./components/edit-dialog.vue"
 import InterfaceDetail from "./components/interface-detail.vue"
 import ImportInterface from "./components/import-interface.vue"
@@ -146,6 +147,7 @@ const searchProjectDetail = () => {
 const initData = () => {
   if (projectStore.projectId === "" || (projectID.value === "" && projectStore.projectId === "")) {
     ElMessage.error("请选择项目")
+    router.go(-1)
     return
   }
   const params = {
@@ -300,7 +302,6 @@ const batchDelete = () => {
   }
 }
 
-initData()
 initData()
 </script>
 

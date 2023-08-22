@@ -55,7 +55,7 @@
 import { ref } from "vue"
 import { usePublicProjectStore } from "@/store/modules/public-space"
 import { getPublicTableDataApi, getInterfaceDataApi } from "@/api/table/index"
-
+import router from "@/router"
 import InterfaceDetail from "./components/interface-detail.vue"
 
 import InterfaceDevelopment from "./components/interface-development.vue"
@@ -123,6 +123,7 @@ const searchProjectDetail = () => {
 const initData = () => {
   if (projectStore.publicProjectId === "" || (projectStore.publicProjectId === "" && projectName.value === "")) {
     ElMessage.error("请选择公开项目")
+    router.go(-1)
     return
   }
   const params = {
@@ -188,7 +189,6 @@ const editProject = (row: any) => {
   initData()
 }
 
-initData()
 initData()
 </script>
 

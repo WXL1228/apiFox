@@ -722,7 +722,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <InterfaceDevelopment1 ref="InterfaceDevelopmentRef1" @initData="initData" />
+    <InterfaceDevelopment1 ref="InterfaceDevelopmentRef1" @initData="initData1" />
   </el-dialog>
 </template>
 
@@ -1166,7 +1166,7 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
   }
   dialogVisible.value = true
   getInterfaceDetailApiFun(interfaceId.value)
-  mockConfig()
+  // mockConfig()
   searchTeam()
 }
 
@@ -1392,7 +1392,7 @@ const checkBody = () => {
 // 跳转项目页
 const detail = () => {
   emit("initData")
-  emit("initData")
+  // emit("initData")
 }
 
 // 保存信息
@@ -1405,10 +1405,10 @@ const save = () => {
       console.log()
       updateTableDataApiFun()
       emit("initData")
-      emit("initData")
+      // emit("initData")
     }
   })
-  emit("initData")
+  // emit("initData")
 }
 // 关闭事件
 const close = () => {
@@ -1485,9 +1485,11 @@ const editProject = (row: any) => {
   console.log(row.responseData)
   const obj = { id: 1, title: "开发接口", detailMsg: row }
   InterfaceDevelopmentRef1.value?.show(obj)
-  initData()
+  // initData()
 }
-const initData = () => {}
+const initData1 = (row: any) => {
+  console.log("00000", row)
+}
 
 defineExpose({
   show
