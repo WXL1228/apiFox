@@ -28,11 +28,6 @@
           :header-cell-style="{ 'text-align': 'center' }"
         >
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="序号" width="100" align="center">
-            <template #default="scope">
-              <span>{{ scope.$index + 1 }}</span>
-            </template>
-          </el-table-column>
           <el-table-column label="接口名称" align="center" prop="name" width="300" />
           <el-table-column label="接口地址" align="center" prop="url" width="300" show-overflow-tooltip />
           <el-table-column label="方法" align="center" prop="http_method" width="300" />

@@ -14,11 +14,6 @@
           :header-cell-style="{ 'text-align': 'center' }"
         >
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="序号" width="100" align="center">
-            <template #default="scope">
-              <span>{{ scope.$index + 1 }}</span>
-            </template>
-          </el-table-column>
           <el-table-column label="项目名称" align="center" prop="name" width="180" />
           <el-table-column label="描述" align="center" prop="description" min-width="200" show-overflow-tooltip />
           <el-table-column label="创建人" align="center" prop="created_by" width="220" />

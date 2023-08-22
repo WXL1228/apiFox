@@ -1087,6 +1087,8 @@ const checkParams = () => {
       else paramFlag.value = 3
     } else paramFlag.value = 3
   } else paramFlag.value = 1
+
+  checkBody()
 }
 
 const setHeaders = () => {
@@ -1142,6 +1144,8 @@ const checkBody = () => {
   } else bodyFlag.value = 1
 
   ResponseBody.value = toJSONString(state_6.ruleForm_6)
+
+  checkParams()
 }
 
 // 跳转项目页
