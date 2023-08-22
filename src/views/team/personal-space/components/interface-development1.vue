@@ -68,41 +68,21 @@ const show = async (obj: { id?: number; title: string; detailMsg: any; responseD
 const errorFlag = ref<boolean>(true)
 
 const save = () => {
-  // console.log(isJson.value)
-
   emit("initData", isJson.value)
-  // console.log(11111, isJson.value)
   if (errorFlag.value) {
     if (isJson.value === "") {
       ElMessage.error("请输入json字符")
     } else {
-      const json = ref<string>("")
-      json.value = JSON.stringify(isJson.value)
-      const string = ref<string[]>([])
-      string.value = json.value.split(",")
-      console.log(string.value)
-      const key = ref<string[]>([])
-      for (let i = 0; i < string.value.length; i++) {
-        const str = ref<string[]>([])
-        str.value = string.value[i].split('"')
-        key.value.push(str.value[1])
-      }
-      for (let i = 0; i < key.value.length; i++) {
-        const keyString = ref("")
-        const valueString = ref("")
+      for (const key in isJson.value as any) {
         const isFlag = ref<boolean>(false)
-        const typeString = ref("")
-        keyString.value = key.value[i]
-        valueString.value = (isJson.value as any)[keyString.value]
-        typeString.value = typeof (isJson.value as any)[keyString.value]
         for (let j = 0; j < stateJson.ruleForm.returnConfig.length; j++) {
-          if (stateJson.ruleForm.returnConfig[j].name === keyString.value) isFlag.value = true
+          if (stateJson.ruleForm.returnConfig[j].name === key) isFlag.value = true
         }
         if (!isFlag.value)
           stateJson.ruleForm.returnConfig.push({
-            name: keyString.value,
+            name: key,
             is_have: "",
-            format: typeString.value,
+            format: typeof (isJson.value as any)[key],
             http_dome: "",
             remark: ""
           })
@@ -115,11 +95,6 @@ const save = () => {
     ElMessage.error("输入非法！")
   }
 }
-
-// const changePosition = () => {
-//   console.log(errorFlag.value)
-//   // emit("initData", isJson.value)
-// }
 
 defineExpose({
   show
