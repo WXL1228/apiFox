@@ -189,7 +189,7 @@ const getDetail = (item: string) => {
 }
 // 成员页面
 const getTeam = (item: any) => {
-  const obj = { id: 1, title: "接口详情", item: item }
+  const obj = { id: 1, title: "成员详情", item: item }
   console.log(item)
   teamDetailRef.value?.show(obj)
 }
