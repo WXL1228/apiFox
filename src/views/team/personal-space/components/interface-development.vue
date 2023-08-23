@@ -722,7 +722,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <InterfaceDevelopment1 ref="InterfaceDevelopmentRef1" @initData="initData1()" />
+    <InterfaceDevelopment1 ref="InterfaceDevelopmentRef1" />
   </el-dialog>
 </template>
 
@@ -1495,9 +1495,9 @@ const editProject = (row: any) => {
   InterfaceDevelopmentRef1.value?.show(obj)
   // initData()
 }
-const initData1 = (row: any) => {
-  console.log("00000", row)
-}
+// const initData1 = (row: any) => {
+//   console.log("00000", row)
+// }
 
 defineExpose({
   show

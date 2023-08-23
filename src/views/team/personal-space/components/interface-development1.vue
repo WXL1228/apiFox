@@ -27,7 +27,7 @@ import { ref, reactive } from "vue"
 import JsonEditorVue from "json-editor-vue3" // 导入模块
 import { ElMessage } from "element-plus"
 
-const emit = defineEmits(["initData"])
+// const emit = defineEmits(["initData"])
 
 const dialogVisible = ref(false)
 
@@ -68,7 +68,7 @@ const show = async (obj: { id?: number; title: string; detailMsg: any; responseD
 const errorFlag = ref<boolean>(true)
 
 const save = () => {
-  emit("initData", isJson.value)
+  // emit("initData", isJson.value)
   if (errorFlag.value) {
     if (isJson.value === "") {
       ElMessage.error("请输入json字符")
