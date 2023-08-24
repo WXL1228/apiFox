@@ -267,7 +267,7 @@
               <el-row :gutter="20" v-for="item in ruleForm_2.returnConfig">
                 <el-col :span="4">
                   <el-form-item prop="'name' + index">
-                    <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="根节点" />
+                    <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="节点" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
@@ -332,7 +332,7 @@
               <el-row :gutter="20" v-for="item in ruleForm_2.returnConfig">
                 <el-col :span="4">
                   <el-form-item prop="'name' + index">
-                    <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="根节点" />
+                    <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="节点" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
@@ -1245,7 +1245,7 @@ const clear_1 = () => {
 
 const sendData = () => {
   if (paramFlag.value + bodyFlag.value === 2) {
-    getSelectDataApi().then((res: any) => {
+    getSelectDataApi(state_2.ruleForm_2.returnConfig).then((res: any) => {
       console.log(res)
       ResponseReturn.value = toJSONString(res)
       ElMessage.success("响应成功，请前往预览！")
@@ -1289,9 +1289,8 @@ const flag11 = ref<number>(0)
 const checkParams = () => {
   flag11.value = 0
   for (let i = 0; i < state_5.ruleForm_5.ParamsConfig.length; i++) {
-    console.log("1")
     const s5P = state_5.ruleForm_5.ParamsConfig[i]
-    console.log("2")
+
     for (let j = 0; j < state.ruleForm.QueryConfig.length; j++) {
       const sQ = state.ruleForm.QueryConfig[j]
       if (s5P.name === sQ.name) {
@@ -1302,7 +1301,6 @@ const checkParams = () => {
       }
     }
   }
-  console.log(flag11.value)
 
   const aux = ref<number>(0)
   const aux1 = ref<number>(0)
@@ -1312,8 +1310,7 @@ const checkParams = () => {
       aux.value = aux.value + 1
       for (let j = 0; j < state_5.ruleForm_5.ParamsConfig.length; j++) {
         const s5P = state_5.ruleForm_5.ParamsConfig[j]
-        console.log(s5P.name)
-        console.log(s5P.format)
+
         if (s5P.name === sQ.name) {
           if (sQ.format === s5P.format) {
             aux1.value = aux1.value + 1
@@ -1347,7 +1344,6 @@ const bodyFlag = ref<number>(0)
 const flag22 = ref<number>(0)
 const checkBody = () => {
   flag22.value = 0
-  console.log("111")
   for (let i = 0; i < state_6.ruleForm_6.BodyConfig.length; i++) {
     const s5P = state_6.ruleForm_6.BodyConfig[i]
     for (let j = 0; j < state_1.ruleForm_1.BodyConfig.length; j++) {
@@ -1433,7 +1429,7 @@ const mockConfig = () => {
   MockInterfaceDetailApi(params).then((res: any) => {
     if (res.code === 200) {
       ElMessage.success(res.message)
-      mockUrl.value = "http://localhost:3333/api/v1" + res.data.mockUrl
+      mockUrl.value = "http://localhost:3333/api/getInfo"
       derailment.value = res.data.mockUrl
       console.log(mockUrl.value)
       console.log(derailment.value)

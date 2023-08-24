@@ -157,7 +157,7 @@
               <el-row :gutter="20" v-for="item in ruleForm_2.returnConfig">
                 <el-col :span="4">
                   <el-form-item prop="'name' + index">
-                    <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="根节点" />
+                    <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="节点" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
