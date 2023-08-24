@@ -559,6 +559,7 @@
           label-width="100px"
           style="margin-top: 20px"
           @change="checkParams"
+          @click="checkParams"
         >
           <el-row :gutter="20">
             <el-col :span="4">
@@ -613,6 +614,7 @@
           label-width="100px"
           style="margin-top: 20px"
           @change="checkBody"
+          @click="checkBody"
         >
           <el-row :gutter="20">
             <el-col :span="4">
@@ -1328,6 +1330,21 @@ const checkParams = () => {
     } else paramFlag.value = 3
   } else paramFlag.value = 1
 
+  if (
+    state_5.ruleForm_5.ParamsConfig.length === 1 &&
+    state_5.ruleForm_5.ParamsConfig[0].format === "" &&
+    state_5.ruleForm_5.ParamsConfig[0].name === "" &&
+    state_5.ruleForm_5.ParamsConfig[0].remark === "" &&
+    state_5.ruleForm_5.ParamsConfig[0].value === "" &&
+    state.ruleForm.QueryConfig.length === 1 &&
+    state.ruleForm.QueryConfig[0].dome === "" &&
+    state.ruleForm.QueryConfig[0].format === "" &&
+    state.ruleForm.QueryConfig[0].is_have === "" &&
+    state.ruleForm.QueryConfig[0].name === "" &&
+    state.ruleForm.QueryConfig[0].remark === ""
+  ) {
+    paramFlag.value = 1
+  }
   checkBody()
 }
 
@@ -1383,6 +1400,22 @@ const checkBody = () => {
   } else bodyFlag.value = 1
 
   ResponseBody.value = toJSONString(state_6.ruleForm_6)
+
+  if (
+    state_6.ruleForm_6.BodyConfig.length === 1 &&
+    state_6.ruleForm_6.BodyConfig[0].format === "" &&
+    state_6.ruleForm_6.BodyConfig[0].name === "" &&
+    state_6.ruleForm_6.BodyConfig[0].remark === "" &&
+    state_6.ruleForm_6.BodyConfig[0].value === "" &&
+    state_1.ruleForm_1.BodyConfig.length === 1 &&
+    state_1.ruleForm_1.BodyConfig[0].dome === "" &&
+    state_1.ruleForm_1.BodyConfig[0].format === "" &&
+    state_1.ruleForm_1.BodyConfig[0].is_have === "" &&
+    state_1.ruleForm_1.BodyConfig[0].name === "" &&
+    state_1.ruleForm_1.BodyConfig[0].remark === ""
+  ) {
+    bodyFlag.value = 1
+  }
 
   checkParams()
 }
