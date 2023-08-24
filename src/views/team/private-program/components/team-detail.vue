@@ -16,7 +16,7 @@
         tooltip-effect="light"
         :header-cell-style="{ 'text-align': 'center' }"
       >
-        <el-table-column label="成员ID" align="center" prop="userId" width="220" />
+        <el-table-column label="成员名称" align="center" prop="username" width="220" />
         <el-table-column
           label="权限(admin:管理 write:读写 read:只读)"
           align="center"
@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { FormInstance } from "element-plus"
 import { ref } from "vue"
-import { AddTeamTableDataApi, getTableDataApi, getPublicTableDataApi } from "@/api/table/index"
+import { AddTeamTableDataApi, getTableDataApi, getPublicTableDataApi, deleteTeamTableDataApi } from "@/api/table/index"
 import { updateTableDataApi } from "@/api/dashboard/index"
 import { ElMessage } from "element-plus"
 import { useUserStore } from "@/store/modules/user"
@@ -63,6 +63,7 @@ interface DetailMsg {
     {
       member: string
       permission: number
+      username: string
     }
   ]
   __v: number | null
@@ -75,6 +76,7 @@ interface DetailMsg1 {
     {
       userId: string
       permission: string
+      username: string
     }
   ]
   __v: number | null
@@ -89,7 +91,8 @@ const tableData = ref<DetailMsg>({
   members: [
     {
       member: "",
-      permission: 2
+      permission: 2,
+      username: ""
     }
   ],
   __v: null,
@@ -101,7 +104,8 @@ const tableData1 = ref<DetailMsg1>({
   members: [
     {
       userId: "",
-      permission: ""
+      permission: "",
+      username: ""
     }
   ],
   __v: null
@@ -139,33 +143,11 @@ const addTeamConfig = () => {
 }
 
 const deleteTeam = (row: any) => {
-  const tableData2 = ref<DetailMsg1>({
-    projectId: "",
-    members: [
-      {
-        userId: "",
-        permission: ""
-      }
-    ],
-    __v: null
-  })
-  tableData2.value.projectId = tableData1.value.projectId
-  for (let i = 0; i < tableData1.value.members.length; i++) {
-    if (tableData1.value.members[i].userId != row.userId) {
-      tableData2.value.members.push(tableData1.value.members[i])
-    } else {
-      tableData1.value.members.splice(i, 1)
-    }
-  }
-  tableData2.value.members.shift()
-
-  console.log(tableData2.value.members)
   const params = {
-    projectId: ID.value,
-    members: tableData1.value.members
+    username: row.username,
+    projectId: ID.value
   }
-
-  updateTableDataApi(params).then((res: any) => {
+  deleteTeamTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
       ElMessage.success(res.error)
       console.log(res)
@@ -179,12 +161,13 @@ const upDeleteTeam = (row: any) => {
   console.log(tableData.value)
 
   for (let i = tableData1.value.members.length - 1; i < tableData.value.members.length - 1; i++) {
-    tableData1.value.members.push({ userId: "", permission: "" })
+    tableData1.value.members.push({ userId: "", permission: "", username: "" })
   }
 
   tableData1.value.projectId = ID.value
   for (let i = 0; i < tableData.value.members.length; i++) {
     tableData1.value.members[i].userId = tableData.value.members[i].member
+    tableData1.value.members[i].username = tableData.value.members[i].username
     if (tableData1.value.members[i] === row) {
       if (tableData1.value.members[i].permission === "write") tableData1.value.members[i].permission = "admin"
       else if (tableData1.value.members[i].permission === "read") tableData1.value.members[i].permission = "write"
@@ -219,10 +202,11 @@ const searchTeam = () => {
       tableData.value.members = res.data.project.members
       tableData1.value.members.splice(0, tableData1.value.members.length)
       for (let i = tableData1.value.members.length - 1; i < tableData.value.members.length - 1; i++) {
-        tableData1.value.members.push({ userId: "", permission: "" })
+        tableData1.value.members.push({ userId: "", permission: "", username: "" })
       }
       for (let i = 0; i < res.data.project.members.length; i++) {
         tableData1.value.members[i].userId = tableData.value.members[i].member
+        tableData1.value.members[i].username = tableData.value.members[i].username
         if (tableData.value.members[i].permission === 1) tableData1.value.members[i].permission = "write"
         else if (tableData.value.members[i].permission === 2) tableData1.value.members[i].permission = "read"
         else if (tableData.value.members[i].permission === 0) tableData1.value.members[i].permission = "admin"

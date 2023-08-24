@@ -92,6 +92,7 @@ interface ITable {
     {
       member: string
       permission: number
+      username: string
     }
   ]
   __v: number | null
@@ -108,7 +109,8 @@ const tableData = ref<ITable[]>([
     members: [
       {
         member: "",
-        permission: 0
+        permission: 0,
+        username: ""
       }
     ],
     __v: null,
