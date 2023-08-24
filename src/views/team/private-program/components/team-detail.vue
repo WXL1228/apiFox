@@ -1,7 +1,10 @@
 <template>
   <el-dialog :title="titleName" width="70%" v-model="dialogVisible" @close="close" :destroy-on-close="true">
-    <el-form-item label="项目名称/ID:">{{ NAME }}--------{{ ID }}</el-form-item
-    ><el-form v-if="isShow" :inline="true">
+    <el-form-item label="项目名称/ID:">{{ NAME }}--------{{ ID }}</el-form-item>
+    <el-form-item label="创建人名称/ID:"
+      >{{ tableData1.members[0].username }}--------{{ tableData1.members[0].userId }}</el-form-item
+    >
+    <el-form v-if="isShow" :inline="true">
       <el-form-item label="用户名称："
         ><el-input placeholder="请输入用户名" clearable v-model="commentText"
       /></el-form-item>
