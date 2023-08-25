@@ -156,7 +156,6 @@ const initData = () => {
   getInterfaceDataApi(params).then((res: any) => {
     if (res.code === 200) {
       tableData.value = res.data.interfaces
-      console.log(tableData.value)
       for (const [key, value] of Object.entries(tableData)) {
         if (key === "_rawValue") {
           for (let a = 0; a < value.length; a++) {

@@ -189,6 +189,7 @@ const getDetail = (item: string) => {
   const obj = { id: 1, title: "项目详情", isAdd: false, item: item }
   tableDetailRef.value?.show(obj)
 }
+
 // 成员页面
 const getTeam = (item: any) => {
   const obj = { id: 1, title: "成员详情", item: item }

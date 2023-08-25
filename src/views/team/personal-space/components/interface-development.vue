@@ -740,6 +740,8 @@ import { Delete, Plus } from "@element-plus/icons-vue"
 import { toJSONString } from "xe-utils"
 import { getSelectDataApi } from "@/api/hook-demo/use-fetch-select"
 import InterfaceDevelopment1 from "./interface-development1.vue"
+import axios from "axios"
+import { getToken } from "@/utils/cache/cookies"
 
 const InterfaceDevelopmentRef1 = ref<InstanceType<typeof InterfaceDevelopment1>>()
 
@@ -1132,6 +1134,7 @@ const interfaceName = ref("") //接口name
 const update_by = ref<string>()
 const update_time = ref<String>()
 const v_input = ref<string>()
+const mockMethod = ref<string>("")
 
 // 规则
 const rules = reactive<FormRules>({
@@ -1153,6 +1156,7 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
     formData.value.url = obj.detailMsg.url
     urlRunConfig.value = "local: http://" + obj.detailMsg.url
     formData.value.method = obj.detailMsg.http_method
+    mockMethod.value = obj.detailMsg.http_method
     if (formData.value.method === "GET") flag_10.value = false
     else flag_10.value = true
     methodRun.value = obj.detailMsg.http_method
@@ -1462,16 +1466,53 @@ const mockConfig = () => {
   MockInterfaceDetailApi(params).then((res: any) => {
     if (res.code === 200) {
       ElMessage.success(res.message)
-      mockUrl.value = "http://localhost:3333/api/getInfo"
+      mockUrl.value = res.data.mockUrl
       derailment.value = res.data.mockUrl
       console.log(mockUrl.value)
       console.log(derailment.value)
-      // MockDetailApi(derailment.value).then((res: any) => {
-      //   if (res.code === 200) {
-      //     ElMessage.success(res.error)
-      //     console.log(res.value)
-      //   }
-      // })
+      const token = getToken()
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+      if (mockMethod.value === "GET") {
+        axios
+          .get(`${derailment.value}`, config)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      } else if (mockMethod.value === "POST") {
+        axios
+          .post(`${derailment.value}`, config)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      } else if (mockMethod.value === "PUT") {
+        axios
+          .put(`${derailment.value}`, config)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      } else if (mockMethod.value === "DELETE") {
+        axios
+          .delete(`${derailment.value}`, config)
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     }
   })
 

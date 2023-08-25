@@ -6,8 +6,9 @@
     >
     <el-form v-if="isShow" :inline="true">
       <el-form-item label="用户名称："
-        ><el-input placeholder="请输入用户名" clearable v-model="commentText"
-      /></el-form-item>
+        ><el-select @click="initUser" clearable v-model="commentText" autocomplete="off" placeholder="请选择用户">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" /> </el-select
+      ></el-form-item>
       <el-form-item><el-button type="primary" @click="addTeamConfig">添加成员</el-button></el-form-item>
     </el-form>
     <div style="margin-top: 5px">
@@ -42,7 +43,13 @@
 <script setup lang="ts">
 import { FormInstance } from "element-plus"
 import { ref } from "vue"
-import { AddTeamTableDataApi, getTableDataApi, getPublicTableDataApi, deleteTeamTableDataApi } from "@/api/table/index"
+import {
+  AddTeamTableDataApi,
+  getTableDataApi,
+  getPublicTableDataApi,
+  deleteTeamTableDataApi,
+  getUserInfoDataApi
+} from "@/api/table/index"
 import { updateTableDataApi } from "@/api/dashboard/index"
 import { ElMessage } from "element-plus"
 import { useUserStore } from "@/store/modules/user"
@@ -116,7 +123,6 @@ const tableData1 = ref<DetailMsg1>({
 
 // 显示弹窗
 const show = async (obj: { id: number; title: string; item: DetailMsg }) => {
-  console.log(obj.item)
   titleName.value = obj.title
   ID.value = obj.item._id
   NAME.value = obj.item.name
@@ -124,12 +130,34 @@ const show = async (obj: { id: number; title: string; item: DetailMsg }) => {
   tableData.value = obj.item
   dialogVisible.value = true
 
+  initUser()
   searchTeam()
+}
+
+const options = ref([
+  {
+    label: "",
+    value: ""
+  }
+])
+
+const initUser = () => {
+  getUserInfoDataApi().then((res: any) => {
+    options.value.splice(0, options.value.length)
+    for (let i = 0; i < res.data.length; i++) {
+      options.value.push({ label: "", value: "" })
+    }
+    for (let i = 0; i < res.data.length; i++) {
+      options.value[i].value = res.data[i].username
+      options.value[i].label = res.data[i].username
+    }
+  })
 }
 
 const commentText = ref("")
 
 const addTeamConfig = () => {
+  console.log(commentText.value)
   const params = {
     username: commentText.value,
     projectId: ID.value

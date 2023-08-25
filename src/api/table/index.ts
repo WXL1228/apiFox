@@ -86,9 +86,33 @@ export function deleteTeamTableDataApi(data: Table.deleteTeamTableRequestData) {
   })
 }
 
-export function MockDetailApi(retail: string) {
+//所有用户信息
+
+export function getUserInfoDataApi() {
   return request({
-    url: `${retail}`,
-    method: "post"
+    url: "/user/alluserInfo",
+    method: "get"
   })
 }
+
+// // get 请求  delete一样  只是get换delete
+// import axios from "axios"
+// import { getToken } from "@/utils/cache/cookies"
+// const initData = () => {
+//   const token = getToken()
+//   const id = "64e73476050867165909ba8d"
+//   const config = {
+//     headers: {
+//       Authorization: `Bearer ${token}`
+//     }
+//   }
+
+//   axios
+//     .get(`http://47.99.59.29:3001/ ${id}/1`, config)
+//     .then((res) => {
+//       console.log(res.data)
+//     })
+//     .catch((error) => {
+//       console.error(error)
+//     })
+// }
