@@ -4,7 +4,7 @@
     <!-- <div class="h-600px min-w-full" /> -->
     <div class="h-100px min-w-full mt-300px">
       <div class="w-300px h-100px m-auto">
-        <el-button type="primary" style="width: 100%; height: 100%; font-size: xx-large" @click="initData"
+        <el-button type="primary" style="width: 100%; height: 100%; font-size: xx-large" @click="createProject"
           >我的项目</el-button
         >
       </div>
@@ -13,41 +13,36 @@
 </template>
 
 <script setup lang="ts">
-// import { useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 
-// const router = useRouter()
+const router = useRouter()
 
-// 创建项目
-// const createProject = () => {
-//   router.push({ path: "/team" })
-// }
-
-// get 请求  delete一样  只是get换delete
-import axios from "axios"
-import { getToken } from "@/utils/cache/cookies"
-const initData = () => {
-  const token = getToken()
-  const id = "64e73476050867165909ba8d"
-  // const postData = {
-  //   username: "example",
-  //   password: "secret"
-  // }
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  }
-
-  axios
-    .get(`http://47.99.59.29:3001/ ${id}/1`, config)
-    .then((res) => {
-      console.log(res.data)
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+// 我的项目
+const createProject = () => {
+  router.push({ path: "/team" })
 }
+
+// // get 请求  delete一样  只是get换delete
+// import axios from "axios"
+// import { getToken } from "@/utils/cache/cookies"
+// const initData = () => {
+//   const token = getToken()
+//   const id = "64e73476050867165909ba8d"
+//   const config = {
+//     headers: {
+//       Authorization: `Bearer ${token}`
+//     }
+//   }
+
+//   axios
+//     .get(`http://47.99.59.29:3001/ ${id}/1`, config)
+//     .then((res) => {
+//       console.log(res.data)
+//     })
+//     .catch((error) => {
+//       console.error(error)
+//     })
+// }
 
 // // post请求  put一样 只是post换put
 // import axios from "axios"
