@@ -27,6 +27,6 @@
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["importinterface", "mockjs", "unocss", "windi", "windicss"],
+  "cSpell.words": ["axios", "importinterface", "mockjs", "unocss", "windi", "windicss"],
   "vue.codeActions.enabled": false
 }
