@@ -53,3 +53,8 @@ export interface AddTeamTableRequestData {
   username: string
   projectId: string
 }
+
+export interface deleteTeamTableRequestData {
+  username: string
+  projectId: string
+}

@@ -78,6 +78,14 @@ export function AddTeamTableDataApi(data: Table.AddTeamTableRequestData) {
   })
 }
 
+export function deleteTeamTableDataApi(data: Table.deleteTeamTableRequestData) {
+  return request({
+    url: "/project/deleteMember",
+    method: "post",
+    data: data
+  })
+}
+
 export function MockDetailApi(retail: string) {
   return request({
     url: `${retail}`,

@@ -92,6 +92,7 @@ interface ITable {
     {
       member: string
       permission: number
+      username: string
     }
   ]
   __v: number | null
@@ -108,7 +109,8 @@ const tableData = ref<ITable[]>([
     members: [
       {
         member: "",
-        permission: 0
+        permission: 0,
+        username: ""
       }
     ],
     __v: null,
@@ -184,7 +186,7 @@ const handleSelectionChange = (val: ITable[]) => {
 
 // 跳转到详情页面
 const getDetail = (item: string) => {
-  const obj = { id: 1, title: "接口详情", isAdd: false, item: item }
+  const obj = { id: 1, title: "项目详情", isAdd: false, item: item }
   tableDetailRef.value?.show(obj)
 }
 // 成员页面

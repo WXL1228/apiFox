@@ -69,7 +69,7 @@ export default [
             value: "@paragraph()"
           }
         ]),
-        message: "获取 1 ~ 10000 随机数据成功！",
+        message: "获取数据成功！",
         info: ""
       }
     }
