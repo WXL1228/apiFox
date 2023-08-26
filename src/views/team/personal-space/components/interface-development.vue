@@ -2434,7 +2434,7 @@ import { useUserStore } from "@/store/modules/user"
 import { getInterfaceDetailApi } from "@/api/table/index"
 import { Delete, Plus, RefreshRight } from "@element-plus/icons-vue"
 import { toJSONString } from "xe-utils"
-import { getSelectDataApi } from "@/api/hook-demo/use-fetch-select"
+// import { getSelectDataApi } from "@/api/hook-demo/use-fetch-select"
 import InterfaceDevelopment1 from "./interface-development1.vue"
 import axios from "axios"
 import { getToken } from "@/utils/cache/cookies"
@@ -3888,12 +3888,33 @@ const clear_1 = () => {
   radio.value = 0
 }
 
+//发送请求
 const sendData = () => {
   if (paramFlag.value + bodyFlag.value === 2) {
-    getSelectDataApi(state_2.ruleForm_2.returnConfig).then((res: any) => {
-      ResponseReturn.value = toJSONString(res)
-      ElMessage.success("响应成功，请前往预览！")
-    })
+    const token = getToken()
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    }
+    if (mockMethod.value === "GET") {
+      axios.get(derailment.value).then((res) => {
+        console.log(res)
+      })
+    } else if (mockMethod.value === "POST") {
+      axios.post("http://47.99.59.29:3001/64ea04d4c1f51ccb44af6c2d/77", config).then((res) => {
+        console.log(res)
+      })
+    } else if (mockMethod.value === "PUT") {
+      axios.put(derailment.value).then((res) => {
+        console.log(res)
+      })
+    } else if (mockMethod.value === "DELETE") {
+      axios.delete(derailment.value).then((res) => {
+        console.log(res)
+      })
+    }
   } else {
     ElMessage.error("参数或类型不一致！")
   }
@@ -4221,49 +4242,44 @@ const mockConfig = () => {
       derailment.value = res.data.mockUrl
       console.log(mockUrl.value)
       console.log(derailment.value)
-      const token = getToken()
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-      if (mockMethod.value === "GET") {
-        axios
-          .get(`${derailment.value}`, config)
-          .then((res) => {
-            console.log(res)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      } else if (mockMethod.value === "POST") {
-        axios
-          .post(`${derailment.value}`, config)
-          .then((res) => {
-            console.log(res)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      } else if (mockMethod.value === "PUT") {
-        axios
-          .put(`${derailment.value}`, config)
-          .then((res) => {
-            console.log(res)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      } else if (mockMethod.value === "DELETE") {
-        axios
-          .delete(`${derailment.value}`, config)
-          .then((res) => {
-            console.log(res)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      }
+      // const token = getToken()
+      // const config = {
+      //   headers: {
+      //     Authorization: `Bearer ${token}`
+      //   }
+      // }
+      // if (mockMethod.value === "GET") {
+      //   axios
+      //     .get(`${derailment.value}`, config)
+      //     .then((res) => {
+      //       console.log(res)
+      //     })
+      //     .catch((error) => {
+      //       console.log(error)
+      //     })
+      // } else if (mockMethod.value === "POST") {
+      //   axios.post("http://47.99.59.29:3001/64ea04d4c1f51ccb44af6c2d/77").then((res) => {
+      //     console.log(res)
+      //   })
+      // } else if (mockMethod.value === "PUT") {
+      //   axios
+      //     .put(`${derailment.value}`, config)
+      //     .then((res) => {
+      //       console.log(res)
+      //     })
+      //     .catch((error) => {
+      //       console.log(error)
+      //     })
+      // } else if (mockMethod.value === "DELETE") {
+      //   axios
+      //     .delete(`${derailment.value}`, config)
+      //     .then((res) => {
+      //       console.log(res)
+      //     })
+      //     .catch((error) => {
+      //       console.log(error)
+      //     })
+      // }
     }
   })
 }
