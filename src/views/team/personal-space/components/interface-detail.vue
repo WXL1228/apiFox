@@ -91,7 +91,6 @@ const show = async (obj: { id: number; title: string; isAdd: boolean; item: stri
   titleName.value = obj.title
   isAdd.value = obj.isAdd
   ID.value = obj.item
-  console.log(ID.value)
   dialogVisible.value = true
 
   getInterfaceDetailApiFun(obj.item)

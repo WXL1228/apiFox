@@ -164,7 +164,6 @@ const initUser = () => {
 const commentText = ref("")
 
 const addTeamConfig = () => {
-  console.log(commentText.value)
   const params = {
     username: commentText.value,
     projectId: ID.value
@@ -173,7 +172,6 @@ const addTeamConfig = () => {
   AddTeamTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
       ElMessage.success(res.error)
-      console.log(res)
 
       searchTeam()
     }
@@ -188,7 +186,6 @@ const deleteTeam = (row: any) => {
   deleteTeamTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
       ElMessage.success(res.error)
-      console.log(res)
 
       searchTeam()
     }
@@ -196,8 +193,6 @@ const deleteTeam = (row: any) => {
 }
 
 const upDeleteTeam = (row: any) => {
-  console.log(tableData.value)
-
   for (let i = tableData1.value.members.length - 1; i < tableData.value.members.length - 1; i++) {
     tableData1.value.members.push({ userId: "", permission: "", username: "" })
   }
@@ -265,7 +260,7 @@ const searchTeam = () => {
 
   getPublicTableDataApi(data).then((res: any) => {
     if (res.code === 200) {
-      console.log(res.data)
+      console.log(res)
     }
   })
 }

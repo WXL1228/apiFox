@@ -109,7 +109,6 @@ const searchProjectDetail = () => {
   }
   getPublicTableDataApi(params).then((res: any) => {
     if (res.code === 200) {
-      console.log(res.data)
       projectStore.publicProjectName = res.data.projects[res.data.projects.length - 1].name
       projectStore.publicProjectId = res.data.projects[res.data.projects.length - 1]._id
       projectID.value = projectStore.publicProjectId
@@ -132,7 +131,6 @@ const initData = () => {
   getInterfaceDataApi(params).then((res: any) => {
     if (res.code === 200) {
       tableData.value = res.data.interfaces
-      console.log(tableData.value)
       for (const [key, value] of Object.entries(tableData)) {
         if (key === "_rawValue") {
           for (let a = 0; a < value.length; a++) {
@@ -143,12 +141,12 @@ const initData = () => {
             }
             const sort = (value: any, l: number, r: number) => {
               if (l >= r) return
-              const x = value[l]["_id"]
+              const x = value[l]["name"]
               let i = l - 1
               let j = r + 1
               while (i < j) {
-                while (value[++i]["_id"] < x);
-                while (value[--j]["_id"] > x);
+                while (value[++i]["name"] < x);
+                while (value[--j]["name"] > x);
                 if (i < j) swap(value, i, j)
               }
               sort(value, l, j)
@@ -183,7 +181,6 @@ const goDetail = (item: string) => {
 
 // 开发接口
 const editProject = (row: any) => {
-  console.log(row.responseData)
   const obj = { id: 1, title: "使用接口", detailMsg: row }
   InterfaceDevelopmentRef.value?.show(obj)
   initData()

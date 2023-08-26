@@ -16,7 +16,7 @@
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="项目名称" align="center" prop="name" width="180" />
           <el-table-column label="描述" align="center" prop="description" min-width="200" show-overflow-tooltip />
-          <el-table-column label="创建人" align="center" prop="created_by" width="220" />
+          <el-table-column label="创建人ID" align="center" prop="created_by" width="220" />
           <el-table-column label="创建日期" align="center" prop="created_time" width="220" />
 
           <el-table-column label="操作" align="center" width="220">
@@ -79,9 +79,7 @@ const projectStore = usePublicProjectStore()
 const initData = () => {
   getPublicTableDataApi().then((res: any) => {
     if (res.code === 200) {
-      console.log(res)
       tableData.value = res.data.publicProjects
-      console.log(tableData.value)
       for (const [key, value] of Object.entries(tableData)) {
         if (key === "_rawValue") {
           for (let i = 0; i < value.length; i++) {

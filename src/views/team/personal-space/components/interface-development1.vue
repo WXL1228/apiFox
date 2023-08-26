@@ -42,7 +42,8 @@ const stateJson = reactive({
         is_have: "",
         format: "",
         http_dome: "",
-        remark: ""
+        remark: "",
+        node: [{}]
       }
     ]
   }
@@ -50,19 +51,15 @@ const stateJson = reactive({
 
 const validate = async (editor: any) => {
   const res = await editor.validate()
-  console.log("----------------")
   if (res.length != 0) {
     errorFlag.value = false
   } else errorFlag.value = true
-  console.log(errorFlag.value)
 }
 
 // 显示弹窗
 const show = async (obj: { id?: number; title: string; detailMsg: any; responseData: any }) => {
   titleName.value = obj.title
-  console.log(obj.responseData)
   stateJson.ruleForm.returnConfig = obj.responseData
-  console.log(stateJson.ruleForm.returnConfig)
   dialogVisible.value = true
 }
 const errorFlag = ref<boolean>(true)
@@ -84,7 +81,98 @@ const save = () => {
             is_have: "",
             format: typeof (isJson.value as any)[key],
             http_dome: "",
-            remark: ""
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: [
+                              {
+                                name: "",
+                                is_have: "",
+                                format: "",
+                                http_dome: "",
+                                remark: "",
+                                node: [
+                                  {
+                                    name: "",
+                                    is_have: "",
+                                    format: "",
+                                    http_dome: "",
+                                    remark: "",
+                                    node: [
+                                      {
+                                        name: "",
+                                        is_have: "",
+                                        format: "",
+                                        http_dome: "",
+                                        remark: "",
+                                        node: [
+                                          {
+                                            name: "",
+                                            is_have: "",
+                                            format: "",
+                                            http_dome: "",
+                                            remark: "",
+                                            node: [
+                                              {
+                                                name: "",
+                                                is_have: "",
+                                                format: "",
+                                                http_dome: "",
+                                                remark: "",
+                                                node: [
+                                                  {
+                                                    name: "",
+                                                    is_have: "",
+                                                    format: "",
+                                                    http_dome: "",
+                                                    remark: "",
+                                                    node: [{}]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           })
       }
       isJson.value = ""

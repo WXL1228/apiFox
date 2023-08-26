@@ -56,7 +56,6 @@ const getTableDetailApiFun = (data: string) => {
   }
   getTableDetailApi(params).then((res: any) => {
     if (res.code === 200) {
-      console.log(res)
       projects.value = res.data.project
       name.value = res.data.project.name
       description.value = res.data.project.description
