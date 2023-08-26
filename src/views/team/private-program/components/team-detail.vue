@@ -6,7 +6,14 @@
     >
     <el-form v-if="isShow" :inline="true">
       <el-form-item label="用户名称："
-        ><el-select @click="initUser" clearable v-model="commentText" autocomplete="off" placeholder="请选择用户">
+        ><el-select
+          @click="initUser"
+          clearable
+          filterable
+          v-model="commentText"
+          autocomplete="off"
+          placeholder="请选择用户"
+        >
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" /> </el-select
       ></el-form-item>
       <el-form-item><el-button type="primary" @click="addTeamConfig">添加成员</el-button></el-form-item>
