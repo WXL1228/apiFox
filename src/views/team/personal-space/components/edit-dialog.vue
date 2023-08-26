@@ -77,15 +77,12 @@ const show = async (obj: { id?: number; title: string; isAdd: boolean; detailMsg
   isAdd.value = obj.isAdd
   if (obj.detailMsg) {
     interfaceId.value = obj.detailMsg._id
-    // console.log(interfaceId.value)
     formData.value.projectId = obj.detailMsg.projectId
     formData.value.name = obj.detailMsg.name
     formData.value.url = obj.detailMsg.url
     formData.value.method = obj.detailMsg.http_method
     formData.value.query = obj.detailMsg.query
     formData.value.body = obj.detailMsg.body
-    // console.log(formData.value.responseData)
-    // console.log(obj.detailMsg.response_data)
     formData.value.responseData = obj.detailMsg.response_data
   } else {
     formData.value.name = ""
@@ -110,10 +107,6 @@ const detail = () => {
 
 // 保存信息
 const save = () => {
-  // console.log(isAdd.value)
-  // console.log(projectStore.projectId)
-  // console.log(formData.value)
-  // console.log(formData.value.name)
   formRef.value?.validate((valid) => {
     if (valid) {
       if (isAdd.value) {
@@ -147,7 +140,106 @@ const createTableDataApiFun = () => {
     method: formData.value.method,
     query: [{ name: "", is_have: "", format: "", dome: "", remark: "" }],
     body: [{ name: "", is_have: "", format: "", dome: "", remark: "" }],
-    responseData: [{ name: "", is_have: "", format: "", http_dome: "", remark: "" }]
+    responseData: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: [
+                              {
+                                name: "",
+                                is_have: "",
+                                format: "",
+                                http_dome: "",
+                                remark: "",
+                                node: [
+                                  {
+                                    name: "",
+                                    is_have: "",
+                                    format: "",
+                                    http_dome: "",
+                                    remark: "",
+                                    node: [
+                                      {
+                                        name: "",
+                                        is_have: "",
+                                        format: "",
+                                        http_dome: "",
+                                        remark: "",
+                                        node: [
+                                          {
+                                            name: "",
+                                            is_have: "",
+                                            format: "",
+                                            http_dome: "",
+                                            remark: "",
+                                            node: [
+                                              {
+                                                name: "",
+                                                is_have: "",
+                                                format: "",
+                                                http_dome: "",
+                                                remark: "",
+                                                node: []
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 
   createInterfaceDataApi(params).then((res: any) => {

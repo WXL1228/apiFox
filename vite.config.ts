@@ -9,7 +9,6 @@ import svgLoader from "vite-svg-loader"
 import UnoCSS from "unocss/vite"
 import WindiCSS from "vite-plugin-windicss"
 import { viteCommonjs } from "@originjs/vite-plugin-commonjs"
-import { viteMockServe } from "vite-plugin-mock"
 
 /** 配置项文档：https://cn.vitejs.dev/config */
 export default (configEnv: ConfigEnv): UserConfigExport => {
@@ -86,11 +85,7 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
       /** windicss */
       WindiCSS(),
       // json插件
-      viteCommonjs(),
-      //mock
-      viteMockServe({
-        mockPath: "./src/mock"
-      })
+      viteCommonjs()
     ],
     /** Vitest 单元测试配置：https://cn.vitest.dev/config */
     test: {

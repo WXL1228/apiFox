@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/valid-v-for -->
 <template>
   <el-dialog
     :fullscreen="true"
@@ -64,7 +63,7 @@
 
         <el-descriptions size="large" :border="true" v-if="isShow != 2" title="请求参数设置">
           <el-descriptions-item label="Query"
-            ><el-form :model="ruleForm" status-icon ref="formRef_1" label-width="100px">
+            ><el-form autofocus :model="ruleForm" status-icon ref="formRef_1" label-width="100px">
               <el-row :gutter="20">
                 <el-col :span="4">
                   <el-form-item>
@@ -72,7 +71,7 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row :gutter="20" v-for="item in ruleForm.QueryConfig">
+              <el-row :gutter="20" v-for="(item, index) in ruleForm.QueryConfig" :key="index">
                 <el-col :span="4">
                   <el-form-item label="参数名称:" prop="'name' + index">
                     <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" />
@@ -118,7 +117,7 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row :gutter="20" v-for="item in ruleForm_1.BodyConfig">
+              <el-row :gutter="20" v-for="(item, index) in ruleForm_1.BodyConfig" :key="index">
                 <el-col :span="4">
                   <el-form-item label="参数名称:" prop="'name' + index">
                     <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" />
@@ -164,7 +163,7 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row :gutter="20" v-for="item in ruleForm.QueryConfig">
+              <el-row :gutter="20" v-for="(item, index) in ruleForm.QueryConfig" :key="index">
                 <el-col :span="4">
                   <el-form-item label="参数名称:" prop="'name' + index">
                     <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" />
@@ -210,7 +209,7 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row :gutter="20" v-for="item in ruleForm_1.BodyConfig">
+              <el-row :gutter="20" v-for="(item, index) in ruleForm_1.BodyConfig" :key="index">
                 <el-col :span="4">
                   <el-form-item label="参数名称:" prop="'name' + index">
                     <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" />
@@ -254,6 +253,7 @@
           <el-radio :label="9">HTML</el-radio>
           <el-radio :label="12">RAW</el-radio>
         </el-radio-group>
+
         <el-descriptions v-if="flag && isShow != 2" size="large" :border="true">
           <el-descriptions-item label="模板">
             <el-form :model="ruleForm_2" status-icon ref="formRef_3" label-width="100px">
@@ -261,10 +261,10 @@
                 <el-col :span="4">
                   <el-form-item>
                     <el-button size="small" round @click="editProject">导入JSON/XML</el-button>
-                  </el-form-item>
-                </el-col>
+                  </el-form-item> </el-col
+                ><el-button size="small" type="primary" :icon="RefreshRight" circle @click="resetTableData" />
               </el-row>
-              <el-row :gutter="20" v-for="item in ruleForm_2.returnConfig">
+              <el-row :gutter="20" v-for="(item, index) in ruleForm_2.returnConfig" :key="index">
                 <el-col :span="4">
                   <el-form-item prop="'name' + index">
                     <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="节点" />
@@ -304,6 +304,857 @@
                   <el-button type="success" :icon="Plus" circle @click="addReturnConfig" />
                   <el-button type="danger" :icon="Delete" circle @click.prevent="removeReturnConfig(item)" />
                 </el-col>
+                <el-from
+                  v-if="item.format.includes('object') || item.format.includes('array') || item.format.includes('any')"
+                  :model="item"
+                  :gutter="20"
+                  status-icon
+                  label-width="100px"
+                  class="ml-8"
+                >
+                  <el-row :gutter="20" v-for="(item1, index) in item.node" :key="index">
+                    <el-col :span="4">
+                      <el-form-item prop="'name' + index">
+                        <el-input
+                          type="text"
+                          v-model="item1.name"
+                          autocomplete="off"
+                          maxlength="50"
+                          placeholder="节点"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="3">
+                      <el-form-item prop="'is_have' + index">
+                        <el-select v-model="item1.is_have" autocomplete="off" placeholder="必需">
+                          <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="3">
+                      <el-form-item prop="'format' + index">
+                        <el-select v-model="item1.format" autocomplete="off" placeholder="string">
+                          <el-option
+                            v-for="item in options_2"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                      <el-form-item prop="'http_dome' + index">
+                        <el-input
+                          type="text"
+                          v-model="item1.http_dome"
+                          autocomplete="off"
+                          maxlength="50"
+                          placeholder="中文名"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                      <el-form-item prop="'remark' + index">
+                        <el-input
+                          type="text"
+                          v-model="item1.remark"
+                          autocomplete="off"
+                          maxlength="50"
+                          placeholder="备注"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-button type="success" :icon="Plus" circle @click="addReturnConfig1(item)" />
+                      <el-button
+                        type="danger"
+                        :icon="Delete"
+                        circle
+                        @click.prevent="removeReturnConfig1(item1, item)"
+                      />
+                    </el-col>
+                    <el-from
+                      v-if="
+                        item1.format.includes('object') ||
+                        item1.format.includes('array') ||
+                        item1.format.includes('any')
+                      "
+                      :model="item1"
+                      :gutter="20"
+                      status-icon
+                      label-width="100px"
+                      class="ml-8"
+                    >
+                      <el-row :gutter="20" v-for="(item2, index) in item1.node" :key="index">
+                        <el-col :span="4">
+                          <el-form-item prop="'name' + index">
+                            <el-input
+                              type="text"
+                              v-model="item2.name"
+                              autocomplete="off"
+                              maxlength="50"
+                              placeholder="节点"
+                            />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="3">
+                          <el-form-item prop="'is_have' + index">
+                            <el-select v-model="item2.is_have" autocomplete="off" placeholder="必需">
+                              <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              />
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="3">
+                          <el-form-item prop="'format' + index">
+                            <el-select v-model="item2.format" autocomplete="off" placeholder="string">
+                              <el-option
+                                v-for="item in options_2"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              />
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="5">
+                          <el-form-item prop="'http_dome' + index">
+                            <el-input
+                              type="text"
+                              v-model="item2.http_dome"
+                              autocomplete="off"
+                              maxlength="50"
+                              placeholder="中文名"
+                            />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="5">
+                          <el-form-item prop="'remark' + index">
+                            <el-input
+                              type="text"
+                              v-model="item2.remark"
+                              autocomplete="off"
+                              maxlength="50"
+                              placeholder="备注"
+                            />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="4">
+                          <el-button type="success" :icon="Plus" circle @click="addReturnConfig2(item1)" />
+                          <el-button
+                            type="danger"
+                            :icon="Delete"
+                            circle
+                            @click.prevent="removeReturnConfig2(item2, item1)"
+                          />
+                        </el-col>
+                        <el-from
+                          v-if="
+                            item2.format.includes('object') ||
+                            item2.format.includes('array') ||
+                            item2.format.includes('any')
+                          "
+                          :model="item2"
+                          :gutter="20"
+                          status-icon
+                          label-width="100px"
+                          class="ml-8"
+                        >
+                          <el-row :gutter="20" v-for="(item3, index) in item2.node" :key="index">
+                            <el-col :span="4">
+                              <el-form-item prop="'name' + index">
+                                <el-input
+                                  type="text"
+                                  v-model="item3.name"
+                                  autocomplete="off"
+                                  maxlength="50"
+                                  placeholder="节点"
+                                />
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="3">
+                              <el-form-item prop="'is_have' + index">
+                                <el-select v-model="item3.is_have" autocomplete="off" placeholder="必需">
+                                  <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                  />
+                                </el-select>
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="3">
+                              <el-form-item prop="'format' + index">
+                                <el-select v-model="item3.format" autocomplete="off" placeholder="string">
+                                  <el-option
+                                    v-for="item in options_2"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                  />
+                                </el-select>
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                              <el-form-item prop="'http_dome' + index">
+                                <el-input
+                                  type="text"
+                                  v-model="item3.http_dome"
+                                  autocomplete="off"
+                                  maxlength="50"
+                                  placeholder="中文名"
+                                />
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                              <el-form-item prop="'remark' + index">
+                                <el-input
+                                  type="text"
+                                  v-model="item3.remark"
+                                  autocomplete="off"
+                                  maxlength="50"
+                                  placeholder="备注"
+                                />
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="4">
+                              <el-button type="success" :icon="Plus" circle @click="addReturnConfig3(item2)" />
+                              <el-button
+                                type="danger"
+                                :icon="Delete"
+                                circle
+                                @click.prevent="removeReturnConfig3(item3, item2)"
+                              />
+                            </el-col>
+                            <el-from
+                              v-if="
+                                item3.format.includes('object') ||
+                                item3.format.includes('array') ||
+                                item3.format.includes('any')
+                              "
+                              :model="item3"
+                              :gutter="20"
+                              status-icon
+                              label-width="100px"
+                              class="ml-8"
+                            >
+                              <el-row :gutter="20" v-for="(item4, index) in item3.node" :key="index">
+                                <el-col :span="4">
+                                  <el-form-item prop="'name' + index">
+                                    <el-input
+                                      type="text"
+                                      v-model="item4.name"
+                                      autocomplete="off"
+                                      maxlength="50"
+                                      placeholder="节点"
+                                    />
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="3">
+                                  <el-form-item prop="'is_have' + index">
+                                    <el-select v-model="item4.is_have" autocomplete="off" placeholder="必需">
+                                      <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                      />
+                                    </el-select>
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="3">
+                                  <el-form-item prop="'format' + index">
+                                    <el-select v-model="item4.format" autocomplete="off" placeholder="string">
+                                      <el-option
+                                        v-for="item in options_2"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                      />
+                                    </el-select>
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="5">
+                                  <el-form-item prop="'http_dome' + index">
+                                    <el-input
+                                      type="text"
+                                      v-model="item4.http_dome"
+                                      autocomplete="off"
+                                      maxlength="50"
+                                      placeholder="中文名"
+                                    />
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="5">
+                                  <el-form-item prop="'remark' + index">
+                                    <el-input
+                                      type="text"
+                                      v-model="item4.remark"
+                                      autocomplete="off"
+                                      maxlength="50"
+                                      placeholder="备注"
+                                    />
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="4">
+                                  <el-button type="success" :icon="Plus" circle @click="addReturnConfig4(item3)" />
+                                  <el-button
+                                    type="danger"
+                                    :icon="Delete"
+                                    circle
+                                    @click.prevent="removeReturnConfig4(item4, item3)"
+                                  />
+                                </el-col>
+                                <el-from
+                                  v-if="
+                                    item4.format.includes('object') ||
+                                    item4.format.includes('array') ||
+                                    item4.format.includes('any')
+                                  "
+                                  :model="item4"
+                                  :gutter="20"
+                                  status-icon
+                                  label-width="100px"
+                                  class="ml-8"
+                                >
+                                  <el-row :gutter="20" v-for="(item5, index) in item4.node" :key="index">
+                                    <el-col :span="4">
+                                      <el-form-item prop="'name' + index">
+                                        <el-input
+                                          type="text"
+                                          v-model="item5.name"
+                                          autocomplete="off"
+                                          maxlength="50"
+                                          placeholder="节点"
+                                        />
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="3">
+                                      <el-form-item prop="'is_have' + index">
+                                        <el-select v-model="item5.is_have" autocomplete="off" placeholder="必需">
+                                          <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                          />
+                                        </el-select>
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="3">
+                                      <el-form-item prop="'format' + index">
+                                        <el-select v-model="item5.format" autocomplete="off" placeholder="string">
+                                          <el-option
+                                            v-for="item in options_2"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                          />
+                                        </el-select>
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="5">
+                                      <el-form-item prop="'http_dome' + index">
+                                        <el-input
+                                          type="text"
+                                          v-model="item5.http_dome"
+                                          autocomplete="off"
+                                          maxlength="50"
+                                          placeholder="中文名"
+                                        />
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="5">
+                                      <el-form-item prop="'remark' + index">
+                                        <el-input
+                                          type="text"
+                                          v-model="item5.remark"
+                                          autocomplete="off"
+                                          maxlength="50"
+                                          placeholder="备注"
+                                        />
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="4">
+                                      <el-button type="success" :icon="Plus" circle @click="addReturnConfig5(item4)" />
+                                      <el-button
+                                        type="danger"
+                                        :icon="Delete"
+                                        circle
+                                        @click.prevent="removeReturnConfig5(item5, item4)"
+                                      />
+                                    </el-col>
+                                    <el-from
+                                      v-if="
+                                        item5.format.includes('object') ||
+                                        item5.format.includes('array') ||
+                                        item5.format.includes('any')
+                                      "
+                                      :model="item5"
+                                      :gutter="20"
+                                      status-icon
+                                      label-width="100px"
+                                      class="ml-8"
+                                    >
+                                      <el-row :gutter="20" v-for="(item6, index) in item5.node" :key="index">
+                                        <el-col :span="4">
+                                          <el-form-item prop="'name' + index">
+                                            <el-input
+                                              type="text"
+                                              v-model="item6.name"
+                                              autocomplete="off"
+                                              maxlength="50"
+                                              placeholder="节点"
+                                            />
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="3">
+                                          <el-form-item prop="'is_have' + index">
+                                            <el-select v-model="item6.is_have" autocomplete="off" placeholder="必需">
+                                              <el-option
+                                                v-for="item in options"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                              />
+                                            </el-select>
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="3">
+                                          <el-form-item prop="'format' + index">
+                                            <el-select v-model="item6.format" autocomplete="off" placeholder="string">
+                                              <el-option
+                                                v-for="item in options_2"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                              />
+                                            </el-select>
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                          <el-form-item prop="'http_dome' + index">
+                                            <el-input
+                                              type="text"
+                                              v-model="item6.http_dome"
+                                              autocomplete="off"
+                                              maxlength="50"
+                                              placeholder="中文名"
+                                            />
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                          <el-form-item prop="'remark' + index">
+                                            <el-input
+                                              type="text"
+                                              v-model="item6.remark"
+                                              autocomplete="off"
+                                              maxlength="50"
+                                              placeholder="备注"
+                                            />
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="4">
+                                          <el-button
+                                            type="success"
+                                            :icon="Plus"
+                                            circle
+                                            @click="addReturnConfig6(item5)"
+                                          />
+                                          <el-button
+                                            type="danger"
+                                            :icon="Delete"
+                                            circle
+                                            @click.prevent="removeReturnConfig6(item6, item5)"
+                                          />
+                                        </el-col>
+                                        <el-from
+                                          v-if="
+                                            item6.format.includes('object') ||
+                                            item6.format.includes('array') ||
+                                            item6.format.includes('any')
+                                          "
+                                          :model="item6"
+                                          :gutter="20"
+                                          status-icon
+                                          label-width="100px"
+                                          class="ml-8"
+                                        >
+                                          <el-row :gutter="20" v-for="(item7, index) in item6.node" :key="index">
+                                            <el-col :span="4">
+                                              <el-form-item prop="'name' + index">
+                                                <el-input
+                                                  type="text"
+                                                  v-model="item7.name"
+                                                  autocomplete="off"
+                                                  maxlength="50"
+                                                  placeholder="节点"
+                                                />
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="3">
+                                              <el-form-item prop="'is_have' + index">
+                                                <el-select
+                                                  v-model="item7.is_have"
+                                                  autocomplete="off"
+                                                  placeholder="必需"
+                                                >
+                                                  <el-option
+                                                    v-for="item in options"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
+                                                  />
+                                                </el-select>
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="3">
+                                              <el-form-item prop="'format' + index">
+                                                <el-select
+                                                  v-model="item7.format"
+                                                  autocomplete="off"
+                                                  placeholder="string"
+                                                >
+                                                  <el-option
+                                                    v-for="item in options_2"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
+                                                  />
+                                                </el-select>
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="5">
+                                              <el-form-item prop="'http_dome' + index">
+                                                <el-input
+                                                  type="text"
+                                                  v-model="item7.http_dome"
+                                                  autocomplete="off"
+                                                  maxlength="50"
+                                                  placeholder="中文名"
+                                                />
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="5">
+                                              <el-form-item prop="'remark' + index">
+                                                <el-input
+                                                  type="text"
+                                                  v-model="item7.remark"
+                                                  autocomplete="off"
+                                                  maxlength="50"
+                                                  placeholder="备注"
+                                                />
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="4">
+                                              <el-button
+                                                type="success"
+                                                :icon="Plus"
+                                                circle
+                                                @click="addReturnConfig7(item6)"
+                                              />
+                                              <el-button
+                                                type="danger"
+                                                :icon="Delete"
+                                                circle
+                                                @click.prevent="removeReturnConfig7(item7, item6)"
+                                              />
+                                            </el-col>
+                                            <el-from
+                                              v-if="
+                                                item7.format.includes('object') ||
+                                                item7.format.includes('array') ||
+                                                item7.format.includes('any')
+                                              "
+                                              :model="item7"
+                                              :gutter="20"
+                                              status-icon
+                                              label-width="100px"
+                                              class="ml-8"
+                                            >
+                                              <el-row :gutter="20" v-for="(item8, index) in item7.node" :key="index">
+                                                <el-col :span="4">
+                                                  <el-form-item prop="'name' + index">
+                                                    <el-input
+                                                      type="text"
+                                                      v-model="item8.name"
+                                                      autocomplete="off"
+                                                      maxlength="50"
+                                                      placeholder="节点"
+                                                    />
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="3">
+                                                  <el-form-item prop="'is_have' + index">
+                                                    <el-select
+                                                      v-model="item8.is_have"
+                                                      autocomplete="off"
+                                                      placeholder="必需"
+                                                    >
+                                                      <el-option
+                                                        v-for="item in options"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value"
+                                                      />
+                                                    </el-select>
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="3">
+                                                  <el-form-item prop="'format' + index">
+                                                    <el-select
+                                                      v-model="item8.format"
+                                                      autocomplete="off"
+                                                      placeholder="string"
+                                                    >
+                                                      <el-option
+                                                        v-for="item in options_2"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value"
+                                                      />
+                                                    </el-select>
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="5">
+                                                  <el-form-item prop="'http_dome' + index">
+                                                    <el-input
+                                                      type="text"
+                                                      v-model="item8.http_dome"
+                                                      autocomplete="off"
+                                                      maxlength="50"
+                                                      placeholder="中文名"
+                                                    />
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="5">
+                                                  <el-form-item prop="'remark' + index">
+                                                    <el-input
+                                                      type="text"
+                                                      v-model="item8.remark"
+                                                      autocomplete="off"
+                                                      maxlength="50"
+                                                      placeholder="备注"
+                                                    />
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="4">
+                                                  <el-button
+                                                    type="success"
+                                                    :icon="Plus"
+                                                    circle
+                                                    @click="addReturnConfig8(item7)"
+                                                  />
+                                                  <el-button
+                                                    type="danger"
+                                                    :icon="Delete"
+                                                    circle
+                                                    @click.prevent="removeReturnConfig8(item8, item7)"
+                                                  />
+                                                </el-col>
+                                                <el-from
+                                                  v-if="
+                                                    item8.format.includes('object') ||
+                                                    item8.format.includes('array') ||
+                                                    item8.format.includes('any')
+                                                  "
+                                                  :model="item8"
+                                                  :gutter="20"
+                                                  status-icon
+                                                  label-width="100px"
+                                                  class="ml-8"
+                                                >
+                                                  <el-row
+                                                    :gutter="20"
+                                                    v-for="(item9, index) in item8.node"
+                                                    :key="index"
+                                                  >
+                                                    <el-col :span="4">
+                                                      <el-form-item prop="'name' + index">
+                                                        <el-input
+                                                          type="text"
+                                                          v-model="item9.name"
+                                                          autocomplete="off"
+                                                          maxlength="50"
+                                                          placeholder="节点"
+                                                        />
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="3">
+                                                      <el-form-item prop="'is_have' + index">
+                                                        <el-select
+                                                          v-model="item9.is_have"
+                                                          autocomplete="off"
+                                                          placeholder="必需"
+                                                        >
+                                                          <el-option
+                                                            v-for="item in options"
+                                                            :key="item.value"
+                                                            :label="item.label"
+                                                            :value="item.value"
+                                                          />
+                                                        </el-select>
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="3">
+                                                      <el-form-item prop="'format' + index">
+                                                        <el-select
+                                                          v-model="item9.format"
+                                                          autocomplete="off"
+                                                          placeholder="string"
+                                                        >
+                                                          <el-option
+                                                            v-for="item in options_2"
+                                                            :key="item.value"
+                                                            :label="item.label"
+                                                            :value="item.value"
+                                                          />
+                                                        </el-select>
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="5">
+                                                      <el-form-item prop="'http_dome' + index">
+                                                        <el-input
+                                                          type="text"
+                                                          v-model="item9.http_dome"
+                                                          autocomplete="off"
+                                                          maxlength="50"
+                                                          placeholder="中文名"
+                                                        />
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="5">
+                                                      <el-form-item prop="'remark' + index">
+                                                        <el-input
+                                                          type="text"
+                                                          v-model="item9.remark"
+                                                          autocomplete="off"
+                                                          maxlength="50"
+                                                          placeholder="备注"
+                                                        />
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="4">
+                                                      <el-button
+                                                        type="success"
+                                                        :icon="Plus"
+                                                        circle
+                                                        @click="addReturnConfig9(item8)"
+                                                      />
+                                                      <el-button
+                                                        type="danger"
+                                                        :icon="Delete"
+                                                        circle
+                                                        @click.prevent="removeReturnConfig9(item9, item8)"
+                                                      />
+                                                    </el-col>
+                                                    <el-from
+                                                      v-if="
+                                                        item9.format.includes('object') ||
+                                                        item9.format.includes('array') ||
+                                                        item9.format.includes('any')
+                                                      "
+                                                      :model="item9"
+                                                      :gutter="20"
+                                                      status-icon
+                                                      label-width="100px"
+                                                      class="ml-8"
+                                                    >
+                                                      <el-row
+                                                        :gutter="20"
+                                                        v-for="(item10, index) in item9.node"
+                                                        :key="index"
+                                                      >
+                                                        <el-col :span="4">
+                                                          <el-form-item prop="'name' + index">
+                                                            <el-input
+                                                              type="text"
+                                                              v-model="item10.name"
+                                                              autocomplete="off"
+                                                              maxlength="50"
+                                                              placeholder="节点"
+                                                            />
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="3">
+                                                          <el-form-item prop="'is_have' + index">
+                                                            <el-select
+                                                              v-model="item10.is_have"
+                                                              autocomplete="off"
+                                                              placeholder="必需"
+                                                            >
+                                                              <el-option
+                                                                v-for="item in options"
+                                                                :key="item.value"
+                                                                :label="item.label"
+                                                                :value="item.value"
+                                                              />
+                                                            </el-select>
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="3">
+                                                          <el-form-item prop="'format' + index">
+                                                            <el-select
+                                                              v-model="item10.format"
+                                                              autocomplete="off"
+                                                              placeholder="string"
+                                                            >
+                                                              <el-option
+                                                                v-for="item in options_2"
+                                                                :key="item.value"
+                                                                :label="item.label"
+                                                                :value="item.value"
+                                                              />
+                                                            </el-select>
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="5">
+                                                          <el-form-item prop="'http_dome' + index">
+                                                            <el-input
+                                                              type="text"
+                                                              v-model="item10.http_dome"
+                                                              autocomplete="off"
+                                                              maxlength="50"
+                                                              placeholder="中文名"
+                                                            />
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="5">
+                                                          <el-form-item prop="'remark' + index">
+                                                            <el-input
+                                                              type="text"
+                                                              v-model="item10.remark"
+                                                              autocomplete="off"
+                                                              maxlength="50"
+                                                              placeholder="备注"
+                                                            />
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="4">
+                                                          <el-button
+                                                            type="success"
+                                                            :icon="Plus"
+                                                            circle
+                                                            @click="addReturnConfig10(item9)"
+                                                          />
+                                                          <el-button
+                                                            type="danger"
+                                                            :icon="Delete"
+                                                            circle
+                                                            @click.prevent="removeReturnConfig10(item10, item9)"
+                                                          /> </el-col></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row
+                ></el-from>
               </el-row> </el-form
           ></el-descriptions-item>
         </el-descriptions>
@@ -329,7 +1180,7 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row :gutter="20" v-for="item in ruleForm_2.returnConfig">
+              <el-row :gutter="20" v-for="item in ruleForm_2.returnConfig" :key="item.name">
                 <el-col :span="4">
                   <el-form-item prop="'name' + index">
                     <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="节点" />
@@ -369,6 +1220,853 @@
                   <el-button type="success" :icon="Plus" circle @click="addReturnConfig" />
                   <el-button type="danger" :icon="Delete" circle @click.prevent="removeReturnConfig(item)" />
                 </el-col>
+                <el-from
+                  v-if="item.format.includes('object') || item.format.includes('array') || item.format.includes('any')"
+                  :model="item"
+                  :gutter="20"
+                  status-icon
+                  label-width="100px"
+                  class="ml-8"
+                >
+                  <el-row :gutter="20" v-for="item1 in item.node" :key="item1.name">
+                    <el-col :span="4">
+                      <el-form-item prop="'name' + index">
+                        <el-input
+                          type="text"
+                          v-model="item1.name"
+                          autocomplete="off"
+                          maxlength="50"
+                          placeholder="节点"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="3">
+                      <el-form-item prop="'is_have' + index">
+                        <el-select v-model="item1.is_have" autocomplete="off" placeholder="必需">
+                          <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="3">
+                      <el-form-item prop="'format' + index">
+                        <el-select v-model="item1.format" autocomplete="off" placeholder="string">
+                          <el-option
+                            v-for="item in options_2"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                      <el-form-item prop="'http_dome' + index">
+                        <el-input
+                          type="text"
+                          v-model="item1.http_dome"
+                          autocomplete="off"
+                          maxlength="50"
+                          placeholder="中文名"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                      <el-form-item prop="'remark' + index">
+                        <el-input
+                          type="text"
+                          v-model="item1.remark"
+                          autocomplete="off"
+                          maxlength="50"
+                          placeholder="备注"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-button type="success" :icon="Plus" circle @click="addReturnConfig1(item)" />
+                      <el-button
+                        type="danger"
+                        :icon="Delete"
+                        circle
+                        @click.prevent="removeReturnConfig1(item1, item)"
+                      />
+                    </el-col>
+                    <el-from
+                      v-if="
+                        item1.format.includes('object') ||
+                        item1.format.includes('array') ||
+                        item1.format.includes('any')
+                      "
+                      :model="item1"
+                      :gutter="20"
+                      status-icon
+                      label-width="100px"
+                      class="ml-8"
+                    >
+                      <el-row :gutter="20" v-for="item2 in item1.node" :key="item2.name">
+                        <el-col :span="4">
+                          <el-form-item prop="'name' + index">
+                            <el-input
+                              type="text"
+                              v-model="item2.name"
+                              autocomplete="off"
+                              maxlength="50"
+                              placeholder="节点"
+                            />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="3">
+                          <el-form-item prop="'is_have' + index">
+                            <el-select v-model="item2.is_have" autocomplete="off" placeholder="必需">
+                              <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              />
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="3">
+                          <el-form-item prop="'format' + index">
+                            <el-select v-model="item2.format" autocomplete="off" placeholder="string">
+                              <el-option
+                                v-for="item in options_2"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                              />
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="5">
+                          <el-form-item prop="'http_dome' + index">
+                            <el-input
+                              type="text"
+                              v-model="item2.http_dome"
+                              autocomplete="off"
+                              maxlength="50"
+                              placeholder="中文名"
+                            />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="5">
+                          <el-form-item prop="'remark' + index">
+                            <el-input
+                              type="text"
+                              v-model="item2.remark"
+                              autocomplete="off"
+                              maxlength="50"
+                              placeholder="备注"
+                            />
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="4">
+                          <el-button type="success" :icon="Plus" circle @click="addReturnConfig2(item1)" />
+                          <el-button
+                            type="danger"
+                            :icon="Delete"
+                            circle
+                            @click.prevent="removeReturnConfig2(item2, item1)"
+                          />
+                        </el-col>
+                        <el-from
+                          v-if="
+                            item2.format.includes('object') ||
+                            item2.format.includes('array') ||
+                            item2.format.includes('any')
+                          "
+                          :model="item2"
+                          :gutter="20"
+                          status-icon
+                          label-width="100px"
+                          class="ml-8"
+                        >
+                          <el-row :gutter="20" v-for="item3 in item2.node" :key="item3.name">
+                            <el-col :span="4">
+                              <el-form-item prop="'name' + index">
+                                <el-input
+                                  type="text"
+                                  v-model="item3.name"
+                                  autocomplete="off"
+                                  maxlength="50"
+                                  placeholder="节点"
+                                />
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="3">
+                              <el-form-item prop="'is_have' + index">
+                                <el-select v-model="item3.is_have" autocomplete="off" placeholder="必需">
+                                  <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                  />
+                                </el-select>
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="3">
+                              <el-form-item prop="'format' + index">
+                                <el-select v-model="item3.format" autocomplete="off" placeholder="string">
+                                  <el-option
+                                    v-for="item in options_2"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                  />
+                                </el-select>
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                              <el-form-item prop="'http_dome' + index">
+                                <el-input
+                                  type="text"
+                                  v-model="item3.http_dome"
+                                  autocomplete="off"
+                                  maxlength="50"
+                                  placeholder="中文名"
+                                />
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="5">
+                              <el-form-item prop="'remark' + index">
+                                <el-input
+                                  type="text"
+                                  v-model="item3.remark"
+                                  autocomplete="off"
+                                  maxlength="50"
+                                  placeholder="备注"
+                                />
+                              </el-form-item>
+                            </el-col>
+                            <el-col :span="4">
+                              <el-button type="success" :icon="Plus" circle @click="addReturnConfig3(item2)" />
+                              <el-button
+                                type="danger"
+                                :icon="Delete"
+                                circle
+                                @click.prevent="removeReturnConfig3(item3, item2)"
+                              />
+                            </el-col>
+                            <el-from
+                              v-if="
+                                item3.format.includes('object') ||
+                                item3.format.includes('array') ||
+                                item3.format.includes('any')
+                              "
+                              :model="item3"
+                              :gutter="20"
+                              status-icon
+                              label-width="100px"
+                              class="ml-8"
+                            >
+                              <el-row :gutter="20" v-for="item4 in item3.node" :key="item4.name">
+                                <el-col :span="4">
+                                  <el-form-item prop="'name' + index">
+                                    <el-input
+                                      type="text"
+                                      v-model="item4.name"
+                                      autocomplete="off"
+                                      maxlength="50"
+                                      placeholder="节点"
+                                    />
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="3">
+                                  <el-form-item prop="'is_have' + index">
+                                    <el-select v-model="item4.is_have" autocomplete="off" placeholder="必需">
+                                      <el-option
+                                        v-for="item in options"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                      />
+                                    </el-select>
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="3">
+                                  <el-form-item prop="'format' + index">
+                                    <el-select v-model="item4.format" autocomplete="off" placeholder="string">
+                                      <el-option
+                                        v-for="item in options_2"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                      />
+                                    </el-select>
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="5">
+                                  <el-form-item prop="'http_dome' + index">
+                                    <el-input
+                                      type="text"
+                                      v-model="item4.http_dome"
+                                      autocomplete="off"
+                                      maxlength="50"
+                                      placeholder="中文名"
+                                    />
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="5">
+                                  <el-form-item prop="'remark' + index">
+                                    <el-input
+                                      type="text"
+                                      v-model="item4.remark"
+                                      autocomplete="off"
+                                      maxlength="50"
+                                      placeholder="备注"
+                                    />
+                                  </el-form-item>
+                                </el-col>
+                                <el-col :span="4">
+                                  <el-button type="success" :icon="Plus" circle @click="addReturnConfig4(item3)" />
+                                  <el-button
+                                    type="danger"
+                                    :icon="Delete"
+                                    circle
+                                    @click.prevent="removeReturnConfig4(item4, item3)"
+                                  />
+                                </el-col>
+                                <el-from
+                                  v-if="
+                                    item4.format.includes('object') ||
+                                    item4.format.includes('array') ||
+                                    item4.format.includes('any')
+                                  "
+                                  :model="item4"
+                                  :gutter="20"
+                                  status-icon
+                                  label-width="100px"
+                                  class="ml-8"
+                                >
+                                  <el-row :gutter="20" v-for="item5 in item4.node" :key="item5.name">
+                                    <el-col :span="4">
+                                      <el-form-item prop="'name' + index">
+                                        <el-input
+                                          type="text"
+                                          v-model="item5.name"
+                                          autocomplete="off"
+                                          maxlength="50"
+                                          placeholder="节点"
+                                        />
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="3">
+                                      <el-form-item prop="'is_have' + index">
+                                        <el-select v-model="item5.is_have" autocomplete="off" placeholder="必需">
+                                          <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                          />
+                                        </el-select>
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="3">
+                                      <el-form-item prop="'format' + index">
+                                        <el-select v-model="item5.format" autocomplete="off" placeholder="string">
+                                          <el-option
+                                            v-for="item in options_2"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
+                                          />
+                                        </el-select>
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="5">
+                                      <el-form-item prop="'http_dome' + index">
+                                        <el-input
+                                          type="text"
+                                          v-model="item5.http_dome"
+                                          autocomplete="off"
+                                          maxlength="50"
+                                          placeholder="中文名"
+                                        />
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="5">
+                                      <el-form-item prop="'remark' + index">
+                                        <el-input
+                                          type="text"
+                                          v-model="item5.remark"
+                                          autocomplete="off"
+                                          maxlength="50"
+                                          placeholder="备注"
+                                        />
+                                      </el-form-item>
+                                    </el-col>
+                                    <el-col :span="4">
+                                      <el-button type="success" :icon="Plus" circle @click="addReturnConfig5(item4)" />
+                                      <el-button
+                                        type="danger"
+                                        :icon="Delete"
+                                        circle
+                                        @click.prevent="removeReturnConfig5(item5, item4)"
+                                      />
+                                    </el-col>
+                                    <el-from
+                                      v-if="
+                                        item5.format.includes('object') ||
+                                        item5.format.includes('array') ||
+                                        item5.format.includes('any')
+                                      "
+                                      :model="item5"
+                                      :gutter="20"
+                                      status-icon
+                                      label-width="100px"
+                                      class="ml-8"
+                                    >
+                                      <el-row :gutter="20" v-for="item6 in item5.node" :key="item6.name">
+                                        <el-col :span="4">
+                                          <el-form-item prop="'name' + index">
+                                            <el-input
+                                              type="text"
+                                              v-model="item6.name"
+                                              autocomplete="off"
+                                              maxlength="50"
+                                              placeholder="节点"
+                                            />
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="3">
+                                          <el-form-item prop="'is_have' + index">
+                                            <el-select v-model="item6.is_have" autocomplete="off" placeholder="必需">
+                                              <el-option
+                                                v-for="item in options"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                              />
+                                            </el-select>
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="3">
+                                          <el-form-item prop="'format' + index">
+                                            <el-select v-model="item6.format" autocomplete="off" placeholder="string">
+                                              <el-option
+                                                v-for="item in options_2"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                              />
+                                            </el-select>
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                          <el-form-item prop="'http_dome' + index">
+                                            <el-input
+                                              type="text"
+                                              v-model="item6.http_dome"
+                                              autocomplete="off"
+                                              maxlength="50"
+                                              placeholder="中文名"
+                                            />
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="5">
+                                          <el-form-item prop="'remark' + index">
+                                            <el-input
+                                              type="text"
+                                              v-model="item6.remark"
+                                              autocomplete="off"
+                                              maxlength="50"
+                                              placeholder="备注"
+                                            />
+                                          </el-form-item>
+                                        </el-col>
+                                        <el-col :span="4">
+                                          <el-button
+                                            type="success"
+                                            :icon="Plus"
+                                            circle
+                                            @click="addReturnConfig6(item5)"
+                                          />
+                                          <el-button
+                                            type="danger"
+                                            :icon="Delete"
+                                            circle
+                                            @click.prevent="removeReturnConfig6(item6, item5)"
+                                          />
+                                        </el-col>
+                                        <el-from
+                                          v-if="
+                                            item6.format.includes('object') ||
+                                            item6.format.includes('array') ||
+                                            item6.format.includes('any')
+                                          "
+                                          :model="item6"
+                                          :gutter="20"
+                                          status-icon
+                                          label-width="100px"
+                                          class="ml-8"
+                                        >
+                                          <el-row :gutter="20" v-for="item7 in item6.node" :key="item7.name">
+                                            <el-col :span="4">
+                                              <el-form-item prop="'name' + index">
+                                                <el-input
+                                                  type="text"
+                                                  v-model="item7.name"
+                                                  autocomplete="off"
+                                                  maxlength="50"
+                                                  placeholder="节点"
+                                                />
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="3">
+                                              <el-form-item prop="'is_have' + index">
+                                                <el-select
+                                                  v-model="item7.is_have"
+                                                  autocomplete="off"
+                                                  placeholder="必需"
+                                                >
+                                                  <el-option
+                                                    v-for="item in options"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
+                                                  />
+                                                </el-select>
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="3">
+                                              <el-form-item prop="'format' + index">
+                                                <el-select
+                                                  v-model="item7.format"
+                                                  autocomplete="off"
+                                                  placeholder="string"
+                                                >
+                                                  <el-option
+                                                    v-for="item in options_2"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value"
+                                                  />
+                                                </el-select>
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="5">
+                                              <el-form-item prop="'http_dome' + index">
+                                                <el-input
+                                                  type="text"
+                                                  v-model="item7.http_dome"
+                                                  autocomplete="off"
+                                                  maxlength="50"
+                                                  placeholder="中文名"
+                                                />
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="5">
+                                              <el-form-item prop="'remark' + index">
+                                                <el-input
+                                                  type="text"
+                                                  v-model="item7.remark"
+                                                  autocomplete="off"
+                                                  maxlength="50"
+                                                  placeholder="备注"
+                                                />
+                                              </el-form-item>
+                                            </el-col>
+                                            <el-col :span="4">
+                                              <el-button
+                                                type="success"
+                                                :icon="Plus"
+                                                circle
+                                                @click="addReturnConfig7(item6)"
+                                              />
+                                              <el-button
+                                                type="danger"
+                                                :icon="Delete"
+                                                circle
+                                                @click.prevent="removeReturnConfig7(item7, item6)"
+                                              />
+                                            </el-col>
+                                            <el-from
+                                              v-if="
+                                                item7.format.includes('object') ||
+                                                item7.format.includes('array') ||
+                                                item7.format.includes('any')
+                                              "
+                                              :model="item7"
+                                              :gutter="20"
+                                              status-icon
+                                              label-width="100px"
+                                              class="ml-8"
+                                            >
+                                              <el-row :gutter="20" v-for="item8 in item7.node" :key="item8.name">
+                                                <el-col :span="4">
+                                                  <el-form-item prop="'name' + index">
+                                                    <el-input
+                                                      type="text"
+                                                      v-model="item8.name"
+                                                      autocomplete="off"
+                                                      maxlength="50"
+                                                      placeholder="节点"
+                                                    />
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="3">
+                                                  <el-form-item prop="'is_have' + index">
+                                                    <el-select
+                                                      v-model="item8.is_have"
+                                                      autocomplete="off"
+                                                      placeholder="必需"
+                                                    >
+                                                      <el-option
+                                                        v-for="item in options"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value"
+                                                      />
+                                                    </el-select>
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="3">
+                                                  <el-form-item prop="'format' + index">
+                                                    <el-select
+                                                      v-model="item8.format"
+                                                      autocomplete="off"
+                                                      placeholder="string"
+                                                    >
+                                                      <el-option
+                                                        v-for="item in options_2"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value"
+                                                      />
+                                                    </el-select>
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="5">
+                                                  <el-form-item prop="'http_dome' + index">
+                                                    <el-input
+                                                      type="text"
+                                                      v-model="item8.http_dome"
+                                                      autocomplete="off"
+                                                      maxlength="50"
+                                                      placeholder="中文名"
+                                                    />
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="5">
+                                                  <el-form-item prop="'remark' + index">
+                                                    <el-input
+                                                      type="text"
+                                                      v-model="item8.remark"
+                                                      autocomplete="off"
+                                                      maxlength="50"
+                                                      placeholder="备注"
+                                                    />
+                                                  </el-form-item>
+                                                </el-col>
+                                                <el-col :span="4">
+                                                  <el-button
+                                                    type="success"
+                                                    :icon="Plus"
+                                                    circle
+                                                    @click="addReturnConfig8(item7)"
+                                                  />
+                                                  <el-button
+                                                    type="danger"
+                                                    :icon="Delete"
+                                                    circle
+                                                    @click.prevent="removeReturnConfig8(item8, item7)"
+                                                  />
+                                                </el-col>
+                                                <el-from
+                                                  v-if="
+                                                    item8.format.includes('object') ||
+                                                    item8.format.includes('array') ||
+                                                    item8.format.includes('any')
+                                                  "
+                                                  :model="item8"
+                                                  :gutter="20"
+                                                  status-icon
+                                                  label-width="100px"
+                                                  class="ml-8"
+                                                >
+                                                  <el-row :gutter="20" v-for="item9 in item8.node" :key="item9.name">
+                                                    <el-col :span="4">
+                                                      <el-form-item prop="'name' + index">
+                                                        <el-input
+                                                          type="text"
+                                                          v-model="item9.name"
+                                                          autocomplete="off"
+                                                          maxlength="50"
+                                                          placeholder="节点"
+                                                        />
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="3">
+                                                      <el-form-item prop="'is_have' + index">
+                                                        <el-select
+                                                          v-model="item9.is_have"
+                                                          autocomplete="off"
+                                                          placeholder="必需"
+                                                        >
+                                                          <el-option
+                                                            v-for="item in options"
+                                                            :key="item.value"
+                                                            :label="item.label"
+                                                            :value="item.value"
+                                                          />
+                                                        </el-select>
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="3">
+                                                      <el-form-item prop="'format' + index">
+                                                        <el-select
+                                                          v-model="item9.format"
+                                                          autocomplete="off"
+                                                          placeholder="string"
+                                                        >
+                                                          <el-option
+                                                            v-for="item in options_2"
+                                                            :key="item.value"
+                                                            :label="item.label"
+                                                            :value="item.value"
+                                                          />
+                                                        </el-select>
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="5">
+                                                      <el-form-item prop="'http_dome' + index">
+                                                        <el-input
+                                                          type="text"
+                                                          v-model="item9.http_dome"
+                                                          autocomplete="off"
+                                                          maxlength="50"
+                                                          placeholder="中文名"
+                                                        />
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="5">
+                                                      <el-form-item prop="'remark' + index">
+                                                        <el-input
+                                                          type="text"
+                                                          v-model="item9.remark"
+                                                          autocomplete="off"
+                                                          maxlength="50"
+                                                          placeholder="备注"
+                                                        />
+                                                      </el-form-item>
+                                                    </el-col>
+                                                    <el-col :span="4">
+                                                      <el-button
+                                                        type="success"
+                                                        :icon="Plus"
+                                                        circle
+                                                        @click="addReturnConfig9(item8)"
+                                                      />
+                                                      <el-button
+                                                        type="danger"
+                                                        :icon="Delete"
+                                                        circle
+                                                        @click.prevent="removeReturnConfig9(item9, item8)"
+                                                      />
+                                                    </el-col>
+                                                    <el-from
+                                                      v-if="
+                                                        item9.format.includes('object') ||
+                                                        item9.format.includes('array') ||
+                                                        item9.format.includes('any')
+                                                      "
+                                                      :model="item9"
+                                                      :gutter="20"
+                                                      status-icon
+                                                      label-width="100px"
+                                                      class="ml-8"
+                                                    >
+                                                      <el-row
+                                                        :gutter="20"
+                                                        v-for="item10 in item9.node"
+                                                        :key="item10.name"
+                                                      >
+                                                        <el-col :span="4">
+                                                          <el-form-item prop="'name' + index">
+                                                            <el-input
+                                                              type="text"
+                                                              v-model="item10.name"
+                                                              autocomplete="off"
+                                                              maxlength="50"
+                                                              placeholder="节点"
+                                                            />
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="3">
+                                                          <el-form-item prop="'is_have' + index">
+                                                            <el-select
+                                                              v-model="item10.is_have"
+                                                              autocomplete="off"
+                                                              placeholder="必需"
+                                                            >
+                                                              <el-option
+                                                                v-for="item in options"
+                                                                :key="item.value"
+                                                                :label="item.label"
+                                                                :value="item.value"
+                                                              />
+                                                            </el-select>
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="3">
+                                                          <el-form-item prop="'format' + index">
+                                                            <el-select
+                                                              v-model="item10.format"
+                                                              autocomplete="off"
+                                                              placeholder="string"
+                                                            >
+                                                              <el-option
+                                                                v-for="item in options_2"
+                                                                :key="item.value"
+                                                                :label="item.label"
+                                                                :value="item.value"
+                                                              />
+                                                            </el-select>
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="5">
+                                                          <el-form-item prop="'http_dome' + index">
+                                                            <el-input
+                                                              type="text"
+                                                              v-model="item10.http_dome"
+                                                              autocomplete="off"
+                                                              maxlength="50"
+                                                              placeholder="中文名"
+                                                            />
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="5">
+                                                          <el-form-item prop="'remark' + index">
+                                                            <el-input
+                                                              type="text"
+                                                              v-model="item10.remark"
+                                                              autocomplete="off"
+                                                              maxlength="50"
+                                                              placeholder="备注"
+                                                            />
+                                                          </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="4">
+                                                          <el-button
+                                                            type="success"
+                                                            :icon="Plus"
+                                                            circle
+                                                            @click="addReturnConfig10(item9)"
+                                                          />
+                                                          <el-button
+                                                            type="danger"
+                                                            :icon="Delete"
+                                                            circle
+                                                            @click.prevent="removeReturnConfig10(item10, item9)"
+                                                          /> </el-col></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row></el-from></el-row
+                ></el-from>
               </el-row> </el-form
           ></el-descriptions-item>
         </el-descriptions>
@@ -450,7 +2148,7 @@
           ref="formRef_4"
           label-width="100px"
           style="margin-top: 20px"
-          @change="setHeaders"
+          @click="setHeaders"
         >
           <el-row :gutter="20">
             <el-col :span="4">
@@ -469,7 +2167,7 @@
               <el-button type="success" :icon="Plus" circle @click="addHeadersConfig" />
             </el-col>
           </el-row>
-          <el-row :gutter="20" v-for="item in ruleForm_3.HeadersConfig">
+          <el-row :gutter="20" v-for="(item, index) in ruleForm_3.HeadersConfig" :key="index">
             <el-col :span="4">
               <el-form-item prop="'name' + index">
                 <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="添加参数" />
@@ -504,7 +2202,7 @@
           ref="formRef_5"
           label-width="100px"
           style="margin-top: 20px"
-          @change="setCookies"
+          @click="setCookies"
         >
           <el-row :gutter="20">
             <el-col :span="4">
@@ -523,7 +2221,7 @@
               <el-button type="success" :icon="Plus" circle @click="addCookiesConfig" />
             </el-col>
           </el-row>
-          <el-row :gutter="20" v-for="item in ruleForm_4.CookiesConfig">
+          <el-row :gutter="20" v-for="(item, index) in ruleForm_4.CookiesConfig" :key="index">
             <el-col :span="4">
               <el-form-item prop="'name' + index">
                 <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="添加参数" />
@@ -558,7 +2256,6 @@
           ref="formRef_6"
           label-width="100px"
           style="margin-top: 20px"
-          @change="checkParams"
           @click="checkParams"
         >
           <el-row :gutter="20">
@@ -578,7 +2275,7 @@
               <el-button type="success" :icon="Plus" circle @click="addParamsConfig" />
             </el-col>
           </el-row>
-          <el-row :gutter="20" v-for="item in ruleForm_5.ParamsConfig">
+          <el-row :gutter="20" v-for="(item, index) in ruleForm_5.ParamsConfig" :key="index">
             <el-col :span="4">
               <el-form-item prop="'name' + index">
                 <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="添加参数" />
@@ -613,7 +2310,6 @@
           ref="formRef_7"
           label-width="100px"
           style="margin-top: 20px"
-          @change="checkBody"
           @click="checkBody"
         >
           <el-row :gutter="20">
@@ -633,7 +2329,7 @@
               <el-button type="success" :icon="Plus" circle @click="addBody1Config" />
             </el-col>
           </el-row>
-          <el-row :gutter="20" v-for="item in ruleForm_6.BodyConfig">
+          <el-row :gutter="20" v-for="(item, index) in ruleForm_6.BodyConfig" :key="index">
             <el-col :span="4">
               <el-form-item prop="'name' + index">
                 <el-input type="text" v-model="item.name" autocomplete="off" maxlength="50" placeholder="添加参数" />
@@ -736,7 +2432,7 @@ import { CreateInterfaceRequestData } from "@/api/table/types/table"
 import { useProjectStore } from "@/store/modules/personal-space"
 import { useUserStore } from "@/store/modules/user"
 import { getInterfaceDetailApi } from "@/api/table/index"
-import { Delete, Plus } from "@element-plus/icons-vue"
+import { Delete, Plus, RefreshRight } from "@element-plus/icons-vue"
 import { toJSONString } from "xe-utils"
 import { getSelectDataApi } from "@/api/hook-demo/use-fetch-select"
 import InterfaceDevelopment1 from "./interface-development1.vue"
@@ -766,8 +2462,6 @@ const state = reactive({
     ]
   }
 })
-
-console.log(state.ruleForm.QueryConfig)
 
 const addQueryConfig = () => {
   state.ruleForm.QueryConfig.push({
@@ -806,8 +2500,6 @@ const state_1 = reactive({
   }
 })
 
-console.log(state_1.ruleForm_1.BodyConfig)
-
 const addBodyConfig = () => {
   state_1.ruleForm_1.BodyConfig.push({
     name: "",
@@ -839,12 +2531,102 @@ const state_2 = reactive({
         is_have: "",
         format: "",
         http_dome: "",
-        remark: ""
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: [
+                              {
+                                name: "",
+                                is_have: "",
+                                format: "",
+                                http_dome: "",
+                                remark: "",
+                                node: [
+                                  {
+                                    name: "",
+                                    is_have: "",
+                                    format: "",
+                                    http_dome: "",
+                                    remark: "",
+                                    node: [
+                                      {
+                                        name: "",
+                                        is_have: "",
+                                        format: "",
+                                        http_dome: "",
+                                        remark: "",
+                                        node: [
+                                          {
+                                            name: "",
+                                            is_have: "",
+                                            format: "",
+                                            http_dome: "",
+                                            remark: "",
+                                            node: [
+                                              {
+                                                name: "",
+                                                is_have: "",
+                                                format: "",
+                                                http_dome: "",
+                                                remark: "",
+                                                node: []
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   }
 })
-console.log(state_2.ruleForm_2.returnConfig)
 
 const addReturnConfig = () => {
   state_2.ruleForm_2.returnConfig.push({
@@ -852,7 +2634,613 @@ const addReturnConfig = () => {
     is_have: "",
     format: "",
     http_dome: "",
-    remark: ""
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: [
+                              {
+                                name: "",
+                                is_have: "",
+                                format: "",
+                                http_dome: "",
+                                remark: "",
+                                node: [
+                                  {
+                                    name: "",
+                                    is_have: "",
+                                    format: "",
+                                    http_dome: "",
+                                    remark: "",
+                                    node: [
+                                      {
+                                        name: "",
+                                        is_have: "",
+                                        format: "",
+                                        http_dome: "",
+                                        remark: "",
+                                        node: [
+                                          {
+                                            name: "",
+                                            is_have: "",
+                                            format: "",
+                                            http_dome: "",
+                                            remark: "",
+                                            node: []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
+}
+
+const addReturnConfig1 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: [
+                              {
+                                name: "",
+                                is_have: "",
+                                format: "",
+                                http_dome: "",
+                                remark: "",
+                                node: [
+                                  {
+                                    name: "",
+                                    is_have: "",
+                                    format: "",
+                                    http_dome: "",
+                                    remark: "",
+                                    node: [
+                                      {
+                                        name: "",
+                                        is_have: "",
+                                        format: "",
+                                        http_dome: "",
+                                        remark: "",
+                                        node: []
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
+}
+
+const addReturnConfig2 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: [
+                              {
+                                name: "",
+                                is_have: "",
+                                format: "",
+                                http_dome: "",
+                                remark: "",
+                                node: [
+                                  {
+                                    name: "",
+                                    is_have: "",
+                                    format: "",
+                                    http_dome: "",
+                                    remark: "",
+                                    node: []
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
+}
+
+const addReturnConfig3 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: [
+                              {
+                                name: "",
+                                is_have: "",
+                                format: "",
+                                http_dome: "",
+                                remark: "",
+                                node: []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
+}
+
+const addReturnConfig4 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
+}
+
+const addReturnConfig5 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
+}
+
+const addReturnConfig6 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
+}
+
+const addReturnConfig7 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
+}
+
+const addReturnConfig8 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: []
+          }
+        ]
+      }
+    ]
+  })
+}
+
+const addReturnConfig9 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: []
+      }
+    ]
+  })
+}
+
+const addReturnConfig10 = (item: any) => {
+  item.node.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: []
   })
 }
 
@@ -860,6 +3248,67 @@ const removeReturnConfig = (item: any) => {
   const index = state_2.ruleForm_2.returnConfig.indexOf(item)
   if (index !== -1) {
     state_2.ruleForm_2.returnConfig.splice(index, 1)
+  }
+}
+
+const removeReturnConfig1 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
+  }
+}
+const removeReturnConfig2 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
+  }
+}
+const removeReturnConfig3 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
+  }
+}
+const removeReturnConfig4 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
+  }
+}
+const removeReturnConfig5 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
+  }
+}
+const removeReturnConfig6 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
+  }
+}
+const removeReturnConfig7 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
+  }
+}
+const removeReturnConfig8 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
+  }
+}
+const removeReturnConfig9 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
+  }
+}
+const removeReturnConfig10 = (item: any, itemprop: any) => {
+  const index = itemprop.node.indexOf(item)
+  if (index !== -1) {
+    itemprop.node.splice(index, 1)
   }
 }
 
@@ -881,7 +3330,6 @@ const state_3 = reactive({
     ]
   }
 })
-console.log(state_3.ruleForm_3.HeadersConfig)
 
 const addHeadersConfig = () => {
   state_3.ruleForm_3.HeadersConfig.push({
@@ -917,7 +3365,6 @@ const state_4 = reactive({
     ]
   }
 })
-console.log(state_4.ruleForm_4.CookiesConfig)
 
 const addCookiesConfig = () => {
   state_4.ruleForm_4.CookiesConfig.push({
@@ -953,7 +3400,6 @@ const state_6 = reactive({
     ]
   }
 })
-console.log(state_6.ruleForm_6.BodyConfig)
 
 const addBody1Config = () => {
   state_6.ruleForm_6.BodyConfig.push({
@@ -989,7 +3435,6 @@ const state_5 = reactive({
     ]
   }
 })
-console.log(state_5.ruleForm_5.ParamsConfig)
 
 const addParamsConfig = () => {
   state_5.ruleForm_5.ParamsConfig.push({
@@ -1085,7 +3530,6 @@ const activeName = ref("first")
 const radio = ref(3)
 const radio1 = ref("Body")
 const setFlag = () => {
-  console.log(radio.value)
   if (radio.value === 3 || radio.value === 6) flag.value = true
   else flag.value = false
 }
@@ -1162,7 +3606,6 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
     methodRun.value = obj.detailMsg.http_method
     formData.value.query = obj.detailMsg.query
     formData.value.body = obj.detailMsg.body
-    console.log(formData.value.body)
     formData.value.responseData = obj.detailMsg.response_data
   } else {
     formData.value.name = ""
@@ -1228,7 +3671,6 @@ const clear = () => {
       remark: ""
     }
   ]
-  save()
   ResponseBody.value = "{}"
   ResponseHeaders.value = "{}"
 }
@@ -1241,18 +3683,214 @@ const ResponseBody1 = ref<string>("{}")
 const ResponseReturn = ref<string>("{}")
 
 const clear_1 = () => {
-  state_2.ruleForm_2.returnConfig = [{ name: "", is_have: "", format: "", http_dome: "", remark: "" }]
+  state_2.ruleForm_2.returnConfig = [
+    {
+      name: "",
+      is_have: "",
+      format: "",
+      http_dome: "",
+      remark: "",
+      node: [
+        {
+          name: "",
+          is_have: "",
+          format: "",
+          http_dome: "",
+          remark: "",
+          node: [
+            {
+              name: "",
+              is_have: "",
+              format: "",
+              http_dome: "",
+              remark: "",
+              node: [
+                {
+                  name: "",
+                  is_have: "",
+                  format: "",
+                  http_dome: "",
+                  remark: "",
+                  node: [
+                    {
+                      name: "",
+                      is_have: "",
+                      format: "",
+                      http_dome: "",
+                      remark: "",
+                      node: [
+                        {
+                          name: "",
+                          is_have: "",
+                          format: "",
+                          http_dome: "",
+                          remark: "",
+                          node: [
+                            {
+                              name: "",
+                              is_have: "",
+                              format: "",
+                              http_dome: "",
+                              remark: "",
+                              node: [
+                                {
+                                  name: "",
+                                  is_have: "",
+                                  format: "",
+                                  http_dome: "",
+                                  remark: "",
+                                  node: [
+                                    {
+                                      name: "",
+                                      is_have: "",
+                                      format: "",
+                                      http_dome: "",
+                                      remark: "",
+                                      node: [
+                                        {
+                                          name: "",
+                                          is_have: "",
+                                          format: "",
+                                          http_dome: "",
+                                          remark: "",
+                                          node: [
+                                            {
+                                              name: "",
+                                              is_have: "",
+                                              format: "",
+                                              http_dome: "",
+                                              remark: "",
+                                              node: []
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  state_2.ruleForm_2.returnConfig.push({
+    name: "",
+    is_have: "",
+    format: "",
+    http_dome: "",
+    remark: "",
+    node: [
+      {
+        name: "",
+        is_have: "",
+        format: "",
+        http_dome: "",
+        remark: "",
+        node: [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: [
+                              {
+                                name: "",
+                                is_have: "",
+                                format: "",
+                                http_dome: "",
+                                remark: "",
+                                node: [
+                                  {
+                                    name: "",
+                                    is_have: "",
+                                    format: "",
+                                    http_dome: "",
+                                    remark: "",
+                                    node: [
+                                      {
+                                        name: "",
+                                        is_have: "",
+                                        format: "",
+                                        http_dome: "",
+                                        remark: "",
+                                        node: [
+                                          {
+                                            name: "",
+                                            is_have: "",
+                                            format: "",
+                                            http_dome: "",
+                                            remark: "",
+                                            node: []
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  })
+  state_2.ruleForm_2.returnConfig.shift()
   state_1.ruleForm_1.BodyConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
   state.ruleForm.QueryConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
 
   radio.value = 0
-  save()
 }
 
 const sendData = () => {
   if (paramFlag.value + bodyFlag.value === 2) {
     getSelectDataApi(state_2.ruleForm_2.returnConfig).then((res: any) => {
-      console.log(res)
       ResponseReturn.value = toJSONString(res)
       ElMessage.success("响应成功，请前往预览！")
     })
@@ -1276,6 +3914,10 @@ const getInterfaceDetailApiFun = (data: string) => {
         .toISOString()
         .replace(/T/g, " ")
         .replace(/\.[\d]{3}Z/, "")
+      formData.value.name =
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.name
+      formData.value.url =
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.url
       state.ruleForm.QueryConfig =
         res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.query
       ResponseParams.value = toJSONString(state.ruleForm)
@@ -1284,9 +3926,131 @@ const getInterfaceDetailApiFun = (data: string) => {
       ResponseBody1.value = toJSONString(state_1.ruleForm_1)
       state_2.ruleForm_2.returnConfig =
         res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data
+      if (
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data
+          .length === 1 &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .format === "" &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .http_dome === "" &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .is_have === "" &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .name === "" &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .remark === ""
+      ) {
+        state_2.ruleForm_2.returnConfig.push({
+          name: "",
+          is_have: "",
+          format: "",
+          http_dome: "",
+          remark: "",
+          node: [
+            {
+              name: "",
+              is_have: "",
+              format: "",
+              http_dome: "",
+              remark: "",
+              node: [
+                {
+                  name: "",
+                  is_have: "",
+                  format: "",
+                  http_dome: "",
+                  remark: "",
+                  node: [
+                    {
+                      name: "",
+                      is_have: "",
+                      format: "",
+                      http_dome: "",
+                      remark: "",
+                      node: [
+                        {
+                          name: "",
+                          is_have: "",
+                          format: "",
+                          http_dome: "",
+                          remark: "",
+                          node: [
+                            {
+                              name: "",
+                              is_have: "",
+                              format: "",
+                              http_dome: "",
+                              remark: "",
+                              node: [
+                                {
+                                  name: "",
+                                  is_have: "",
+                                  format: "",
+                                  http_dome: "",
+                                  remark: "",
+                                  node: [
+                                    {
+                                      name: "",
+                                      is_have: "",
+                                      format: "",
+                                      http_dome: "",
+                                      remark: "",
+                                      node: [
+                                        {
+                                          name: "",
+                                          is_have: "",
+                                          format: "",
+                                          http_dome: "",
+                                          remark: "",
+                                          node: [
+                                            {
+                                              name: "",
+                                              is_have: "",
+                                              format: "",
+                                              http_dome: "",
+                                              remark: "",
+                                              node: [
+                                                {
+                                                  name: "",
+                                                  is_have: "",
+                                                  format: "",
+                                                  http_dome: "",
+                                                  remark: "",
+                                                  node: []
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        })
+        state_2.ruleForm_2.returnConfig.shift()
+      }
     }
   })
   mockConfig()
+}
+
+const setCookies = () => {
+  ResponseCookies.value = toJSONString(state_4.ruleForm_4)
+}
+
+const setHeaders = () => {
+  ResponseHeaders.value = toJSONString(state_3.ruleForm_3)
 }
 
 const paramFlag = ref<number>(0)
@@ -1350,14 +4114,6 @@ const checkParams = () => {
     paramFlag.value = 1
   }
   checkBody()
-}
-
-const setHeaders = () => {
-  ResponseHeaders.value = toJSONString(state_3.ruleForm_3)
-}
-
-const setCookies = () => {
-  ResponseCookies.value = toJSONString(state_4.ruleForm_4)
 }
 
 const bodyFlag = ref<number>(0)
@@ -1434,10 +4190,6 @@ const detail = () => {
 const save = () => {
   formRef.value?.validate((valid) => {
     if (valid) {
-      console.log(state_2.ruleForm_2.returnConfig)
-      console.log(state_1.ruleForm_1.BodyConfig)
-      console.log(state.ruleForm.QueryConfig)
-      console.log()
       updateTableDataApiFun()
       emit("initData")
       // emit("initData")
@@ -1450,7 +4202,6 @@ const close = () => {
   formRef.value?.resetFields()
   emit("initData")
   dialogVisible.value = false
-  clear()
 }
 
 // mock
@@ -1515,15 +4266,246 @@ const mockConfig = () => {
       }
     }
   })
-
-  console.log(derailment.value)
 }
 
 //修改接口
 const updateTableDataApiFun = () => {
-  if (projectStore.projectId === "") {
-    ElMessage.error("请选择项目")
-    return
+  const i1 = ref<number>(0)
+  for (let i = 0; i < state_2.ruleForm_2.returnConfig.length; i++) {
+    i1.value = i1.value + 1
+    if (
+      state_2.ruleForm_2.returnConfig[i].format === "" &&
+      state_2.ruleForm_2.returnConfig[i].http_dome === "" &&
+      state_2.ruleForm_2.returnConfig[i].is_have === "" &&
+      state_2.ruleForm_2.returnConfig[i].name === "" &&
+      state_2.ruleForm_2.returnConfig[i].remark === ""
+    ) {
+      if (i1.value > 1) {
+        state_2.ruleForm_2.returnConfig.splice(i, 1)
+        i = i - 1
+      }
+    }
+    const a1 = ref<number>(0)
+    for (let a = 0; a < state_2.ruleForm_2.returnConfig[i].node.length; a++) {
+      a1.value = a1.value + 1
+      if (
+        state_2.ruleForm_2.returnConfig[i].node[a].format === "" &&
+        state_2.ruleForm_2.returnConfig[i].node[a].http_dome === "" &&
+        state_2.ruleForm_2.returnConfig[i].node[a].is_have === "" &&
+        state_2.ruleForm_2.returnConfig[i].node[a].name === "" &&
+        state_2.ruleForm_2.returnConfig[i].node[a].remark === ""
+      ) {
+        if (a1.value > 1) {
+          state_2.ruleForm_2.returnConfig[i].node.splice(a, 1)
+          a = a - 1
+        }
+      }
+      const b1 = ref<number>(0)
+      for (let b = 0; b < state_2.ruleForm_2.returnConfig[i].node[a].node.length; b++) {
+        b1.value = b1.value + 1
+        if (
+          state_2.ruleForm_2.returnConfig[i].node[a].node[b].format === "" &&
+          state_2.ruleForm_2.returnConfig[i].node[a].node[b].http_dome === "" &&
+          state_2.ruleForm_2.returnConfig[i].node[a].node[b].is_have === "" &&
+          state_2.ruleForm_2.returnConfig[i].node[a].node[b].name === "" &&
+          state_2.ruleForm_2.returnConfig[i].node[a].node[b].remark === ""
+        ) {
+          if (b1.value > 1) {
+            state_2.ruleForm_2.returnConfig[i].node[a].node.splice(b, 1)
+            b = b - 1
+          }
+        }
+        const c1 = ref<number>(0)
+        for (let c = 0; c < state_2.ruleForm_2.returnConfig[i].node[a].node[b].node.length; c++) {
+          c1.value = c1.value + 1
+          if (
+            state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].format === "" &&
+            state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].http_dome === "" &&
+            state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].is_have === "" &&
+            state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].name === "" &&
+            state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].remark === ""
+          ) {
+            if (c1.value > 1) {
+              state_2.ruleForm_2.returnConfig[i].node[a].node[b].node.splice(c, 1)
+              c = c - 1
+            }
+          }
+          const d1 = ref<number>(0)
+          for (let d = 0; d < state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node.length; d++) {
+            d1.value = d1.value + 1
+            if (
+              state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].format === "" &&
+              state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].http_dome === "" &&
+              state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].is_have === "" &&
+              state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].name === "" &&
+              state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].remark === ""
+            ) {
+              if (d1.value > 1) {
+                state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node.splice(d, 1)
+                d = d - 1
+              }
+            }
+            const e1 = ref<number>(0)
+            for (let e = 0; e < state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node.length; e++) {
+              e1.value = e1.value + 1
+              if (
+                state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].format === "" &&
+                state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].http_dome === "" &&
+                state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].is_have === "" &&
+                state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].name === "" &&
+                state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].remark === ""
+              ) {
+                if (e1.value > 1) {
+                  state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node.splice(e, 1)
+                  e = e - 1
+                }
+              }
+              const f1 = ref<number>(0)
+              for (
+                let f = 0;
+                f < state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node.length;
+                f++
+              ) {
+                f1.value = f1.value + 1
+                if (
+                  state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].format === "" &&
+                  state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].http_dome === "" &&
+                  state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].is_have === "" &&
+                  state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].name === "" &&
+                  state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].remark === ""
+                ) {
+                  if (f1.value > 1) {
+                    state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node.splice(f, 1)
+                    f = f - 1
+                  }
+                }
+                const g1 = ref<number>(0)
+                for (
+                  let g = 0;
+                  g < state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node.length;
+                  g++
+                ) {
+                  g1.value = g1.value + 1
+                  if (
+                    state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g]
+                      .format === "" &&
+                    state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g]
+                      .http_dome === "" &&
+                    state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g]
+                      .is_have === "" &&
+                    state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].name ===
+                      "" &&
+                    state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g]
+                      .remark === ""
+                  ) {
+                    if (g1.value > 1) {
+                      state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node.splice(
+                        g,
+                        1
+                      )
+                      g = g - 1
+                    }
+                  }
+                  const h1 = ref<number>(0)
+                  for (
+                    let h = 0;
+                    h <
+                    state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node
+                      .length;
+                    h++
+                  ) {
+                    h1.value = h1.value + 1
+                    if (
+                      state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[h]
+                        .format === "" &&
+                      state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[h]
+                        .http_dome === "" &&
+                      state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[h]
+                        .is_have === "" &&
+                      state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[h]
+                        .name === "" &&
+                      state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[h]
+                        .remark === ""
+                    ) {
+                      if (h1.value > 1) {
+                        state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[
+                          g
+                        ].node.splice(h, 1)
+                        h = h - 1
+                      }
+                    }
+                    const k1 = ref<number>(0)
+                    for (
+                      let k = 0;
+                      k <
+                      state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[h]
+                        .node.length;
+                      k++
+                    ) {
+                      k1.value = k1.value + 1
+                      if (
+                        state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[
+                          h
+                        ].node[k].format === "" &&
+                        state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[
+                          h
+                        ].node[k].http_dome === "" &&
+                        state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[
+                          h
+                        ].node[k].is_have === "" &&
+                        state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[
+                          h
+                        ].node[k].name === "" &&
+                        state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[
+                          h
+                        ].node[k].remark === ""
+                      ) {
+                        if (k1.value > 1) {
+                          state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[
+                            g
+                          ].node[h].node.splice(k, 1)
+                          k = k - 1
+                        }
+                      }
+                      const m1 = ref<number>(0)
+                      for (
+                        let m = 0;
+                        m <
+                        state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g].node[
+                          h
+                        ].node[k].node.length;
+                        m++
+                      ) {
+                        m1.value = m1.value + 1
+                        if (
+                          state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g]
+                            .node[h].node[k].node[m].format === "" &&
+                          state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g]
+                            .node[h].node[k].node[m].http_dome === "" &&
+                          state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g]
+                            .node[h].node[k].node[m].is_have === "" &&
+                          state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g]
+                            .node[h].node[k].node[m].name === "" &&
+                          state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[g]
+                            .node[h].node[k].node[m].remark === ""
+                        ) {
+                          if (m1.value > 1) {
+                            state_2.ruleForm_2.returnConfig[i].node[a].node[b].node[c].node[d].node[e].node[f].node[
+                              g
+                            ].node[h].node[k].node.splice(m, 1)
+                            m = m - 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
   const params = {
     interfaceId: interfaceId.value,
@@ -1552,9 +4534,135 @@ const updateTableDataApiFun = () => {
   })
 }
 
+const resetTableData = () => {
+  const params = {
+    interfaceId: interfaceId.value
+  }
+  getInterfaceDetailApi(params).then((res: any) => {
+    if (res.code === 200) {
+      state_2.ruleForm_2.returnConfig =
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data
+      if (
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data
+          .length === 1 &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .format === "" &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .http_dome === "" &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .is_have === "" &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .name === "" &&
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data[0]
+          .remark === ""
+      ) {
+        state_2.ruleForm_2.returnConfig.push({
+          name: "",
+          is_have: "",
+          format: "",
+          http_dome: "",
+          remark: "",
+          node: [
+            {
+              name: "",
+              is_have: "",
+              format: "",
+              http_dome: "",
+              remark: "",
+              node: [
+                {
+                  name: "",
+                  is_have: "",
+                  format: "",
+                  http_dome: "",
+                  remark: "",
+                  node: [
+                    {
+                      name: "",
+                      is_have: "",
+                      format: "",
+                      http_dome: "",
+                      remark: "",
+                      node: [
+                        {
+                          name: "",
+                          is_have: "",
+                          format: "",
+                          http_dome: "",
+                          remark: "",
+                          node: [
+                            {
+                              name: "",
+                              is_have: "",
+                              format: "",
+                              http_dome: "",
+                              remark: "",
+                              node: [
+                                {
+                                  name: "",
+                                  is_have: "",
+                                  format: "",
+                                  http_dome: "",
+                                  remark: "",
+                                  node: [
+                                    {
+                                      name: "",
+                                      is_have: "",
+                                      format: "",
+                                      http_dome: "",
+                                      remark: "",
+                                      node: [
+                                        {
+                                          name: "",
+                                          is_have: "",
+                                          format: "",
+                                          http_dome: "",
+                                          remark: "",
+                                          node: [
+                                            {
+                                              name: "",
+                                              is_have: "",
+                                              format: "",
+                                              http_dome: "",
+                                              remark: "",
+                                              node: [
+                                                {
+                                                  name: "",
+                                                  is_have: "",
+                                                  format: "",
+                                                  http_dome: "",
+                                                  remark: "",
+                                                  node: []
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        })
+        state_2.ruleForm_2.returnConfig.shift()
+      }
+    }
+  })
+}
+
 // json编辑器
 const editProject = (row: any) => {
-  console.log(row.responseData)
+  console.log(row._id)
   const obj = {
     id: 1,
     title: "开发接口",

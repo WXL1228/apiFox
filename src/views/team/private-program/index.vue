@@ -147,7 +147,6 @@ const initData = () => {
           }
         }
       }
-      console.log(res.data)
       isShow.value = [{ show: 0 }]
       for (let i = 0; i < res.data.projects.length - 1; i++) {
         isShow.value.push({ show: 0 })
@@ -159,7 +158,6 @@ const initData = () => {
             isShow.value[i].show = res.data.projects[i].members[j].permission
           }
         }
-        console.log(isShow.value)
       }
     }
   })
@@ -167,8 +165,6 @@ const initData = () => {
 
 // 设置公开私有
 const isPublicDetail = (row: any) => {
-  const isPrivateFlag = ref<boolean>()
-  console.log(isPrivateFlag.value)
   const params = {
     projectId: row._id,
     name: row.name,
@@ -193,12 +189,11 @@ const getDetail = (item: string) => {
 // 成员页面
 const getTeam = (item: any) => {
   const obj = { id: 1, title: "成员详情", item: item }
-  console.log(item)
+
   teamDetailRef.value?.show(obj)
 }
 // 跳转到详情页面
 const goDetail = (item: any) => {
-  console.log(item._id)
   projectStore.projectId = item._id
   projectStore.projectName = item.name
   router.push({
@@ -214,7 +209,6 @@ const createProject = () => {
 
 // 编辑项目
 const editProject = (row: any) => {
-  console.log(tableData.value.indexOf(row))
   const obj = { id: 1, title: "编辑项目", isAdd: false, detailMsg: row }
   editDialogRef.value?.show(obj)
 }

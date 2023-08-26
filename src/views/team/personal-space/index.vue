@@ -166,12 +166,12 @@ const initData = () => {
             }
             const sort = (value: any, l: number, r: number) => {
               if (l >= r) return
-              const x = value[l]["_id"]
+              const x = value[l]["name"]
               let i = l - 1
               let j = r + 1
               while (i < j) {
-                while (value[++i]["_id"] < x);
-                while (value[--j]["_id"] > x);
+                while (value[++i]["name"] < x);
+                while (value[--j]["name"] > x);
                 if (i < j) swap(value, i, j)
               }
               sort(value, l, j)
@@ -238,7 +238,6 @@ const importInterface = () => {
 
 // 开发接口
 const editProject = (row: any) => {
-  console.log(row.responseData)
   const obj = { id: 1, title: "开发接口", detailMsg: row }
   InterfaceDevelopmentRef.value?.show(obj)
   initData()
@@ -247,7 +246,6 @@ const editProject = (row: any) => {
 
 // 删除接口(单个)
 const deleteTableDataApiFun = (row: any) => {
-  console.log(row._id)
   ElMessageBox.confirm("确定删除该接口吗？", "提示", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
