@@ -1,7 +1,15 @@
 <template>
   <el-dialog :title="titleName" width="40%" v-model="dialogVisible" @close="close" :destroy-on-close="true">
     <el-form-item label="项目ID:">{{ projectId }}</el-form-item>
-    <el-upload class="upload-demo" drag action="" multiple>
+    <el-upload
+      class="upload-demo"
+      drag
+      action="#"
+      accept=""
+      :show-file-list="false"
+      :auto-upload="true"
+      :http-request="handleChange"
+    >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text"><em>点击</em>或者拖拽文件到此区域</div>
       <template #tip>
@@ -15,6 +23,8 @@
 import { UploadFilled } from "@element-plus/icons-vue"
 import { FormInstance } from "element-plus"
 import { ref } from "vue"
+import { uploadFile } from "@/api/team/personal-space/import-interface"
+import { ElMessage } from "element-plus"
 
 const dialogVisible = ref(false)
 const formRef = ref<FormInstance>()
@@ -28,27 +38,27 @@ const show = async (obj: { id?: number; title: string; projectId: string }) => {
   projectId.value = obj.projectId
   dialogVisible.value = true
 }
-
-// 跳转项目页
-// import { useRouter } from "vue-router"
-// const router = useRouter()
-// const detail = () => {
-//   emit("initData")
-//   router.push({
-//     name: "Personal-Space"
-//   })
-// }
-
-// 保存信息
-// const save = () => {
-//   formRef.value?.validate((valid) => {})
-//   emit("initData")
-// }
 // 关闭事件
 const close = () => {
   formRef.value?.resetFields()
   emit("initData")
   dialogVisible.value = false
+}
+
+// 专题图上传
+const handleChange: any = (file: any) => {
+  const form = new FormData()
+  form.append("projectId", projectId.value)
+  form.append("swaggerFile", file.file)
+  uploadFile(form)
+    .then((res: any) => {
+      if (res.code === 200) {
+        ElMessage.success(res.message)
+        emit("initData")
+        dialogVisible.value = false
+      }
+    })
+    .finally(() => {})
 }
 
 defineExpose({
