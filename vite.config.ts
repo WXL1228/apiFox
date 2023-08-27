@@ -46,6 +46,11 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
           /** 是否允许跨域 */
           changeOrigin: true,
           rewrite: (path) => path.replace("/api/v1", "")
+        },
+        "/api2": {
+          target: "http://47.99.59.29:3001", // 新接口地址
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api2/, "")
         }
       }
     },

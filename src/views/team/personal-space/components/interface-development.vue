@@ -2437,7 +2437,7 @@ import { toJSONString } from "xe-utils"
 // import { getSelectDataApi } from "@/api/hook-demo/use-fetch-select"
 import InterfaceDevelopment1 from "./interface-development1.vue"
 import axios from "axios"
-import { getToken } from "@/utils/cache/cookies"
+// import { getToken } from "@/utils/cache/cookies"
 
 const InterfaceDevelopmentRef1 = ref<InstanceType<typeof InterfaceDevelopment1>>()
 
@@ -3889,13 +3889,15 @@ const clear_1 = () => {
 }
 
 //发送请求
+const baseURL = import.meta.env.VITE_BASE_API1
 const sendData = () => {
   if (paramFlag.value + bodyFlag.value === 2) {
-    const token = getToken()
+    // const token = getToken()
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
+        // Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
       }
     }
     if (mockMethod.value === "GET") {
@@ -3903,7 +3905,7 @@ const sendData = () => {
         console.log(res)
       })
     } else if (mockMethod.value === "POST") {
-      axios.post("http://47.99.59.29:3001/64ea04d4c1f51ccb44af6c2d/77", config).then((res) => {
+      axios.post(`${baseURL}/64ea04d4c1f51ccb44af6c2d/77`, config).then((res) => {
         console.log(res)
       })
     } else if (mockMethod.value === "PUT") {
