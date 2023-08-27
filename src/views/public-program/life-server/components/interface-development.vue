@@ -1287,7 +1287,6 @@ const state = reactive({
     ]
   }
 })
-console.log(state.ruleForm.QueryConfig)
 
 const addQueryConfig = () => {
   state.ruleForm.QueryConfig.push({
@@ -1318,7 +1317,6 @@ const state_1 = reactive({
     ]
   }
 })
-console.log(state_1.ruleForm_1.BodyConfig)
 
 const addBodyConfig = () => {
   state_1.ruleForm_1.BodyConfig.push({
@@ -1458,7 +1456,6 @@ const state_3 = reactive({
     ]
   }
 })
-console.log(state_3.ruleForm_3.HeadersConfig)
 
 const addHeadersConfig = () => {
   state_3.ruleForm_3.HeadersConfig.push({
@@ -1494,7 +1491,6 @@ const state_4 = reactive({
     ]
   }
 })
-console.log(state_4.ruleForm_4.CookiesConfig)
 
 const addCookiesConfig = () => {
   state_4.ruleForm_4.CookiesConfig.push({
@@ -1530,7 +1526,6 @@ const state_6 = reactive({
     ]
   }
 })
-console.log(state_6.ruleForm_6.BodyConfig)
 
 const addBody1Config = () => {
   state_6.ruleForm_6.BodyConfig.push({
@@ -1566,7 +1561,6 @@ const state_5 = reactive({
     ]
   }
 })
-console.log(state_5.ruleForm_5.ParamsConfig)
 
 const addParamsConfig = () => {
   state_5.ruleForm_5.ParamsConfig.push({
@@ -1721,7 +1715,6 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
   if (obj.detailMsg) {
     interfaceId.value = obj.detailMsg._id
     interfaceName.value = obj.detailMsg.name
-    // console.log(interfaceId.value)
     formData.value.projectId = obj.detailMsg.projectId
     formData.value.name = obj.detailMsg.name
     formData.value.url = obj.detailMsg.url
@@ -1731,7 +1724,6 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
     methodRun.value = obj.detailMsg.http_method
     formData.value.query = obj.detailMsg.query
     formData.value.body = obj.detailMsg.body
-    console.log(formData.value.body)
     formData.value.responseData = obj.detailMsg.response_data
   } else {
     formData.value.name = ""
@@ -2131,10 +2123,6 @@ const detail = () => {
 const save = () => {
   formRef.value?.validate((valid) => {
     if (valid) {
-      console.log(state_2.ruleForm_2.returnConfig)
-      console.log(state_1.ruleForm_1.BodyConfig)
-      console.log(state.ruleForm.QueryConfig)
-      console.log()
       updateTableDataApiFun()
       emit("initData")
       emit("initData")
