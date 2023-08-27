@@ -27,7 +27,10 @@
         <el-divider />
         <el-descriptions size="large" :border="true" title="返回数据">
           <el-descriptions-item>
-            <textarea disabled rows="27" style="width: 100%; resize: vertical" v-model="ResponseReturn">[0]</textarea>
+            <div style="white-space: pre-line" class="bg-gray-50">
+              <pre>{{ ResponseReturn1 }}</pre>
+            </div>
+            <textarea type="text" disabled rows="13" style="width: 100%; resize: vertical" v-model="ResponseReturn" />
           </el-descriptions-item>
         </el-descriptions> </el-tab-pane
       ><el-tab-pane label="编辑" name="second">
@@ -1261,7 +1264,7 @@ import { usePublicProjectStore } from "@/store/modules/public-space"
 import { getInterfaceDetailApi } from "@/api/table/index"
 import { Delete, Plus } from "@element-plus/icons-vue"
 import { toJSONString } from "xe-utils"
-// import { getSelectDataApi } from "@/api/hook-demo/use-fetch-select"
+import axios from "axios"
 
 type Item = { type: TagProps["type"]; label: string }
 
@@ -1686,7 +1689,7 @@ const formRef = ref<FormInstance>()
 const emit = defineEmits(["initData"])
 const methodRun = ref("")
 const urlRunConfig = ref("")
-const RunData = ref("/111111")
+const RunData = ref("/")
 const mockUrl = ref<string>("")
 const formData = ref<CreateInterfaceRequestData>({
   projectId: projectStore.publicProjectId,
@@ -1703,6 +1706,7 @@ const interfaceName = ref("") //接口name
 const update_by = ref<string>()
 const update_time = ref<String>()
 const v_input = ref<string>()
+const mockMethod = ref<string>("")
 
 // 规则
 const rules = reactive<FormRules>({
@@ -1722,6 +1726,7 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
     formData.value.name = obj.detailMsg.name
     formData.value.url = obj.detailMsg.url
     urlRunConfig.value = "local: http://" + obj.detailMsg.url
+    mockMethod.value = obj.detailMsg.http_method
     formData.value.method = obj.detailMsg.http_method
     methodRun.value = obj.detailMsg.http_method
     formData.value.query = obj.detailMsg.query
@@ -1779,70 +1784,63 @@ const clear = () => {
   ResponseHeaders.value = "{}"
 }
 
+const derailment = ref<string>("")
 const ResponseHeaders = ref<string>("{}")
 const ResponseBody = ref<string>("{}")
 const ResponseCookies = ref<string>("{}")
 const ResponseParams = ref<string>("{}")
 const ResponseBody1 = ref<string>("{}")
 const ResponseReturn = ref<string>("{}")
+const ResponseReturn1 = ref<Object>({})
 
+//发送请求
+const baseURL = import.meta.env.VITE_BASE_API1
 const sendData = () => {
-  // const params = {
-  //   interfaceId: interfaceId.value
-  // }
-  // MockInterfaceDetailApi(params).then((res: any) => {
-  //   if (res.code === 200) {
-  //     ElMessage.success(res.message)
-  //     mockUrl.value = res.data.mockUrl
-  //     derailment.value = res.data.mockUrl
-  //     console.log(mockUrl.value)
-  //     console.log(derailment.value)
-  //     const token = getToken()
-  //     const config = {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`
-  //       }
-  //     }
-  //     if (mockMethod.value === "GET") {
-  //       axios
-  //         .get(`${derailment.value}`, config)
-  //         .then((res) => {
-  //           console.log(res)
-  //         })
-  //         .catch((error) => {
-  //           console.log(error)
-  //         })
-  //     } else if (mockMethod.value === "POST") {
-  //       axios
-  //         .post(`${derailment.value}`, config)
-  //         .then((res) => {
-  //           console.log(res)
-  //         })
-  //         .catch((error) => {
-  //           console.log(error)
-  //         })
-  //     } else if (mockMethod.value === "PUT") {
-  //       axios
-  //         .put(`${derailment.value}`, config)
-  //         .then((res) => {
-  //           console.log(res)
-  //         })
-  //         .catch((error) => {
-  //           console.log(error)
-  //         })
-  //     } else if (mockMethod.value === "DELETE") {
-  //       axios
-  //         .delete(`${derailment.value}`, config)
-  //         .then((res) => {
-  //           console.log(res)
-  //         })
-  //         .catch((error) => {
-  //           console.log(error)
-  //         })
-  //     }
-  //   }
-  // })
-  // console.log(derailment.value)
+  if (paramFlag.value + bodyFlag.value === 2) {
+    // const token = getToken()
+    const config = {
+      headers: {
+        // Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+      }
+    }
+    if (mockMethod.value === "GET") {
+      axios.get(`${baseURL}${derailment.value}`, config).then((res) => {
+        ResponseReturn1.value["code"] = res.status
+        ElMessage.success("响应成功,请前往预览！")
+        ResponseReturn.value = "data : " + toJSONString(res.data)
+        ResponseReturn1.value["message"] = res.statusText
+        ResponseReturn1.value["data"] = res.data
+      })
+    } else if (mockMethod.value === "POST") {
+      axios.post(`${baseURL}${derailment.value}`, config).then((res) => {
+        ResponseReturn1.value["code"] = res.status
+        ElMessage.success("响应成功,请前往预览！")
+        ResponseReturn.value = "data : " + toJSONString(res.data)
+        ResponseReturn1.value["message"] = res.statusText
+        ResponseReturn1.value["data"] = res.data
+      })
+    } else if (mockMethod.value === "PUT") {
+      axios.put(`${baseURL}${derailment.value}`, config).then((res) => {
+        ResponseReturn1.value["code"] = res.status
+        ElMessage.success("响应成功,请前往预览！")
+        ResponseReturn.value = "data : " + toJSONString(res.data)
+        ResponseReturn1.value["message"] = res.statusText
+        ResponseReturn1.value["data"] = res.data
+      })
+    } else if (mockMethod.value === "DELETE") {
+      axios.delete(`${baseURL}${derailment.value}`, config).then((res) => {
+        ResponseReturn1.value["code"] = res.status
+        ElMessage.success("响应成功,请前往预览！")
+        ResponseReturn.value = "data : " + toJSONString(res.data)
+        ResponseReturn1.value["message"] = res.statusText
+        ResponseReturn1.value["data"] = res.data
+      })
+    }
+  } else {
+    ElMessage.error("参数或类型不一致！")
+  }
 }
 
 const getInterfaceDetailApiFun = (data: string) => {
@@ -2148,8 +2146,14 @@ const save = () => {
 const close = () => {
   formRef.value?.resetFields()
   emit("initData")
+  clearResponseReturn()
   dialogVisible.value = false
   clear()
+}
+
+const clearResponseReturn = () => {
+  ResponseReturn.value = ""
+  ResponseReturn1.value = {}
 }
 
 // mock
@@ -2165,7 +2169,8 @@ const mockConfig = () => {
   MockInterfaceDetailApi(params).then((res: any) => {
     if (res.code === 200) {
       ElMessage.success(res.message)
-      mockUrl.value = "http://localhost:3333/api/v1" + res.data.mockUrl
+      mockUrl.value = res.data.mockUrl
+      derailment.value = res.data.mockUrl
     }
   })
 }

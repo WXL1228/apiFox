@@ -2414,7 +2414,10 @@
         <el-divider />
         <el-descriptions size="large" :border="true" title="返回数据">
           <el-descriptions-item>
-            <textarea type="text" disabled rows="27" style="width: 100%; resize: vertical" v-model="ResponseReturn" />
+            <div style="white-space: pre-line" class="bg-gray-50">
+              <pre>{{ ResponseReturn1 }}</pre>
+            </div>
+            <textarea type="text" disabled rows="13" style="width: 100%; resize: vertical" v-model="ResponseReturn" />
           </el-descriptions-item>
         </el-descriptions>
       </el-tab-pane>
@@ -3561,7 +3564,7 @@ const formRef = ref<FormInstance>()
 const emit = defineEmits(["initData"])
 const methodRun = ref("")
 const urlRunConfig = ref("")
-const RunData = ref("/111111")
+const RunData = ref("/")
 const mockUrl = ref<string>("")
 const formData = ref<CreateInterfaceRequestData>({
   projectId: projectStore.projectId,
@@ -3594,7 +3597,6 @@ const show = async (obj: { id?: number; title: string; detailMsg?: DetailMsg }) 
   if (obj.detailMsg) {
     interfaceId.value = obj.detailMsg._id
     interfaceName.value = obj.detailMsg.name
-    // console.log(interfaceId.value)
     formData.value.projectId = obj.detailMsg.projectId
     formData.value.name = obj.detailMsg.name
     formData.value.url = obj.detailMsg.url
@@ -3681,6 +3683,7 @@ const ResponseCookies = ref<string>("{}")
 const ResponseParams = ref<string>("{}")
 const ResponseBody1 = ref<string>("{}")
 const ResponseReturn = ref<string>("{}")
+const ResponseReturn1 = ref<object>({})
 
 const clear_1 = () => {
   state_2.ruleForm_2.returnConfig = [
@@ -3901,20 +3904,36 @@ const sendData = () => {
       }
     }
     if (mockMethod.value === "GET") {
-      axios.get(derailment.value).then((res) => {
-        console.log(res)
+      axios.get(`${baseURL}${derailment.value}`, config).then((res) => {
+        ResponseReturn1.value["code"] = res.status
+        ElMessage.success("响应成功,请前往预览！")
+        ResponseReturn.value = "data : " + toJSONString(res.data)
+        ResponseReturn1.value["message"] = res.statusText
+        ResponseReturn1.value["data"] = res.data
       })
     } else if (mockMethod.value === "POST") {
-      axios.post(`${baseURL}/64ea04d4c1f51ccb44af6c2d/77`, config).then((res) => {
-        console.log(res)
+      axios.post(`${baseURL}${derailment.value}`, config).then((res) => {
+        ResponseReturn1.value["code"] = res.status
+        ElMessage.success("响应成功,请前往预览！")
+        ResponseReturn.value = "data : " + toJSONString(res.data)
+        ResponseReturn1.value["message"] = res.statusText
+        ResponseReturn1.value["data"] = res.data
       })
     } else if (mockMethod.value === "PUT") {
-      axios.put(derailment.value).then((res) => {
-        console.log(res)
+      axios.put(`${baseURL}${derailment.value}`, config).then((res) => {
+        ResponseReturn1.value["code"] = res.status
+        ElMessage.success("响应成功,请前往预览！")
+        ResponseReturn.value = "data : " + toJSONString(res.data)
+        ResponseReturn1.value["message"] = res.statusText
+        ResponseReturn1.value["data"] = res.data
       })
     } else if (mockMethod.value === "DELETE") {
-      axios.delete(derailment.value).then((res) => {
-        console.log(res)
+      axios.delete(`${baseURL}${derailment.value}`, config).then((res) => {
+        ResponseReturn1.value["code"] = res.status
+        ElMessage.success("响应成功,请前往预览！")
+        ResponseReturn.value = "data : " + toJSONString(res.data)
+        ResponseReturn1.value["message"] = res.statusText
+        ResponseReturn1.value["data"] = res.data
       })
     }
   } else {
@@ -4224,7 +4243,13 @@ const save = () => {
 const close = () => {
   formRef.value?.resetFields()
   emit("initData")
+  clearResponseReturn()
   dialogVisible.value = false
+}
+
+const clearResponseReturn = () => {
+  ResponseReturn.value = ""
+  ResponseReturn1.value = {}
 }
 
 // mock
@@ -4242,46 +4267,6 @@ const mockConfig = () => {
       ElMessage.success(res.message)
       mockUrl.value = res.data.mockUrl
       derailment.value = res.data.mockUrl
-      console.log(mockUrl.value)
-      console.log(derailment.value)
-      // const token = getToken()
-      // const config = {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`
-      //   }
-      // }
-      // if (mockMethod.value === "GET") {
-      //   axios
-      //     .get(`${derailment.value}`, config)
-      //     .then((res) => {
-      //       console.log(res)
-      //     })
-      //     .catch((error) => {
-      //       console.log(error)
-      //     })
-      // } else if (mockMethod.value === "POST") {
-      //   axios.post("http://47.99.59.29:3001/64ea04d4c1f51ccb44af6c2d/77").then((res) => {
-      //     console.log(res)
-      //   })
-      // } else if (mockMethod.value === "PUT") {
-      //   axios
-      //     .put(`${derailment.value}`, config)
-      //     .then((res) => {
-      //       console.log(res)
-      //     })
-      //     .catch((error) => {
-      //       console.log(error)
-      //     })
-      // } else if (mockMethod.value === "DELETE") {
-      //   axios
-      //     .delete(`${derailment.value}`, config)
-      //     .then((res) => {
-      //       console.log(res)
-      //     })
-      //     .catch((error) => {
-      //       console.log(error)
-      //     })
-      // }
     }
   })
 }
@@ -4689,11 +4674,7 @@ const editProject = (row: any) => {
   }
 
   InterfaceDevelopmentRef1.value?.show(obj)
-  // initData()
 }
-// const initData1 = (row: any) => {
-//   console.log("00000", row)
-// }
 
 defineExpose({
   show
