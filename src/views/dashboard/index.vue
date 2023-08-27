@@ -22,7 +22,7 @@ const createProject = () => {
   router.push({ path: "/team" })
 }
 
-// // get 请求  delete一样  只是get换delete
+// // get 请求  delete一样  只是get换delete  
 // import axios from "axios"
 // import { getToken } from "@/utils/cache/cookies"
 // const initData = () => {
