@@ -1807,35 +1807,35 @@ const sendData = () => {
     }
     if (mockMethod.value === "GET") {
       axios.get(`${baseURL}${derailment.value}`, config).then((res) => {
-        ResponseReturn1.value["code"] = res.status
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { code: res.status })
         ElMessage.success("响应成功,请前往预览！")
         ResponseReturn.value = "data : " + toJSONString(res.data)
-        ResponseReturn1.value["message"] = res.statusText
-        ResponseReturn1.value["data"] = res.data
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { message: res.statusText })
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { data: res.data })
       })
     } else if (mockMethod.value === "POST") {
       axios.post(`${baseURL}${derailment.value}`, config).then((res) => {
-        ResponseReturn1.value["code"] = res.status
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { code: res.status })
         ElMessage.success("响应成功,请前往预览！")
         ResponseReturn.value = "data : " + toJSONString(res.data)
-        ResponseReturn1.value["message"] = res.statusText
-        ResponseReturn1.value["data"] = res.data
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { message: res.statusText })
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { data: res.data })
       })
     } else if (mockMethod.value === "PUT") {
       axios.put(`${baseURL}${derailment.value}`, config).then((res) => {
-        ResponseReturn1.value["code"] = res.status
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { code: res.status })
         ElMessage.success("响应成功,请前往预览！")
         ResponseReturn.value = "data : " + toJSONString(res.data)
-        ResponseReturn1.value["message"] = res.statusText
-        ResponseReturn1.value["data"] = res.data
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { message: res.statusText })
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { data: res.data })
       })
     } else if (mockMethod.value === "DELETE") {
       axios.delete(`${baseURL}${derailment.value}`, config).then((res) => {
-        ResponseReturn1.value["code"] = res.status
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { code: res.status })
         ElMessage.success("响应成功,请前往预览！")
         ResponseReturn.value = "data : " + toJSONString(res.data)
-        ResponseReturn1.value["message"] = res.statusText
-        ResponseReturn1.value["data"] = res.data
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { message: res.statusText })
+        ResponseReturn1.value = Object.assign(ResponseReturn1.value, { data: res.data })
       })
     }
   } else {
