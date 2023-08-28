@@ -156,6 +156,11 @@ const initData = () => {
   getInterfaceDataApi(params).then((res: any) => {
     if (res.code === 200) {
       tableData.value = res.data.interfaces
+      for (let i = 0; i < tableData.value.length; i++) {
+        if (tableData.value[i].url[0] === "/") {
+          tableData.value[i].url = "127.0.0.1" + tableData.value[i].url
+        }
+      }
       for (const [key, value] of Object.entries(tableData)) {
         if (key === "_rawValue") {
           for (let a = 0; a < value.length; a++) {

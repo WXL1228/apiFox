@@ -3958,8 +3958,15 @@ const getInterfaceDetailApiFun = (data: string) => {
         .replace(/\.[\d]{3}Z/, "")
       formData.value.name =
         res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.name
-      formData.value.url =
-        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.url
+      if (
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.url[0] === "/"
+      ) {
+        formData.value.url =
+          "127.0.0.1" +
+          res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.url
+      } else
+        formData.value.url =
+          res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.url
       state.ruleForm.QueryConfig =
         res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.query
       ResponseParams.value = toJSONString(state.ruleForm)
@@ -4090,8 +4097,7 @@ const getInterfaceDetailApiFun = (data: string) => {
         state.ruleForm.QueryConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
       }
       if (
-        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.body.length ===
-        undefined
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.body === undefined
       ) {
         state_1.ruleForm_1.BodyConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
       }
