@@ -5,7 +5,7 @@
         <el-input v-model="formData.name" placeholder="请输入接口名称" />
       </el-form-item>
       <el-form-item label="接口地址：" prop="url">
-        <el-input v-model="formData.url" placeholder="请输入接口地址"><template #prepend>http://</template></el-input>
+        <el-input v-model="formData.url" placeholder="/path" />
       </el-form-item>
       <el-form-item label="请求方法：" prop="method">
         <div>
@@ -136,7 +136,7 @@ const createTableDataApiFun = () => {
   const params = {
     projectId: projectStore.projectId,
     name: formData.value.name,
-    url: formData.value.url,
+    url: "127.0.0.1" + formData.value.url,
     method: formData.value.method,
     query: [{ name: "", is_have: "", format: "", dome: "", remark: "" }],
     body: [{ name: "", is_have: "", format: "", dome: "", remark: "" }],

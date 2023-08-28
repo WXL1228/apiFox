@@ -19,8 +19,8 @@
               </el-form-item>
               <el-form-item label="接口地址：" prop="url">
                 <el-input v-model="formData.url" placeholder="请输入接口地址"
-                  ><template #prepend>http://</template></el-input
-                >
+                  ><template #prepend>http://</template>
+                </el-input>
               </el-form-item>
               <el-form-item label="请求方法：" prop="method">
                 <div>
