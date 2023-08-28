@@ -95,6 +95,13 @@ export function getUserInfoDataApi() {
   })
 }
 
+export function getDomeDataApi() {
+  return request({
+    url: "/download/template",
+    method: "get"
+  })
+}
+
 // // get 请求  delete一样  只是get换delete
 // import axios from "axios"
 // import { getToken } from "@/utils/cache/cookies"

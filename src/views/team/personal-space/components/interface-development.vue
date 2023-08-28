@@ -4082,6 +4082,124 @@ const getInterfaceDetailApiFun = (data: string) => {
         })
         state_2.ruleForm_2.returnConfig.shift()
       }
+      console.log(res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.query)
+      if (
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.query ===
+        undefined
+      ) {
+        state.ruleForm.QueryConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
+      }
+      if (
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.body.length ===
+        undefined
+      ) {
+        state_1.ruleForm_1.BodyConfig = [{ name: "", is_have: "", format: "", dome: "", remark: "" }]
+      }
+      if (
+        res.data.interfaceDetail.interfaces[res.data.interfaceDetail.interfaces.length - 1].interface.response_data ===
+        undefined
+      ) {
+        state_2.ruleForm_2.returnConfig = [
+          {
+            name: "",
+            is_have: "",
+            format: "",
+            http_dome: "",
+            remark: "",
+            node: [
+              {
+                name: "",
+                is_have: "",
+                format: "",
+                http_dome: "",
+                remark: "",
+                node: [
+                  {
+                    name: "",
+                    is_have: "",
+                    format: "",
+                    http_dome: "",
+                    remark: "",
+                    node: [
+                      {
+                        name: "",
+                        is_have: "",
+                        format: "",
+                        http_dome: "",
+                        remark: "",
+                        node: [
+                          {
+                            name: "",
+                            is_have: "",
+                            format: "",
+                            http_dome: "",
+                            remark: "",
+                            node: [
+                              {
+                                name: "",
+                                is_have: "",
+                                format: "",
+                                http_dome: "",
+                                remark: "",
+                                node: [
+                                  {
+                                    name: "",
+                                    is_have: "",
+                                    format: "",
+                                    http_dome: "",
+                                    remark: "",
+                                    node: [
+                                      {
+                                        name: "",
+                                        is_have: "",
+                                        format: "",
+                                        http_dome: "",
+                                        remark: "",
+                                        node: [
+                                          {
+                                            name: "",
+                                            is_have: "",
+                                            format: "",
+                                            http_dome: "",
+                                            remark: "",
+                                            node: [
+                                              {
+                                                name: "",
+                                                is_have: "",
+                                                format: "",
+                                                http_dome: "",
+                                                remark: "",
+                                                node: [
+                                                  {
+                                                    name: "",
+                                                    is_have: "",
+                                                    format: "",
+                                                    http_dome: "",
+                                                    remark: "",
+                                                    node: []
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
   })
   mockConfig()
