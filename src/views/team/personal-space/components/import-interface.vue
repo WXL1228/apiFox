@@ -1,6 +1,9 @@
 <template>
   <el-dialog :title="titleName" width="40%" v-model="dialogVisible" @close="close" :destroy-on-close="true">
-    <el-form-item label="项目ID:">{{ projectId }}</el-form-item>
+    <el-form-item label="项目ID:"
+      >{{ projectId }}
+      <el-button class="ml-10px" type="primary" @click="downloadTemplate">下载模板</el-button></el-form-item
+    >
     <el-upload
       class="upload-demo"
       drag
@@ -23,15 +26,14 @@
 import { UploadFilled } from "@element-plus/icons-vue"
 import { FormInstance } from "element-plus"
 import { ref } from "vue"
-import { uploadFile } from "@/api/team/personal-space/import-interface"
-import { ElMessage } from "element-plus"
+import { uploadFile, downLoadFile } from "@/api/team/personal-space/import-interface"
+import { ElMessage, ElNotification } from "element-plus"
 
 const dialogVisible = ref(false)
 const formRef = ref<FormInstance>()
 const emit = defineEmits(["initData"])
 const titleName = ref("")
 const projectId = ref<string>("") //接口id
-
 // 显示弹窗
 const show = async (obj: { id?: number; title: string; projectId: string }) => {
   titleName.value = obj.title
@@ -45,7 +47,7 @@ const close = () => {
   dialogVisible.value = false
 }
 
-// 专题图上传
+// 文件上传
 const handleChange: any = (file: any) => {
   const form = new FormData()
   form.append("projectId", projectId.value)
@@ -59,6 +61,36 @@ const handleChange: any = (file: any) => {
       }
     })
     .finally(() => {})
+}
+
+// 下载模板
+const downloadTemplate = () => {
+  ElNotification({
+    title: "下载",
+    message: "开始执行下载任务...",
+    type: "success",
+    duration: 3000
+  })
+  downLoadFile()
+    .then((res: any) => {
+      const dispositionArr = res.headers["content-disposition"].split("=")
+      const fileName = decodeURIComponent(dispositionArr[1])
+      const blob: any = new Blob([res.data], {
+        type: res.data.type
+      })
+      const link = document.createElement("a")
+      link.href = URL.createObjectURL(blob)
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
+      setTimeout(() => {
+        URL.revokeObjectURL(blob)
+        document.body.removeChild(link)
+      }, 0)
+    })
+    .catch(() => {
+      ElMessage.error("下载失败")
+    })
 }
 
 defineExpose({
